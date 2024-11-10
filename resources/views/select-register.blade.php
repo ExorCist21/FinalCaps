@@ -1,19 +1,35 @@
 <x-guest-layout>
-    <div class="flex flex-col items-center justify-center dark:bg-gray-900 h-96 w-full">
-        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200 -mt-4">Register As:</h1>
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-10 w-full max-w-md border-2">
-            <div class="flex flex-col space-y-4">
-                <a href="{{ route('patient.register') }}" class="font-bold flex border-2 py-3 justify-center bg-red-500 text-black rounded-lg hover:bg-red-300 transition duration-200">
+    <div class="min-h-screen sm:min-h-[400px] h-auto flex flex-col items-center justify-center bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 relative sm:py-10">
+        <!-- Background image -->
+        <div class="absolute inset-0 -z-10 opacity-30 bg-cover" style="background-image: url('https://source.unsplash.com/featured/?wellness,nature');"></div>
+
+        <!-- Welcome Text -->
+        <div class="text-center mb-10">
+            <h1 class="text-5xl font-extrabold text-blue-500 drop-shadow-lg">Welcome to MentalWell</h1>
+            <p class="text-xl text-gray-600 mt-2">Choose Your Registration Type Below</p>
+        </div>
+
+        <!-- Registration Options Container -->
+        <div class="bg-white bg-opacity-80 shadow-xl rounded-xl p-12 w-full max-w-lg border border-gray-200 backdrop-blur-md">
+            <div class="flex flex-col space-y-6">
+                <!-- Register as Patient Button -->
+                <a href="{{ route('patient.register') }}" 
+                class="text-lg font-bold flex py-4 justify-center bg-pink-300 text-gray-800 rounded-lg shadow-lg transition duration-300 transform hover:scale-105 hover:bg-pink-400">
                     Register as Patient
                 </a>
-                <a href="{{ route('therapist.register') }}" class="font-bold flex border-2 py-3 justify-center bg-blue-500 text-black rounded-lg hover:bg-blue-300 transition duration-200">
+
+                <!-- Register as Therapist Button -->
+                <a href="{{ route('therapist.register') }}" 
+                class="text-lg font-bold flex py-4 justify-center bg-blue-300 text-gray-800 rounded-lg shadow-lg transition duration-300 transform hover:scale-105 hover:bg-blue-400">
                     Register as Therapist
                 </a>
             </div>
         </div>
-        <div class="py-2 flex">
-            <a href="{{ route('login') }}" class="font-bold text-base pr-60 pt-2 mt-2 underline underline-offset-4 text-sky-600">
-                Already signed up?
+
+        <!-- Login Link -->
+        <div class="mt-10">
+            <a href="{{ route('login') }}" class="text-lg font-semibold text-blue-700 underline hover:text-blue-800">
+                Already signed up? Log in here
             </a>
         </div>
     </div>
