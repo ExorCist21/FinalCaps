@@ -69,6 +69,7 @@
                 @csrf
                 <div class="p-4 md:p-5 space-y-4">
                     <input type="hidden" name="therapist_id" value="{{ $therapist->id }}">
+                    <input type="hidden" name="receiverID" value="{{ $therapist->id }}">
                     <label for="appointmentDate" class="block text-sm font-medium text-gray-700">Appointment Date</label>
                     <input type="datetime-local" id="appointmentDate" name="datetime" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
 

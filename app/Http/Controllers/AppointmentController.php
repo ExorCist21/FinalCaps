@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +19,7 @@ class AppointmentController extends Controller
         ]);
 
         // Create a new appointment
-        Appointment::create([
+        $patient = Appointment::create([
             'datetime' => $request->datetime,
             'description' => $request->description,
             'therapistID' => $request->therapist_id,
@@ -29,6 +29,14 @@ class AppointmentController extends Controller
             'status' => 'pending',
         ]);
 
+        $patientName = Auth::user()->name;
+
+        Notification::create([
+            'n_userID' => $request->therapist_id,  // Notify the therapist
+            'type' => 'appointment',  // You can define this type for negotiation
+            'data' => $patientName, // Custom message
+            'created_at' => now(),
+        ]);
         // Redirect with success message
         return redirect()->route('patients.appointment')->with('success', 'Appointment successfully booked!');
     }
@@ -51,4 +59,5 @@ class AppointmentController extends Controller
         // Redirect with a success message
         return redirect()->route('patients.appointment')->with('success', 'Appointment successfully canceled!');
     }
+    
 }

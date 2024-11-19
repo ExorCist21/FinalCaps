@@ -13,7 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\PaymentController;
-
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -84,7 +84,12 @@ Route::middleware(['auth', 'role:patient'])->get('/patient/bookappointment', [Pa
 
 // Patient appointment details
 Route::middleware(['auth', 'role:patient'])->get('/patient/bookappointment/{id}', [PatientController::class, 'appDetails'])->name('patients.therapist-details');
-
+// Patient make notifications to therapist
+Route::middleware(['auth'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.all');
+    Route::get('/space/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+});
 // Patient store appointment
 Route::post('patients/bookappointment/store', [AppointmentController::class, 'store'])->name('appointments.store');
 

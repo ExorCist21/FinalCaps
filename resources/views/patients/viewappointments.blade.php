@@ -8,7 +8,12 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-5">
+        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-5 relative"> <!-- Add 'relative' to the container -->
+            <!-- Position the button to the upper-right corner -->
+            <div class="absolute top-3 right-2 mt-3 mr-3">
+                <a href="{{ route('patients.bookappointments') }}" class="py-2 pt-2 px-8 border-2 rounded-md bg-green-400 hover:bg-green-500 hover:text-white">Book Now!</a>
+            </div>
+
             <h3 class="text-lg font-semibold mb-4">Your Appointments</h3>
 
             @if ($appointments->isEmpty())
@@ -51,9 +56,6 @@
                     </tbody>
                 </table>
             @endif
-        </div>
-        <div class="pt-6">
-            <a href="{{ route('patients.bookappointments') }}" class="py-2 pt-2 px-8 border-2 rounded-md bg-green-400">Book Now!</a>
         </div>
     </div>
 </x-app-layout>
