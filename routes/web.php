@@ -104,7 +104,8 @@ Route::middleware(['auth', 'role:patient'])->get('/patient/bookappointment/{id}'
 Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.all');
     Route::get('/space/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
-    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+
 });
 // Patient store appointment
 Route::post('patients/bookappointment/store', [AppointmentController::class, 'store'])->name('appointments.store');

@@ -27,7 +27,7 @@ class AppointmentController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
             'status' => 'pending',
-            'session_meeting' => null,
+            'session_meeting' => 'online',
         ]);
 
         $patientName = Auth::user()->name;
