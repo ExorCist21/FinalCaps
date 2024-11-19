@@ -28,7 +28,7 @@
                    class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
                    View Session
                 </a>
-                <a href="#" 
+                <a href="{{ route('patient.progress') }}" 
                    class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
                    Progress
                 </a>

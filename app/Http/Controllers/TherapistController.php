@@ -92,4 +92,41 @@ class TherapistController extends Controller
         return redirect()->route('therapist.session')->with('success', 'Appointment marked as done.');
     }
 
+    public function editProfile()
+    {
+        // Get the current therapist information
+        $therapistInformation = auth()->user()->therapistInformation;
+        
+        return view('therapist.profile', compact('therapistInformation'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        // Validate the incoming data
+        $validated = $request->validate([
+            'clinic_name' => 'nullable|string|max:255',
+            'awards' => 'nullable|string|max:255',
+            'expertise' => 'nullable|string|max:255',
+        ]);
+
+        $therapistInformation = auth()->user()->therapistInformation()->firstOrCreate([
+            'user_id' => auth()->id(), 
+        ]);
+
+        // Update the profile information
+        $therapistInformation->update($validated);
+
+        // Redirect with success message
+        return redirect()->route('therapist.background')
+                         ->with('success', 'Your profile has been updated successfully.');
+    }
+
+    public function showBackground()
+    {
+        // Get the current therapist's information
+        $therapistInformation = auth()->user()->therapistInformation;
+
+        return view('therapist.background', compact('therapistInformation'));
+    }
+
 }

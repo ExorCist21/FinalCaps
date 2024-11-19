@@ -28,13 +28,21 @@
             </div>
             <hr class="my-4"/>
             <p class="text-gray-600 mb-2">
-                <strong>Expertise:</strong> Psykayatres
+                <strong>Expertise:</strong> {{ $therapist->therapistInformation->expertise ?? 'Not Available' }}
             </p>
             <!-- Ratings with Stars -->
             <div class="flex items-center mb-4">
                 <strong class="text-gray-600 mr-2">Ratings:</strong>
-                <div class="flex" data-rating="2">
-                    <!-- Stars will be rendered here -->
+                <div class="flex">
+                        @if($therapist->feedback->count() > 0)
+                            <p class="text-sm text-gray-700 mb-2">
+                                <div class="flex justify-center" data-rating="{{ round($therapist->feedback->avg('rating'), 1) }}">
+                                    <!-- Stars will be rendered here -->
+                                </div>
+                            </p>
+                        @else
+                            <p class="text-sm text-gray-700 text-gray-500">No feedback yet</p>
+                        @endif
                 </div>
             </div>
             <!-- Awards Section -->
@@ -42,8 +50,7 @@
                 <strong>Awards:</strong>
             </p>
             <ul class="list-disc ml-5 text-gray-600 mb-4">
-                <li class="mb-2">Best Therapist of the Year (2023)</li>
-                <li class="mb-2">Excellence in Mental Health Services Award (2022)</li>
+                <li class="mb-2"> {{ $therapist->therapistInformation->awards ?? 'None' }} </li>
             </ul>
             <!-- Patient Feedbacks Section -->
             <p class="text-gray-600 mb-2">

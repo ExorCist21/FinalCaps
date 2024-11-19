@@ -4,22 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Content;
+use App\Models\Feedback;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 
-
 class PatientController extends Controller
 {
-    //
     public function index()
     {
         // Fetch the authenticated user by their ID
         $patients = User::where('role', 'patient')
-                    ->where('id', auth()->id()) // Filter by authenticated user's ID
-                    ->get();
+                        ->where('id', auth()->id()) // Filter by authenticated user's ID
+                        ->get();
 
-        return view('patients.dashboard', compact('patients'));
+        // Fetch all the contents posted by the admin
+        $contents = Content::all(); // You can modify this query if needed, e.g., based on content type or visibility
+
+        return view('patients.dashboard', compact('patients', 'contents'));
     }
+
+
 
     public function viewApp()
     {
@@ -33,8 +38,11 @@ class PatientController extends Controller
         return view('patients.viewappointments', compact('appointments'));
     }
 
+
     public function appIndex() {
-        $therapists = User::where('role', 'therapist')->get();
+        $therapists = User::where('role', 'therapist')
+        ->with('therapistInformation','feedback')->get();
+        
         // Pass therapists to the view
         return view('patients.bookappointments', compact('therapists'));
     }
@@ -48,7 +56,8 @@ class PatientController extends Controller
         return view('patients.therapist-details', compact('therapist'));
     }
 
-    public function showRegistrationForm () {
+    public function showRegistrationForm()
+    {
         return view('patients.register');
     }
 
