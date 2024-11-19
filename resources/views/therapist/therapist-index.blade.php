@@ -132,8 +132,8 @@
                         </div>
 
                         <div class="flex justify-between items-center">
-                            <button type="button" onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancel</button>
-                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit</button>
+                            <button type="button" onclick="closeModal()" class="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300">Cancel</button>
+                            <button type="submit" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600">Save Information</button>
                         </div>
                     </form>
                 </div>

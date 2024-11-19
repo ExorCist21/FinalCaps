@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Notification;
 use App\Models\Appointment;
 use App\Models\Progress;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -97,14 +98,17 @@ class AppointmentController extends Controller
     public function viewSession($appointmentId)
     {
         $appointment = Appointment::findOrFail($appointmentId);
-
+    
         // Ensure the therapist is the one managing the appointment
         if ($appointment->therapistID !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
-
-        return view('therapist.view-session', compact('appointment'));
-    }
+    
+        // Fetch the patient's details
+        $patient = User::findOrFail($appointment->patientID);
+    
+        return view('therapist.view-session', compact('appointment', 'patient'));
+    }    
 
     public function storeSession(Request $request, $appointmentId)
     {
