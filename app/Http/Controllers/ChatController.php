@@ -133,4 +133,18 @@ class ChatController extends Controller
 
         return back();
     }
+    public function fetchMessages(Request $request, $conversationId)
+    {
+        $conversation = Conversation::findOrFail($conversationId);
+
+        if ($conversation->sender_id !== Auth::id() && $conversation->receiver_id !== Auth::id()) {
+            abort(403, 'Unauthorized access.');
+        }
+
+        $lastMessageId = $request->query('lastMessageId', 0);
+        $messages = $conversation->messages()->where('id', '>', $lastMessageId)->get();
+
+        return response()->json($messages);
+    }
+
 }

@@ -146,6 +146,8 @@
                                         // Customize the message based on notification type
                                         if (notification.type === 'appointment_approved') {
                                             notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> has approved your booking.';         
+                                        } else if (notification.type === 'appointment_disapproved') {
+                                            notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> has disapproved your booking.';         
                                         } else {
                                             notificationMessage.textContent = notification.description;  // Default message
                                         }
