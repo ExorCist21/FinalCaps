@@ -13,7 +13,7 @@ class Conversation extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable=[
+    protected $fillable = [
         'receiver_id',
         'sender_id',
         'appointment_id'

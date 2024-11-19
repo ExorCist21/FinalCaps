@@ -43,7 +43,7 @@
                 @forelse($doneAppointments as $appointment)
                 <div class="flex justify-between items-center border-b border-gray-200 py-3">
                     <div>
-                        <p class="font-semibold">{{ $appointment->patient->name }}</p>
+                        <p class="font-semibold">{{ $appointment->patient->name }}'s health</p>
                         <p class="text-gray-500 text-sm">{{ $appointment->datetime }}</p>
                     </div>
                     <div> 
