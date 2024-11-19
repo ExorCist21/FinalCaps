@@ -13,7 +13,11 @@ class PatientController extends Controller
     //
     public function index()
     {
-        $patients = User::where('role', 'therapist')->get();
+        // Fetch the authenticated user by their ID
+        $patients = User::where('role', 'patient')
+                    ->where('id', auth()->id()) // Filter by authenticated user's ID
+                    ->get();
+
         return view('patients.dashboard', compact('patients'));
     }
 

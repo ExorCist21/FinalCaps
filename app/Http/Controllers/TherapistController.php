@@ -2,7 +2,7 @@
 
 
 namespace App\Http\Controllers;
-
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Appointment;
@@ -12,7 +12,8 @@ class TherapistController extends Controller
 {
     public function index()
     {
-        $therapists = User::where('role', 'therapist')->get();
+        $therapists = User::where('role', 'therapist')
+        ->where('id', auth()->id())->get();
         return view('therapist.dashboard', compact('therapists'));
     }
 
@@ -33,7 +34,7 @@ class TherapistController extends Controller
         $appointment = Appointment::findOrFail($appointmentID);
         $appointment->status = 'approved'; // Set the status to approved
         $appointment->save();
-    
+        $this->notifyPatientApprove($appointment);
         return redirect()->back()->with('success', 'Appointment approved successfully.');
     }
 
@@ -44,6 +45,22 @@ class TherapistController extends Controller
     
         return redirect()->back()->with('success', 'Appointment disapproved successfully.');
     }
+    protected function notifyPatientApprove(Appointment $appointment)
+{
+    // Find the patient based on the patientID from the appointment
+    $patient = User::find($appointment->patientID);  // Assuming patientID is the user ID
+    $therapist = User::find($appointment->therapistID);
+    // Check if the patient exists
+    if ($patient) {
+        // Create the notification for the patient
+        Notification::create([
+            'n_userID' => $patient->id,  // Use $patient->id, not $patient->patientID
+            'data' =>  $therapist->name,  // Store the patient's name in the notification's data field
+            'type' => 'appointment_approved',  // Notification type
+        ]);
+    }
+}
+
 
     public function deactivate($id)
     {
@@ -61,6 +78,18 @@ class TherapistController extends Controller
         $therapist->save();
 
         return redirect()->back()->with('success', 'Therapist has been activated successfully.');
+    }
+
+    public function markAsDone($appointmentId)
+    {
+        // Find the appointment
+        $appointment = Appointment::findOrFail($appointmentId);
+
+        // Update the isDone field
+        $appointment->isDone = true;
+        $appointment->save();
+
+        return redirect()->route('therapist.session')->with('success', 'Appointment marked as done.');
     }
 
 }
