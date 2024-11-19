@@ -127,16 +127,15 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/appointments/{appointmentID}/update-progress', [AppointmentController::class, 'updateProgress'])->name('therapist.appointment.updateProgress');
 });
 
-
-
 Route::get('/patient/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
 Route::get('/patient/session/{appointmentId}/schedule', [AppointmentController::class, 'viewPatient'])->name('patient.viewSession');
+Route::get('/chat/conversation-list', [ChatController::class, 'fetchConversationList']);
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/patient/chat', [ChatController::class, 'index'])->name('chat.index');
-    Route::get('/patient/chat/with/{therapist}/{appointment}', [ChatController::class, 'show'])->name('chat.show');
-    Route::post('/patient/chat/send/{conversation}', [ChatController::class, 'sendMessage'])->name('chat.send');
-    Route::get('/chat/fetch/{conversation}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index'); // Added name here
+    Route::get('/chat/load-initial-messages', [ChatController::class, 'loadInitialMessages']);
+    Route::get('/chat/fetch-unread-messages', [ChatController::class, 'fetchUnreadMessages']);
+    Route::post('/chat/send-message', [ChatController::class, 'sendMessage']); // POST request only
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -146,14 +145,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat/fetch/{conversation}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
 });
 // Add a route for fetching messages for a conversation
-
-
-
-
-
-
-
-
 
 // Authentication routes
 Route::post('/login', [LoginController::class, 'login'])->name('login');
