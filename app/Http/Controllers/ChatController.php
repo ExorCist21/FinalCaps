@@ -2,149 +2,128 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Appointment;
-use App\Models\User;
-use App\Models\Conversation;
-use App\Models\Message;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Message;
+use App\Models\User;
+use Carbon\Carbon;
 
 class ChatController extends Controller
 {
-    /**
-     * Display a list of therapists for the patient to select.
-     */
     public function index()
     {
-        // Fetch the patient's upcoming appointments along with therapist data
-        $appointments = Appointment::where('patientID', Auth::id())
-            ->where('status', 'approved')
-            ->with('therapist')  // Eager load the therapist
-            ->get();
+        // Get the authenticated user's ID
+        $userId = auth()->id();
 
-        return view('chat.index', compact('appointments'));
+        // Pass it to the view
+        return view('chat.index', ['userId' => $userId]);
     }
 
-    public function therapistIndex()
+    public function fetchConversationList(Request $request)
     {
-        // Fetch the patient's upcoming appointments along with therapist data
-        $appointments = Appointment::where('therapistID', Auth::id())
-            ->where('status', 'approved')
-            ->with('patient')  // Eager load the therapist
-            ->get();
+        $senderId = $request->input('sender_id');
 
-        return view('chat.therapist-index', compact('appointments'));
-    }
+        // Fetch the user's role
+        $userRole = \DB::table('users')->where('id', $senderId)->value('role');
 
-    public function showTherapist($patientId, $appointmentId)
-    {
-        $appointment = Appointment::findOrFail($appointmentId);
-        $patient = User::findOrFail($patientId);
+        // Initialize conversations
+        $conversations = [];
 
-        // Ensure the therapist is the one who has access
-        if ($appointment->therapistID !== Auth::id()) {
-            abort(403, 'Unauthorized');
+        if ($userRole === 'patient') {
+            // Fetch distinct therapists for the patient
+            $conversations = \DB::table('appointments')
+                ->join('users', 'users.id', '=', 'appointments.therapistID')
+                ->where('appointments.patientID', $senderId)
+                ->select('users.id', 'users.name', 'users.email') // Corrected table alias
+                ->groupBy('users.id', 'users.name', 'users.email') // Added 'users.email' to groupBy
+                ->orderBy(\DB::raw('MAX(appointments.updated_at)'), 'desc') // Corrected ordering
+                ->get();
+        } elseif ($userRole === 'therapist') {
+            // Fetch distinct patients for the therapist
+            $conversations = \DB::table('appointments')
+                ->join('users', 'users.id', '=', 'appointments.patientID')
+                ->where('appointments.therapistID', $senderId)
+                ->select('users.id', 'users.name', 'users.email') // Corrected table alias
+                ->groupBy('users.id', 'users.name', 'users.email') // Added 'users.email' to groupBy
+                ->orderBy(\DB::raw('MAX(appointments.updated_at)'), 'desc') // Corrected ordering
+                ->get();
         }
 
-        // Check if a conversation exists between the patient and therapist
-        $conversation = Conversation::where(function ($query) use ($appointment) {
-            $query->where('sender_id', $appointment->patientID)
-                ->where('receiver_id', Auth::id());
-        })->orWhere(function ($query) use ($appointment) {
-            $query->where('sender_id', Auth::id())
-                ->where('receiver_id', $appointment->patientID);
-        })->first();
+        return response()->json($conversations);
+    }
 
-        // If no conversation exists, create a new one
-        if (!$conversation) {
-            $conversation = Conversation::create([
-                'sender_id' => $appointment->patientID,
-                'receiver_id' => Auth::id(),
-                'appointment_id' => $appointmentId,
+    public function loadInitialMessages(Request $request)
+    {
+        $senderId = $request->input('sender_id');
+        $receiverId = $request->input('receiver_id');
+    
+        // Fetch the latest 50 messages between the sender and receiver
+        $initialMessages = Message::where(function ($query) use ($senderId, $receiverId) {
+            $query->where('sender_id', $senderId)
+                  ->where('receiver_id', $receiverId);
+        })->orWhere(function ($query) use ($senderId, $receiverId) {
+            $query->where('sender_id', $receiverId)
+                  ->where('receiver_id', $senderId);
+        })->orderBy('created_at', 'desc')
+          ->limit(50)
+          ->get();
+    
+        // Return as a JSON response
+        return response()->json($initialMessages);
+    }    
+
+    public function fetchUnreadMessages(Request $request)
+    {
+        $senderId = $request->input('sender_id');
+        $receiverId = $request->input('receiver_id');
+    
+        // Fetch unread messages where read_at is NULL
+        $unreadMessages = Message::where('receiver_id', $senderId)
+                                 ->where('sender_id', $receiverId)
+                                 ->whereNull('read_at')
+                                 ->orderBy('created_at', 'asc')
+                                 ->get();
+    
+        // Mark the fetched unread messages as read
+        Message::where('receiver_id', $senderId)
+               ->where('sender_id', $receiverId)
+               ->whereNull('read_at')
+               ->update(['read_at' => Carbon::now()]);
+    
+        return response()->json($unreadMessages);
+    }
+    
+    // Send a new message
+    public function sendMessage(Request $request)
+    {
+        try {
+            // Log incoming request data
+            \Log::info('SendMessage Request:', $request->all());
+
+            // Validate input
+            $request->validate([
+                'sender_id' => 'required|exists:users,id',
+                'receiver_id' => 'required|exists:users,id',
+                'body' => 'required|string|max:5000',
             ]);
-        }
 
-        // Fetch messages for the conversation
-        $messages = $conversation->messages;
-
-        return view('chat.therapist-chat', compact('conversation', 'messages', 'patient', 'appointment'));
-    }
-
-    /**
-     * Show the chat for the selected therapist and appointment.
-     */
-    public function show($therapistId, $appointmentId)
-    {
-        $appointment = Appointment::findOrFail($appointmentId);
-        $therapist = User::findOrFail($therapistId);
-
-        // Ensure the patient is the one who booked the appointment
-        if ($appointment->patientID !== Auth::id()) {
-            abort(403, 'Unauthorized');
-        }
-
-        // Check if a conversation exists between the patient and therapist
-        $conversation = Conversation::where(function ($query) use ($appointment) {
-            $query->where('sender_id', Auth::id())
-                ->where('receiver_id', $appointment->therapistID);
-        })->orWhere(function ($query) use ($appointment) {
-            $query->where('sender_id', $appointment->therapistID)
-                ->where('receiver_id', Auth::id());
-        })->first();
-
-        // If no conversation exists, create a new one
-        if (!$conversation) {
-            $conversation = Conversation::create([
-                'sender_id' => Auth::id(),
-                'receiver_id' => $appointment->therapistID,
-                'appointment_id' => $appointment->appointmentId,
+            // Create the message
+            $message = Message::create([
+                'sender_id' => $request->input('sender_id'),
+                'receiver_id' => $request->input('receiver_id'),
+                'body' => $request->input('body'),
+                'created_at' => now(),
             ]);
+
+            // Log successful creation
+            \Log::info('Message Created:', $message->toArray());
+
+            return response()->json($message);
+        } catch (\Exception $e) {
+            // Log the error
+            \Log::error('Error Sending Message:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Unable to send message.'], 500);
         }
-
-        // Fetch messages for the conversation
-        $messages = $conversation->messages;
-
-        return view('chat.chat', compact('conversation', 'messages', 'therapist', 'appointment'));
     }
 
-    /**
-     * Send a message to the conversation.
-     */
-    public function sendMessage(Request $request, $conversationId)
-    {
-        $request->validate([
-            'message' => 'required|string|max:255',
-        ]);
-
-        $conversation = Conversation::findOrFail($conversationId);
-
-        // Ensure the authenticated user is part of the conversation
-        if ($conversation->sender_id !== Auth::id() && $conversation->receiver_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        // Store the message
-        Message::create([
-            'conversation_id' => $conversation->id,
-            'receiver_id' => $conversation->receiver_id,
-            'sender_id' => Auth::id(),
-            'body' => $request->message,
-        ]);
-
-        return back();
-    }
-    public function fetchMessages(Request $request, $conversationId)
-    {
-        $conversation = Conversation::findOrFail($conversationId);
-
-        if ($conversation->sender_id !== Auth::id() && $conversation->receiver_id !== Auth::id()) {
-            abort(403, 'Unauthorized access.');
-        }
-
-        $lastMessageId = $request->query('lastMessageId', 0);
-        $messages = $conversation->messages()->where('id', '>', $lastMessageId)->get();
-
-        return response()->json($messages);
-    }
-
+    
 }

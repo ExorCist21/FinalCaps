@@ -1,64 +1,64 @@
 <title>Appointment Session</title>
 <x-app-layout>
     <div class="container mx-auto p-4">
-        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md">
-            <div class="p-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold">Upcoming Appointments</h2>
-                <p class="text-gray-500 text-sm">Here are your upcoming appointments. Click to edit the details.</p>
-            </div>
-
-            <!-- Appointment List -->
-            <div class="p-4">
-                @forelse($upcomingAppointments as $appointment)
-                    <div class="flex justify-between items-center border-b border-gray-200 py-3">
-                        <div>
-                            <p class="font-semibold">{{ $appointment->patient->name }}</p>
-                            <p class="text-gray-500 text-sm">{{ $appointment->datetime }}</p>
-                        </div>
-                        <div>
-                            <a href="{{ route('therapist.viewSession', $appointment->appointmentID) }}" class="text-blue-600 hover:underline">Edit Meeting Details</a>
-                        </div>
-                        <div>
-                            <form action="{{ route('therapist.markAsDone', $appointment->appointmentID) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
-                                    Submit (Mark as Done)
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                @empty
-                    <p class="text-gray-500">No upcoming appointments.</p>
-                @endforelse
-            </div>
-
-            <div class="p-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold">Done Appointments</h2>
-                <p class="text-gray-500 text-sm">Here are your done appointments. Click to update the progress.</p>
-            </div>
-
-            <!-- Done Appointment List -->
-            <div class="p-4">
-                @forelse($doneAppointments as $appointment)
-                <div class="flex justify-between items-center border-b border-gray-200 py-3">
+        <div class="max-w-7xl mx-auto">
+            <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Upcoming Appointments -->
+                <div>
+                    <h2 class="text-lg font-semibold mb-2">Upcoming Appointments</h2>
+                    <p class="text-gray-500 text-sm mb-4">Here are your upcoming appointments. Click to edit the details.</p>
                     <div>
-                        <p class="font-semibold">{{ $appointment->patient->name }}'s health</p>
-                        <p class="text-gray-500 text-sm">{{ $appointment->datetime }}</p>
-                    </div>
-                    <div> 
-                        @if ($appointment->progress)
-                            <!-- If progress exists, show "Update Progress" -->
-                            <a href="{{ route('therapist.progress', ['appointmentID' => $appointment->appointmentID]) }}" class="text-blue-600 hover:underline">View Progress</a>
-                        @else
-                            <!-- If no progress, show "Add Info" and trigger the modal -->
-                            <button onclick="openModal({{ $appointment->appointmentID }})" class="text-blue-600 hover:underline">Add Info</button>
-                        @endif
+                        @forelse($upcomingAppointments as $appointment)
+                            <div class="flex justify-between items-center border-b border-gray-200 py-3">
+                                <div>
+                                    <p class="font-semibold">{{ $appointment->patient->name }}</p>
+                                    <p class="text-gray-500 text-sm">{{ $appointment->datetime }}</p>
+                                </div>
+                                <div class="ml-auto">
+                                    <a href="{{ route('therapist.viewSession', $appointment->appointmentID) }}"
+                                    class="text-blue-600 hover:border-b-2 hover:border-b-blue-600 mx-2 py-1">
+                                        Edit
+                                    </a>
+                                    <a href="#" 
+                                    onclick="event.preventDefault(); markAsDone('{{ route('therapist.markAsDone', $appointment->appointmentID) }}')" 
+                                    class="text-green-600 hover:border-b-2 hover:border-b-green-600 mx-2 py-1">
+                                        Complete
+                                    </a>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-gray-500">No upcoming appointments.</p>
+                        @endforelse
                     </div>
                 </div>
-                @empty
-                    <p class="text-gray-500">No done appointments.</p>
-                @endforelse
+
+                <!-- Done Appointments -->
+                <div>
+                    <h2 class="text-lg font-semibold mb-2">Done Appointments</h2>
+                    <p class="text-gray-500 text-sm mb-4">Here are your done appointments. Click to update the progress.</p>
+                    <div>
+                        @forelse($doneAppointments as $appointment)
+                            <div class="flex justify-between items-center border-b border-gray-200 py-3">
+                                <div>
+                                    <p class="font-semibold">{{ $appointment->patient->name }}</p>
+                                    <p class="text-gray-500 text-sm">{{ $appointment->datetime }}</p>
+                                </div>
+                                <div> 
+                                    @if ($appointment->progress)
+                                        <a href="{{ route('therapist.progress', ['appointmentID' => $appointment->appointmentID]) }}"
+                                        class="text-blue-600 hover:border-b-2 hover:border-b-blue-600 mx-2 py-1">
+                                            View Progress
+                                        </a>
+                                    @else
+                                        <button onclick="openModal({{ $appointment->appointmentID }})" class="text-blue-600 hover:border-b-2 hover:border-b-blue-600 mx-2 py-1">Add Info</button>
+                                    @endif
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-gray-500">No done appointments.</p>
+                        @endforelse
+                    </div>
+                </div>
             </div>
 
             <!-- Add Info Modal -->
@@ -132,31 +132,48 @@
                         </div>
 
                         <div class="flex justify-between items-center">
-                            <button type="button" onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancel</button>
-                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit</button>
+                            <button type="button" onclick="closeModal()" class="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300">Cancel</button>
+                            <button type="submit" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600">Save Information</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-<script>
-    // Open the modal and populate the appointmentId in the form's action
-    function openModal(appointmentId) {
-        const modal = document.getElementById('addInfoModal');
-        const form = document.getElementById('addInfoForm');
-        
-        // Update the form action with the correct appointment ID
-        form.action = `/therapist/session/${appointmentId}/progress`;
+    <script>
+        function openModal(appointmentId) {
+            const modal = document.getElementById('addInfoModal');
+            const form = document.getElementById('addInfoForm');
+            form.action = `/therapist/session/${appointmentId}/progress`;
+            modal.classList.remove('hidden');
+        }
 
-        modal.classList.remove('hidden'); // Show the modal
+        function closeModal() {
+            const modal = document.getElementById('addInfoModal');
+            modal.classList.add('hidden');
+        }
+
+        function markAsDone(url) {
+        if (confirm('Are you sure you want to mark this appointment as done?')) {
+            fetch(url, {
+                method: 'POST', // Use POST instead of PUT
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ _method: 'PUT' }) // Include the `_method` override
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Appointment marked as done.');
+                    window.location.reload(); // Reload to reflect changes
+                } else {
+                    alert('An error occurred while marking the appointment as done.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
     }
+    </script>
 
-    // Close the modal
-    function closeModal() {
-        const modal = document.getElementById('addInfoModal');
-        modal.classList.add('hidden'); // Hide the modal
-    }
-
-</script>
 </x-app-layout>
