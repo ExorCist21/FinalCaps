@@ -17,15 +17,31 @@ use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware(['guest', 'prevent.back.history']);
 
-Route::get('/select-register', [AdminController::class, 'selectRegister'])->name('view.select-register');
+// Login Page
+Route::get('/login', [LoginController::class, 'showLoginForm'])
+    ->name('login')
+    ->middleware(['guest', 'prevent.back.history']);
 
-Route::get('/register/patient', [PatientController::class, 'showRegistrationForm'])->name('patient.register');
-Route::get('/register/therapist', [TherapistController::class, 'showRegistrationForm'])->name('therapist.register');
+// Select Register Page
+Route::get('/select-register', [AdminController::class, 'selectRegister'])
+    ->name('view.select-register')
+    ->middleware(['guest', 'prevent.back.history']);
+
+// Patient Registration Page
+Route::get('/register/patient', [PatientController::class, 'showRegistrationForm'])
+    ->name('patient.register')
+    ->middleware(['guest', 'prevent.back.history']);
+
+// Therapist Registration Page
+Route::get('/register/therapist', [TherapistController::class, 'showRegistrationForm'])
+    ->name('therapist.register')
+    ->middleware(['guest', 'prevent.back.history']);
 
 Route::post('/register/patient', [RegisteredUserController::class, 'storePatient'])->name('patient.store');
 Route::post('/register/therapist', [RegisteredUserController::class, 'storeTherapist'])->name('therapist.store');
+
 Route::get('/dashboard', function () {
     $user = auth()->user();
 
