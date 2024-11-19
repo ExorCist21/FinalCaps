@@ -1,45 +1,54 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('therapist.dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('therapist.dashboard')" :active="request()->routeIs('therapist.dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-
-                    <!-- Add more therapist-specific links here -->
-                    <x-nav-link :href="route('therapist.appointment')" :active="request()->routeIs('therapist.appointment')">
-                        {{ __('Appointment') }}
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('therapist.chats')" :active="request()->routeIs('therapist.chats')">
-                        {{ __('Chats') }}
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('therapist.session')" :active="request()->routeIs('therapist.session')">
-                        {{ __('View Session') }}
-                    </x-nav-link>
-
-                    <x-nav-link>
-                        {{ __('Progress') }}
-                    </x-nav-link>
-                </div>
+<nav x-data="{ open: false }" class="bg-white mb-28">
+    <!-- Main Header -->
+    <header class="absolute inset-x-0 top-0 z-50 border-b">
+        <nav class="flex items-center justify-between p-6 lg:px-8 max-w-7xl mx-auto" aria-label="Global">
+            <!-- Logo -->
+            <div class="flex lg:flex-1">
+                <a href="{{ route('therapist.dashboard') }}" class="flex items-center">
+                    <img src="https://i.ibb.co/mC0RNNS/M-1-removebg-preview.png" class="h-8 w-auto" alt="MentalWell Logo">
+                    <span class="ml-2 text-lg font-bold text-gray-900">MentalWell</span>
+                </a>
             </div>
 
-            <!-- User Settings Dropdown -->
-<div class="hidden sm:flex sm:items-center sm:ml-6">
+            <!-- Centered Navigation Links -->
+            <div class="hidden lg:flex lg:gap-x-5 justify-center flex-grow">
+                <a href="{{ route('therapist.dashboard') }}" 
+                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+                   Dashboard
+                </a>
+                <a href="{{ route('therapist.appointment') }}" 
+                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+                   Appointments
+                </a>
+                <a href="{{ route('therapist.chats') }}" 
+                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+                   Chats
+                </a>
+                <a href="{{ route('therapist.session') }}" 
+                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+                   View Session
+                </a>
+                <a href="#" 
+                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+                   Progress
+                </a>
+            </div>
+
+            <!-- Right-Aligned Notification and User Dropdown -->
+            <div class="flex items-center gap-4 lg:flex lg:flex-1 lg:justify-end">
+                <a href="{{ route('therapist.chats') }}" class="text-gray-500 hover:text-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+                    </svg>
+                </a>
+
+                <!-- Notification Icon -->
                 <div class="relative">
-                    <i class="fa-regular fa-bell font-semibold text-gray-500 hover:text-orange-500 cursor-pointer"></i>
-                    <!-- Red dot for new notifications -->
-                    <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
+                    <button class="relative text-gray-500 hover:text-gray-900" id="notification-icon">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <!-- Red dot for new notifications -->
+                        <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
+                    </button>
                     <!-- Notification Dropdown -->
                     <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
                         <h2 class="px-4 py-2 text-lg font-semibold text-gray-800 border-b">Notifications</h2>
@@ -50,47 +59,32 @@
                     </div>
                 </div>
 
-    <!-- Settings Dropdown -->
-    <x-dropdown align="right" width="48">
-        <x-slot name="trigger">
-            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                <div>{{ Auth::user()->name }}</div>
-                <div class="ml-1">
-                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
+                <!-- User Settings Dropdown -->
+                <div x-data="{ open: false }" class="relative">
+                    <button @click="open = !open" class="flex items-center text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+                        <span>{{ Auth::user()->name }}</span>
+                        <svg class="ml-1 h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a 1 1 0 01-1.414 0l-4-4a 1 1 0 010-1.414z" />
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                            Profile
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                                Log Out
+                            </button>
+                        </form>
+                    </div>
                 </div>
-            </button>
-        </x-slot>
-
-        <x-slot name="content">
-            <x-dropdown-link :href="route('profile.edit')">
-                {{ __('Profile') }}
-            </x-dropdown-link>
-
-            <!-- Authentication -->
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-
-                <x-dropdown-link :href="route('logout')"
-                        onclick="event.preventDefault();
-                                    this.closest('form').submit();">
-                    {{ __('Log Out') }}
-                </x-dropdown-link>
-            </form>
-        </x-slot>
-    </x-dropdown>
-</div>
-
-<!-- Notification Dropdown (Hidden by default) -->
-<div id="notification-dropdown" class="absolute right-0 mt-2 w-60 bg-white shadow-lg rounded-lg hidden z-10">
-    <div id="notification-list">
-        <!-- Notifications will appear here -->
-    </div>
-    <div class="p-2 text-center">
-        <button id="clear-notifications" class="text-sm text-blue-500">Clear All</button>
-    </div>
-</div>
+            </div>
+        </nav>
+    </header>
+</nav>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -145,6 +139,8 @@
                                 const notificationMessage = document.createElement('div');
                                 // Customize the message based on notification type
                                 if (notification.type === 'appointment') {
+                                    notificationMessage.innerHTML = 'Patient ' + '<strong>' + notification.data + '</strong> has booked.';         
+                                } else if (notification.type === 'appointment_approved') {
                                     notificationMessage.innerHTML = 'Patient ' + '<strong>' + notification.data + '</strong> has booked.';         
                                 } else {
                                     notificationMessage.textContent = notification.description;  // Default message
@@ -261,8 +257,3 @@
         loadNotifications();
     });
 </script>
-
-
-        </div>
-    </div>
-</nav>

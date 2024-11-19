@@ -13,12 +13,8 @@ class NotificationController extends Controller
      */
     public function markAsRead($id)
     {
-        // Find the notification by ID
         $notification = Notification::findOrFail($id);
-
-        // Update the 'read_at' column to the current timestamp
         $notification->update(['read_at' => now()]);
-
         return response()->json(['message' => 'Notification marked as read successfully.']);
     }
 
