@@ -4,6 +4,7 @@ use App\Http\Livewire\Chat\Index;
 use App\Http\Livewire\Chat\Chat;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TherapistController;
@@ -63,6 +64,12 @@ Route::middleware(['auth', 'role:admin'])->get('/admin/users', [AdminController:
 Route::middleware(['auth', 'role:admin'])->get('/admin/reports', [AdminController::class, 'reports'])->name('admin.reports');
 Route::middleware(['auth', 'role:admin'])->get('/admin/therapists', [AdminController::class, 'therapists'])->name('admin.therapists');
 Route::middleware(['auth', 'role:admin'])->get('/admin/patients', [AdminController::class, 'patients'])->name('admin.patients');
+Route::middleware(['auth', 'role:admin'])->get('/admin/contentmng', [ContentController::class, 'index'])->name('admin.contentmng');
+Route::middleware(['auth', 'role:admin'])->post('/admin/contentmng', [ContentController::class, 'store'])->name('admin.contentmng.store');
+Route::middleware(['auth', 'role:admin'])->delete('/contentmng/{content_id}', [ContentController::class, 'destroy'])->name('admin.contentmng.delete');
+Route::middleware(['auth', 'role:admin'])->get('/contentmng/{content}/edit', [ContentController::class, 'edit'])->name('admin.contentmng.edit');
+Route::middleware(['auth', 'role:admin'])->put('/contentmng/{content}', [ContentController::class, 'update'])->name('admin.contentmng.update');
+Route::middleware(['auth', 'role:admin'])->get('/patients/dashboard', [PatientController::class, 'dashboard'])->name('patients.dashboard');
 
 // Therapist dashboard route
 Route::middleware(['auth', 'role:therapist'])->get('/therapist/dashboard', [TherapistController::class, 'index'])->name('therapist.dashboard');
@@ -158,13 +165,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat/fetch/{conversation}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
 });
 // Add a route for fetching messages for a conversation
-
-
-
-
-
-
-
 
 
 // Authentication routes
