@@ -41,6 +41,6 @@ class Appointment extends Model
 
     public function progress()
     {
-        return $this->hasOne(Progress::class, 'appointment_id', 'appointmentID');
+        return $this->hasMany(Progress::class, 'appointment_id', 'appointmentID');
     }
 }

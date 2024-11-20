@@ -60,7 +60,7 @@ class ChatController extends Controller
             $conversation = Conversation::create([
                 'sender_id' => $appointment->patientID,
                 'receiver_id' => Auth::id(),
-                'appointment_id' => $appointment->appointmentId,
+                'appointment_id' => $appointmentId,
             ]);
         }
 

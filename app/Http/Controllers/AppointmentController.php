@@ -85,6 +85,7 @@ class AppointmentController extends Controller
         // Fetch the patient's upcoming appointments along with therapist data
         $appointments = Appointment::where('patientID', Auth::id())
             ->where('status', 'approved')
+            ->where('isDone', false)
             ->with('therapist')
             ->get();
 
@@ -182,51 +183,58 @@ class AppointmentController extends Controller
         return view('therapist.viewProgress', compact('appointments'));
     }
 
-    public function updateProgress(Request $request, $appointmentID)
+    public function storeProgressTherapist(Request $request, $appointmentID)
     {
-        // Validate request data
+        // Validate the input
         $request->validate([
-            'mental_condition' => 'required|string',
-            'mood' => 'required|string',
-            'symptoms' => 'required|string',
-            'remarks' => 'nullable|string',
-            'risk' => 'required|string',
-            'status' => 'required|string',
+            'mental_condition' => 'required|string|max:255',
+            'mood' => 'required|string|max:255',
+            'symptoms' => 'required|string|max:1000',
+            'remarks' => 'nullable|string|max:1000',
+            'risk' => 'required|string|max:255',
+            'status' => 'required|string|max:255',
         ]);
 
-        // Find the progress record linked to the appointmentID
-        $progress = Progress::where('appointment_id', $appointmentID)->first();
+        // Find the appointment
+        $appointment = Appointment::findOrFail($appointmentID);
 
-        if (!$progress) {
-            return redirect()
-                ->route('appointment.progress', ['appointmentID' => $appointmentID])
-                ->with('error', 'Progress not found for the specified appointment.');
-        }
+        // Create new progress record
+        $progress = new Progress();
+        $progress->appointment_id = $appointment->appointmentID;
+        $progress->mental_condition = $request->mental_condition;
+        $progress->mood = $request->mood;
+        $progress->symptoms = $request->symptoms;
+        $progress->remarks = $request->remarks;
+        $progress->risk = $request->risk;
+        $progress->status = $request->status;
+        $progress->save();
 
-        // Update progress data
-        $progress->update([
-            'mental_condition' => $request->input('mental_condition'),
-            'mood' => $request->input('mood'),
-            'symptoms' => $request->input('symptoms'),
-            'remarks' => $request->input('remarks'),
-            'risk' => $request->input('risk'),
-            'status' => $request->input('status'),
-        ]);
-
-        return redirect()
-            ->route('therapist.progress', ['appointmentID' => $appointmentID])
-            ->with('success', 'Progress updated successfully!');
+        // Redirect back to the appointment page or a confirmation page
+        return redirect()->route('therapist.progress')->with('success', 'Progress added successfully.');
     }
 
+    public function showPatientAppointments()
+    {
+        // Fetch appointments with progress and therapist details for the patient
+        $appointments = Appointment::with(['progress', 'therapist'])
+            ->where('patientID', auth()->user()->id) // Assuming authenticated patient
+            ->where('status','approved')
+            ->where('isDone', true)
+            ->orderBy('datetime', 'asc')
+            ->get();
 
+        // Return the view with the appointments
+        return view('patients.card-progress', compact('appointments'));
+    }
 
+    // Show progress for a specific appointment
     public function showProgress($appointmentID)
     {
-        // Fetch the appointment along with its progress and related data
-        $appointment = Appointment::with(['progress', 'patient', 'therapist'])
-            ->findOrFail($appointmentID);
+        // Fetch the specific appointment with its progress
+        $appointment = Appointment::with('progress')->findOrFail($appointmentID);
 
-        return view('therapist.progress-detail', compact('appointment'));
+        // Return the progress view for this specific appointment
+        return view('patients.progress', compact('appointment'));
     }
 
 }

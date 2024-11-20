@@ -19,35 +19,19 @@
                             <p class="text-gray-600 text-sm">Date: {{ $appointment->datetime }}</p>
                             <p class="text-gray-600 text-sm">Session Type: {{ $appointment->meeting_type }}</p>
 
-                            <div class="mt-4">
-                                <h3 class="text-lg font-semibold text-gray-800">Progress Details</h3>
-                                @if($appointment->progress)
-                                    <div class="space-y-2">
-                                        <p><strong>Mental Condition:</strong> {{ $appointment->progress->mental_condition }}</p>
-                                        <p><strong>Mood:</strong> {{ $appointment->progress->mood }}</p>
-                                        <p><strong>Symptoms:</strong> {{ $appointment->progress->symptoms }}</p>
-                                        <p><strong>Remarks:</strong> {{ $appointment->progress->remarks }}</p>
-                                        <p><strong>Risk:</strong> {{ $appointment->progress->risk }}</p>
-                                        <p><strong>Status:</strong> {{ $appointment->progress->status }}</p>
-                                    </div>
-                                @else
-                                    <p class="text-red-500">No progress details available for this appointment.</p>
-                                @endif
-                            </div>
-
                             <!-- Buttons Section -->
                             <div class="mt-4 flex justify-between">
                                 <!-- View Details Button -->
                                 <a href="{{ route('therapist.show.progress', ['appointmentID' => $appointment->appointmentID]) }}" 
                                 class="bg-blue-500 text-white px-2 py-2 rounded-md hover:bg-blue-600">
-                                View Details
+                                View Progress
                                 </a>
 
                                 <!-- Update Progress Button -->
                                 <button 
                                 class="bg-green-500 text-white px-2 py-2 rounded-md hover:bg-green-600"
                                 onclick="openModal({{ json_encode($appointment->progress) }}, {{ $appointment->appointmentID }})">
-                                    Update Progress
+                                    Add Progress
                                 </button>
                             </div>
                         </div>
@@ -67,6 +51,7 @@
                                     <div class="mb-4">
                                         <label for="mental_condition-{{ $appointment->appointmentID }}" class="block text-sm font-medium text-gray-700">Mental Condition</label>
                                         <select id="mental_condition-{{ $appointment->appointmentID }}" name="mental_condition" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" required>
+                                            <option value="">Select...</option>
                                             <option value="Anxiety">Anxiety</option>
                                             <option value="Depression">Depression</option>
                                             <option value="Bipolar Disorder">Bipolar Disorder</option>
@@ -80,6 +65,7 @@
                                     <div class="mb-4">
                                         <label for="mood-{{ $appointment->appointmentID }}" class="block text-sm font-medium text-gray-700">Mood</label>
                                         <select id="mood-{{ $appointment->appointmentID }}" name="mood" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" required>
+                                            <option value="">Select...</option>
                                             <option value="Happy">Happy</option>
                                             <option value="Sad">Sad</option>
                                             <option value="Irritable">Irritable</option>
@@ -106,6 +92,7 @@
                                     <div class="mb-4">
                                         <label for="risk-{{ $appointment->appointmentID }}" class="block text-sm font-medium text-gray-700">Risk</label>
                                         <select id="risk-{{ $appointment->appointmentID }}" name="risk" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" required>
+                                            <option value="">Select...</option>
                                             <option value="Low">Low</option>
                                             <option value="Moderate">Moderate</option>
                                             <option value="High">High</option>
@@ -118,6 +105,7 @@
                                     <div class="mb-4">
                                         <label for="status-{{ $appointment->appointmentID }}" class="block text-sm font-medium text-gray-700">Status</label>
                                         <select id="status-{{ $appointment->appointmentID }}" name="status" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" required>
+                                            <option value="">Select...</option>
                                             <option value="Ongoing">Ongoing</option>
                                             <option value="Completed">Completed</option>
                                             <option value="Discharged">Discharged</option>
@@ -153,12 +141,6 @@
         function openModal(progressData, appointmentID) {
             // Populate the modal with existing progress data
             document.getElementById('appointment-id-' + appointmentID).value = appointmentID;
-            document.getElementById('mental_condition-' + appointmentID).value = progressData.mental_condition || '';
-            document.getElementById('mood-' + appointmentID).value = progressData.mood || '';
-            document.getElementById('symptoms-' + appointmentID).value = progressData.symptoms || '';
-            document.getElementById('remarks-' + appointmentID).value = progressData.remarks || '';
-            document.getElementById('risk-' + appointmentID).value = progressData.risk || '';
-            document.getElementById('status-' + appointmentID).value = progressData.status || '';
 
             // Show the modal
             document.getElementById('progress-modal-' + appointmentID).classList.remove('hidden');

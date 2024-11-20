@@ -124,13 +124,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/therapist/session/{appointmentID}/progress', [AppointmentController::class, 'storeProgress'])->name('therapist.storeProgress');
     Route::get('/therapist/progress', [AppointmentController::class, 'viewProgress'])->name('therapist.progress');
     Route::get('/therapist/progress/{appointmentID}', [AppointmentController::class, 'showProgress'])->name('therapist.show.progress');
-    Route::put('/appointments/{appointmentID}/update-progress', [AppointmentController::class, 'updateProgress'])->name('therapist.appointment.updateProgress');
+    Route::put('/appointments/{appointmentID}/update-progress', [AppointmentController::class, 'storeProgressTherapist'])->name('therapist.appointment.updateProgress');
 });
 
 
 
 Route::get('/patient/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
 Route::get('/patient/session/{appointmentId}/schedule', [AppointmentController::class, 'viewPatient'])->name('patient.viewSession');
+Route::get('/patient/progress', [AppointmentController::class, 'showPatientAppointments'])->name('patient.progress');
+Route::get('/patient/progress/{appointmentID}', [AppointmentController::class, 'showProgress'])->name('patient.show.progress');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/patient/chat', [ChatController::class, 'index'])->name('chat.index');
