@@ -6,36 +6,54 @@
         </h2>
     </x-slot>
 
-    <div class="py-2">
-        <div class="max-w-7xl mx-auto">
-            <!-- Display Admin's Posted Content -->
-            <div class="mt-8">
-                <h3 class="text-2xl font-semibold">Contents Feed</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                    @foreach($contents as $content)
-                    <div class="bg-white dark:bg-gray-800 p-4 shadow-md rounded-lg">
-                    <p class="text-m">
-                        <span class="font-bold text-lg">{{ $content->creator->name }}</span> added a new content
-                    </p>
-                    <p class="text-sm text-gray-700 mb-2">{{ $content->created_at->format('F j, Y') }}</p>
-
-                    <!-- Content Image -->
-                    @if($content->image_path)
-                        <img src="{{ Storage::url($content->image_path) }}" alt="Content Image" class="w-full h-48 object-cover rounded-md mb-4">
-                    @endif
-
-                    <!-- Content Title -->
-                    <h3 class="text-lg font-semibold text-gray-900">{{ $content->title }}</h3>
-
-                    <!-- Content Description -->
-                    <p class="text-sm text-gray-700 mt-2">{{ $content->description }}</p>
-
-                    <!-- Content URL -->
-                    <a href="{{ $content->url }}" class="text-blue-600 mt-2 block">Visit Link</a>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
+    <div class="max-w-7xl mx-auto">
+        <!-- Header Section -->
+        <div class="mb-5 flex items-center justify-between">
+            <h3 class="text-xl font-semibold text-gray-800">
+                {{ __('Your Content Feed') }}
+            </h3>
         </div>
+
+        @if ($contents->isEmpty())
+            <p class="text-center text-gray-600">No content available at the moment.</p>
+        @else
+            <div id="contentsContainer" class="grid grid-cols-1">
+                @foreach($contents as $content)
+                    <div class="bg-white rounded-md p-6 border transition-shadow duration-200">
+                        <!-- Creator Info -->
+                        <div class="flex items-center mb-4">
+                            <img src="https://i.pravatar.cc/150?img={{ $content->creator->id }}"
+                                 alt="Creator Avatar" 
+                                 class="w-12 h-12 ring-2 ring-indigo-600 rounded-full object-cover mr-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 capitalize">{{ $content->creator->name }}</h3>
+                                <p class="text-sm text-gray-600">{{ $content->created_at->format('F j, Y') }}</p>
+                            </div>
+                        </div>
+
+                        <hr class="my-4"/>
+
+                        <!-- Content Image -->
+                        @if($content->image_path)
+                            <img src="{{ Storage::url($content->image_path) }}" 
+                                 alt="Content Image" 
+                                 class="w-full aspect-w-16 aspect-h-9 object-cover rounded-md mb-4">
+                        @endif
+
+                        <!-- Content Title -->
+                        <h3 class="text-lg font-semibold text-gray-800">{{ $content->title }}</h3>
+
+                        <!-- Content Description -->
+                        <p class="text-sm text-gray-600 mt-2">{{ Str::limit($content->description, 100, '...') }}</p>
+
+                        <!-- Content URL -->
+                        <a href="{{ $content->url }}" 
+                           class="text-sm font-medium text-indigo-600 hover:text-indigo-800 mt-4 block">
+                            Visit Link
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 </x-app-layout>
