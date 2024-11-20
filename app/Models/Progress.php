@@ -14,11 +14,17 @@ class Progress extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'appointment_id', 'disease', 'disease_type', 'fatal', 'remarks', 'status'
+        'appointment_id',
+        'mental_condition',
+        'mood',
+        'symptoms',
+        'remarks',
+        'risk',
+        'status',
     ];
 
     public function appointment()
     {
-        return $this->belongsTo(Appointment::class);
+        return $this->belongsTo(Appointment::class, 'appointment_id', 'appointmentID');
     }
 }

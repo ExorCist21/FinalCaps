@@ -28,20 +28,20 @@
                         {{ __('View Session') }}
                     </x-nav-link>
 
-                    <x-nav-link>
+                    <x-nav-link :href="route('therapist.progress')" :active="request()->routeIs('therapist.progress')">
                         {{ __('Progress') }}
                     </x-nav-link>
                 </div>
             </div>
 
             <!-- User Settings Dropdown -->
-<div class="hidden sm:flex sm:items-center sm:ml-6">
-                <div class="relative">
-                    <i class="fa-regular fa-bell font-semibold text-gray-500 hover:text-orange-500 cursor-pointer"></i>
-                    <!-- Red dot for new notifications -->
-                    <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
-                    <!-- Notification Dropdown -->
-                    <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <div class="relative">
+                        <i class="fa-regular fa-bell font-semibold text-gray-500 hover:text-orange-500 cursor-pointer"></i>
+                        <!-- Red dot for new notifications -->
+                        <span id="notification-dot" class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full" style="display: none;"></span>
+                        <!-- Notification Dropdown -->
+                        <div id="notification-dropdown" class="border absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-2 z-50 hidden">
                         <h2 class="px-4 py-2 text-lg font-semibold text-gray-800 border-b">Notifications</h2>
                         <div id="notification-list" class="max-h-80">
                             <p class="px-4 py-2 text-gray-800">No new notifications.</p>

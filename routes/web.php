@@ -119,7 +119,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/therapist/session/{appointmentId}/schedule', [AppointmentController::class, 'viewSession'])->name('therapist.viewSession');
     Route::post('/therapist/session/{appointmentId}/schedule', [AppointmentController::class, 'storeSession'])->name('therapist.storeSession');
     Route::put('/therapist/session/{appointmentId}/mark-as-done', [TherapistController::class, 'markAsDone'])->name('therapist.markAsDone');
+    Route::get('/therapist/session/{appointmentId}', [AppointmentController::class, 'addInfo'])->name('therapist.addInfo');
+    Route::post('/therapist/session/{appointmentID}/progress', [AppointmentController::class, 'storeProgress'])->name('therapist.storeProgress');
+    Route::get('/therapist/progress', [AppointmentController::class, 'viewProgress'])->name('therapist.progress');
+    Route::get('/therapist/progress/{appointmentID}', [AppointmentController::class, 'showProgress'])->name('therapist.show.progress');
+    Route::put('/appointments/{appointmentID}/update-progress', [AppointmentController::class, 'updateProgress'])->name('therapist.appointment.updateProgress');
 });
+
+
 
 Route::get('/patient/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
 Route::get('/patient/session/{appointmentId}/schedule', [AppointmentController::class, 'viewPatient'])->name('patient.viewSession');

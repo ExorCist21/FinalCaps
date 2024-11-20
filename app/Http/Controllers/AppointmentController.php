@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Models\Notification;
-use Illuminate\Http\Request;
 use App\Models\Appointment;
+use App\Models\Progress;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
@@ -27,7 +28,7 @@ class AppointmentController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
             'status' => 'pending',
-            'session_meeting' => null,
+            'session_meeting' => 'online',
         ]);
 
         $patientName = Auth::user()->name;
@@ -67,13 +68,13 @@ class AppointmentController extends Controller
         $upcomingAppointments = Appointment::where('therapistID', Auth::id())
             ->where('status', 'approved')
             ->where('isDone', false)
-            ->with('patient')
+            ->with('patient','progress')
             ->get();
 
         $doneAppointments = Appointment::where('therapistID', Auth::id())
             ->where('status', 'approved')
             ->where('isDone', true)
-            ->with('patient')
+            ->with('patient','progress')
             ->get();
 
         return view('therapist.therapist-index', compact('upcomingAppointments', 'doneAppointments'));
@@ -127,4 +128,105 @@ class AppointmentController extends Controller
 
         return redirect()->route('therapist.session')->with('success', 'Consultation details updated successfully!');
     }
+
+    public function addInfo($appointmentId)
+    {
+        // Fetch the appointment using the provided appointmentId
+        $appointment = Appointment::findOrFail($appointmentId);
+        
+        // Here you can load any other data or perform logic as needed
+        
+        // Return a view where the therapist can add the info for the appointment
+        return view('therapist.add-info', compact('appointment'));
+    }
+    
+    public function storeProgress(Request $request, $appointmentID)
+    {
+        // Validate the input
+        $request->validate([
+            'mental_condition' => 'required|string|max:255',
+            'mood' => 'required|string|max:255',
+            'symptoms' => 'required|string|max:1000',
+            'remarks' => 'nullable|string|max:1000',
+            'risk' => 'required|string|max:255',
+            'status' => 'required|string|max:255',
+        ]);
+
+        // Find the appointment
+        $appointment = Appointment::findOrFail($appointmentID);
+
+        // Create new progress record
+        $progress = new Progress();
+        $progress->appointment_id = $appointment->appointmentID;
+        $progress->mental_condition = $request->mental_condition;
+        $progress->mood = $request->mood;
+        $progress->symptoms = $request->symptoms;
+        $progress->remarks = $request->remarks;
+        $progress->risk = $request->risk;
+        $progress->status = $request->status;
+        $progress->save();
+
+        // Redirect back to the appointment page or a confirmation page
+        return redirect()->route('therapist.session')->with('success', 'Progress added successfully.');
+    }
+
+    public function viewProgress()
+    {
+        // Fetch all appointments for the authenticated therapist along with their related progress and patient
+        $appointments = Appointment::with('progress', 'patient')
+            ->where('isDone', true)
+            ->where('therapistID', auth()->id()) // Only fetch appointments for the authenticated therapist
+            ->get();
+
+        // Return the appointments and their progress to the view
+        return view('therapist.viewProgress', compact('appointments'));
+    }
+
+    public function updateProgress(Request $request, $appointmentID)
+    {
+        // Validate request data
+        $request->validate([
+            'mental_condition' => 'required|string',
+            'mood' => 'required|string',
+            'symptoms' => 'required|string',
+            'remarks' => 'nullable|string',
+            'risk' => 'required|string',
+            'status' => 'required|string',
+        ]);
+
+        // Find the progress record linked to the appointmentID
+        $progress = Progress::where('appointment_id', $appointmentID)->first();
+
+        if (!$progress) {
+            return redirect()
+                ->route('appointment.progress', ['appointmentID' => $appointmentID])
+                ->with('error', 'Progress not found for the specified appointment.');
+        }
+
+        // Update progress data
+        $progress->update([
+            'mental_condition' => $request->input('mental_condition'),
+            'mood' => $request->input('mood'),
+            'symptoms' => $request->input('symptoms'),
+            'remarks' => $request->input('remarks'),
+            'risk' => $request->input('risk'),
+            'status' => $request->input('status'),
+        ]);
+
+        return redirect()
+            ->route('therapist.progress', ['appointmentID' => $appointmentID])
+            ->with('success', 'Progress updated successfully!');
+    }
+
+
+
+    public function showProgress($appointmentID)
+    {
+        // Fetch the appointment along with its progress and related data
+        $appointment = Appointment::with(['progress', 'patient', 'therapist'])
+            ->findOrFail($appointmentID);
+
+        return view('therapist.progress-detail', compact('appointment'));
+    }
+
 }

@@ -39,7 +39,8 @@ class Appointment extends Model
         return $this->belongsTo(User::class, 'therapistID');
     }
 
-    public function progress() {
-        return $this->hasOne(Progress::class,);
+    public function progress()
+    {
+        return $this->hasOne(Progress::class, 'appointment_id', 'appointmentID');
     }
 }
