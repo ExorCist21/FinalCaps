@@ -9,6 +9,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -19,6 +20,13 @@ use App\Http\Controllers\Chat\Index;
 Route::get('/', function () {
     return view('welcome');
 })->middleware(['guest', 'prevent.back.history']);
+
+// Registration routes
+Route::get('/select-register', [AdminController::class, 'selectRegister'])->name('view.select-register')->middleware(['guest', 'prevent.back.history']);
+Route::get('/register/patient', [PatientController::class, 'showRegistrationForm'])->name('patient.register')->middleware(['guest', 'prevent.back.history']);
+Route::get('/register/therapist', [TherapistController::class, 'showRegistrationForm'])->name('therapist.register')->middleware(['guest', 'prevent.back.history']);
+Route::post('/register/patient', [RegisteredUserController::class, 'storePatient'])->name('patient.store');
+Route::post('/register/therapist', [RegisteredUserController::class, 'storeTherapist'])->name('therapist.store');
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -83,6 +91,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports');
         Route::get('/therapists', [AdminController::class, 'therapists'])->name('admin.therapists');
         Route::get('/patients', [AdminController::class, 'patients'])->name('admin.patients');
+        Route::get('/content', [ContentController::class, 'index'])->name('admin.contentmng');
+        Route::post('/content', [ContentController::class, 'store'])->name('admin.contentmng.store');
+        Route::delete('/content/{content_id}', [ContentController::class, 'destroy'])->name('admin.contentmng.delete');
+        Route::get('/content/{content_id}/edit', [ContentController::class, 'edit'])->name('admin.contentmng.edit');
+        Route::put('/content/{content_id}/edit', [ContentController::class, 'update'])->name('admin.contentmng.update');
+        Route::post('/content', [ContentController::class, 'store'])->name('admin.contentmng.store');
         Route::post('/patients/{id}/deactivate', [PatientController::class, 'deactivate'])->name('patients.deactivate');
         Route::post('/therapist/{id}/deactivate', [TherapistController::class, 'deactivate'])->name('therapist.deactivate');
         Route::post('/patients/{id}/activate', [PatientController::class, 'activate'])->name('patients.activate');

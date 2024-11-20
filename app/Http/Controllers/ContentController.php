@@ -20,6 +20,7 @@ class ContentController extends Controller
     public function store(Request $request)
     {
         // Validate the incoming request
+        //dd($request->all());
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
