@@ -6,14 +6,8 @@
             {{ __('Therapist Details') }}
         </h2>
     </x-slot>
-    
-    <div class="max-w-4xl mx-auto my-16">
-        <div class="flex justify-start">
-            <button id="backButton" class="w-auto mb-6 flex items-center text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                <span class="mr-2" aria-hidden="true">&larr;</span>
-                Back
-            </button>
-        </div>
+
+    <div class="max-w-7xl mx-auto">
         <div class="bg-white rounded-md p-6 border">
             <!-- Therapist Image -->
             <div class="flex items-center mb-4">
@@ -115,11 +109,6 @@
 
 <!-- Script for rendering 5 stars -->
 <script>
-    // Add a click event listener to the Back button
-    document.getElementById('backButton').addEventListener('click', function () {
-        history.back(); // Navigate to the previous page in browser history
-    });
-
     document.addEventListener("DOMContentLoaded", () => {
         // Find all elements with the data-rating attribute
         document.querySelectorAll("[data-rating]").forEach((ratingElement) => {

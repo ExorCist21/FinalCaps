@@ -1,31 +1,32 @@
 <x-app-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
+    <div class="max-w-lg mx-auto p-10 bg-gray-50 rounded-md border">
+        <h2 class="text-2xl font-semibold text-center text-gray-800 200 mb-4">
+            Verify Your Email Address
+        </h2>
+        <p class="text-sm text-gray-600 text-center mb-6">
+            Thanks for signing up! We're thrilled to have you on board. Before you can start connecting with MentalWell, please verify your email by clicking on the link we've sent to your inbox. If you didn’t receive the email, don’t worry – we can send you another one.
+        </p>
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-    @endif
-
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
-
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
+        @if (session('status') == 'verification-link-sent')
+            <div class="mb-4 text-center text-sm font-medium text-green-600">
+                A new verification link has been sent to your email address. Please check your inbox!
             </div>
-        </form>
+        @endif
 
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
+        <div class="text-center">
+            <form method="POST" action="{{ route('verification.send') }}" class="inline-block">
+                @csrf
+                <button 
+                    type="submit" 
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                    Resend Verification Email
+                </button>
+            </form>
+        </div>
 
-            <button type="submit" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                {{ __('Log Out') }}
-            </button>
-        </form>
+        <p class="text-center text-sm text-gray-500 mt-6">
+            Having trouble? Contact our <a href="#" class="text-indigo-600 hover:underline">support team</a>. We're here to help.
+        </p>
     </div>
 </x-app-layout>

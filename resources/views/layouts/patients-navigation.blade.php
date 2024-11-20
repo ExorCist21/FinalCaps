@@ -86,7 +86,19 @@
     </header>
 </nav>
 
+<div class="flex justify-start max-w-7xl mx-auto">
+    <button id="backButton" class="w-auto mb-6 flex items-center text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+        <span class="mr-2" aria-hidden="true">&larr;</span>
+        Back
+    </button>
+</div>
+
 <script>
+    // Add a click event listener to the Back button
+    document.getElementById('backButton').addEventListener('click', function () {
+        history.back(); // Navigate to the previous page in browser history
+    });
+    
     document.addEventListener('DOMContentLoaded', function () {
         const notificationIcon = document.querySelector('.fa-bell');
         const notificationDropdown = document.getElementById('notification-dropdown');

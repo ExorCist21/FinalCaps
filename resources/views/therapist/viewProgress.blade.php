@@ -10,7 +10,7 @@
         <div class="mb-5 flex items-center justify-between">
             <div>
             <h3 class="text-xl font-semibold text-gray-800">
-                {{ __('Patient Progress') }}
+                {{ __('Patients Progress') }}
             </h3>
             <p class="text-gray-500 text-sm">Select the patient to view detailed progress</p>
             </div>

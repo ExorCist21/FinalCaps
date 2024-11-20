@@ -15,15 +15,32 @@ class PasswordController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
+        // Validate inputs with custom error bag
         $validated = $request->validateWithBag('updatePassword', [
-            'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
+            'current_password' => [
+                'required',
+                'current_password', // Built-in Laravel validation for matching current password
+            ],
+            'password' => [
+                'required',
+                Password::defaults(), // Validates the strength of the password
+                'confirmed', // Ensures 'password' and 'password_confirmation' match
+            ],
         ]);
 
-        $request->user()->update([
-            'password' => Hash::make($validated['password']),
-        ]);
+        try {
+            // Update user's password
+            $request->user()->update([
+                'password' => Hash::make($validated['password']),
+            ]);
 
-        return back()->with('status', 'password-updated');
+            // Redirect with success message
+            return back()->with('status', 'Password updated successfully.');
+        } catch (\Exception $e) {
+            // Catch any unexpected error and log if necessary
+            return back()->withErrors([
+                'updatePassword' => 'An error occurred while updating the password. Please try again.',
+            ]);
+        }
     }
 }
