@@ -34,6 +34,10 @@
                     <x-nav-link :href="route('admin.reports')" :active="request()->routeIs('admin.reports')">
                         {{ __('View Reports') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('admin.contentmng')" :active="request()->routeIs('admin.reports')">
+                        {{ __('Content Management') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -41,7 +45,7 @@
                     <button @click="open = !open" class="flex items-center text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
                         <span>{{ Auth::user()->name }}</span>
                         <svg class="ml-1 h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a 1 1 0 01-1.414 0l-4-4a 1 1 0 010-1.414z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a 1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                         </svg>
                     </button>
 

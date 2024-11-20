@@ -34,17 +34,6 @@ Route::get('/dashboard', function () {
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Authentication Routes
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
-    Route::get('/select-register', [AdminController::class, 'selectRegister'])->name('view.select-register');
-    Route::get('/register/patient', [PatientController::class, 'showRegistrationForm'])->name('patient.register');
-    Route::get('/register/therapist', [TherapistController::class, 'showRegistrationForm'])->name('therapist.register');
-    Route::post('/register/patient', [RegisteredUserController::class, 'storePatient'])->name('patient.store');
-    Route::post('/register/therapist', [RegisteredUserController::class, 'storeTherapist'])->name('therapist.store');
-});
-
 // Authenticated User Routes (after login)
 Route::middleware('auth')->group(function () {
     // Grouped by Role
