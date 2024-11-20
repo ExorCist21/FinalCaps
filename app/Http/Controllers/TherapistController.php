@@ -34,7 +34,7 @@ class TherapistController extends Controller
         $appointment = Appointment::findOrFail($appointmentID);
         $appointment->status = 'approved'; // Set the status to approved
         $appointment->save();
-        $this->notifyPatientApprove($appointment);
+        $this->notifyPatient($appointment, 'appointment_approved');
         return redirect()->back()->with('success', 'Appointment approved successfully.');
     }
 
@@ -42,24 +42,24 @@ class TherapistController extends Controller
         $appointment = Appointment::findOrFail($appointmentID);
         $appointment->status = 'disapproved'; // Set the status to disapproved
         $appointment->save();
-    
+        $this->notifyPatient($appointment, 'appointment_disapproved');
         return redirect()->back()->with('success', 'Appointment disapproved successfully.');
     }
-    protected function notifyPatientApprove(Appointment $appointment)
-{
-    // Find the patient based on the patientID from the appointment
-    $patient = User::find($appointment->patientID);  // Assuming patientID is the user ID
-    $therapist = User::find($appointment->therapistID);
-    // Check if the patient exists
-    if ($patient) {
-        // Create the notification for the patient
-        Notification::create([
-            'n_userID' => $patient->id,  // Use $patient->id, not $patient->patientID
-            'data' =>  $therapist->name,  // Store the patient's name in the notification's data field
-            'type' => 'appointment_approved',  // Notification type
-        ]);
+    protected function notifyPatient(Appointment $appointment, $type)
+    {
+        // Find the patient based on the patientID from the appointment
+        $patient = User::find($appointment->patientID);  // Assuming patientID is the user ID
+        $therapist = User::find($appointment->therapistID);
+        // Check if the patient exists
+        if ($patient) {
+            // Create the notification for the patient
+            Notification::create([
+                'n_userID' => $patient->id,  // Use $patient->id, not $patient->patientID
+                'data' =>  $therapist->name,  // Store the patient's name in the notification's data field
+                'type' => $type,  // Notification type
+            ]);
+        }
     }
-}
 
 
     public function deactivate($id)

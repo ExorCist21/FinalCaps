@@ -104,7 +104,8 @@ Route::middleware(['auth', 'role:patient'])->get('/patient/bookappointment/{id}'
 Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.all');
     Route::get('/space/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
-    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+
 });
 // Patient store appointment
 Route::post('patients/bookappointment/store', [AppointmentController::class, 'store'])->name('appointments.store');
@@ -135,13 +136,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/patient/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/patient/chat/with/{therapist}/{appointment}', [ChatController::class, 'show'])->name('chat.show');
     Route::post('/patient/chat/send/{conversation}', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat/fetch/{conversation}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/therapist/chat', [ChatController::class, 'therapistIndex'])->name('therapist.chats');
     Route::get('/therapist/chat/with/{patient}/{appointment}', [ChatController::class, 'showTherapist'])->name('therapist.show');
     Route::post('/therapist/chat/send/{conversation}', [ChatController::class, 'sendMessage'])->name('therapist.send');
+    Route::get('/chat/fetch/{conversation}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
 });
+// Add a route for fetching messages for a conversation
+
+
+
+
+
+
 
 
 
