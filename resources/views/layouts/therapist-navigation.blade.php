@@ -71,6 +71,9 @@
                     <!-- Dropdown Menu -->
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                         <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                            Edit Password
+                        </a>
+                        <a href="{{ route('therapist.background') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
                             Profile
                         </a>
                         <form method="POST" action="{{ route('logout') }}">

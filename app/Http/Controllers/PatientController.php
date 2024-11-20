@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Feedback;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,7 +35,9 @@ class PatientController extends Controller
     }
 
     public function appIndex() {
-        $therapists = User::where('role', 'therapist')->get();
+        $therapists = User::where('role', 'therapist')
+        ->with('therapistInformation','feedback')->get();
+        
         // Pass therapists to the view
         return view('patients.bookappointments', compact('therapists'));
     }

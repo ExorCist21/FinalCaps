@@ -1,3 +1,4 @@
+<!-- resources/views/appointments/index.blade.php -->
 <title>Appointment Session</title>
 <x-app-layout>
     <div class="container mx-auto p-4">
@@ -40,6 +41,40 @@
                     <p class="text-gray-500 col-span-full">You have no upcoming appointments.</p>
                 @endforelse
             </div>
+
+            <!-- Done Appointments and Feedback Section -->
+            <div class="mt-6">
+                <h2 class="font-semibold text-lg text-gray-800">Completed Appointments</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @forelse ($doneAppointments as $appointment)
+                        <div class="bg-white p-4 shadow rounded-lg">
+                            <h3 class="font-semibold text-gray-800">{{ $appointment->therapist->name }}</h3>
+                            <p class="text-gray-600 text-sm">{{ $appointment->datetime }}</p>
+                            <p class="text-gray-600 text-sm">Patient: {{ $appointment->patient->name }}</p>
+                            <p class="text-gray-600 text-sm">Meeting Type: {{ ucfirst($appointment->meeting_type) }}</p>
+                            <p class="text-gray-600 text-sm">Session: {{ $appointment->session_meeting }}</p>
+
+                            @php
+                                // Check if feedback exists for this appointment and patient
+                                $feedbackExists = $appointment->feedback()
+                                    ->where('patient_id', auth()->id())
+                                    ->exists();
+                            @endphp
+
+                            @if ($feedbackExists)
+                                <p class="text-green-600 font-semibold">Done Feedback</p>
+                            @else
+                                <a href="{{ route('appointments.feedback.create', ['appointmentId' => $appointment->appointmentID]) }}" 
+                                class="text-blue-600 hover:underline">
+                                    Give Feedback
+                                </a>
+                            @endif
+                        </div>
+                    @empty
+                        <p class="text-gray-500">No completed appointments available.</p>
+                    @endforelse
+                </div>
+            </div>
         </div>
     </div>
 
@@ -49,7 +84,7 @@
             <h3 class="text-xl font-semibold text-gray-800 mb-4">Appointment Details</h3>
             <p id="modalDatetime" class="text-gray-700 mb-2"><strong>Datetime:</strong> </p>
             <p id="modalSessionMeeting" class="text-gray-700 mb-2"><strong>Session Meeting:</strong> </p>
-            <p id="modalMeetingType" class="text-gray-700 mb-4"><strong>Meeting:</strong> </p>
+            <p id="modalMeetingType" class="text-gray-700 mb-4"><strong>Meeting Type:</strong> </p>
 
             <div class="flex justify-end">
                 <button 

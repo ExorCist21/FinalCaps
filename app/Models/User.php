@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -58,6 +59,26 @@ class User extends Authenticatable
     public function receivesBroadcastNotificationsOn(): string
     {
         return 'users.'.$this->id;
+    }
+
+    public function therapistInformation()
+    {
+        return $this->hasOne(TherapistInformation::class);
+    }
+
+    public function appointmentsAsTherapist()
+    {
+        return $this->hasMany(Appointment::class, 'therapist_id');
+    }
+
+    public function appointmentsAsPatient()
+    {
+        return $this->hasMany(Appointment::class, 'patient_id');
+    }
+
+    public function feedback()
+    {
+        return $this->hasMany(Feedback::class, 'therapist_id');
     }
 
 }

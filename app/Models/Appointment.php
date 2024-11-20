@@ -43,4 +43,8 @@ class Appointment extends Model
     {
         return $this->hasMany(Progress::class, 'appointment_id', 'appointmentID');
     }
+    public function feedback()
+    {
+        return $this->hasMany(Feedback::class, 'appointment_id');
+    }
 }

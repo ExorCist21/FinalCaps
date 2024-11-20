@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Notification;
+use App\Models\Feedback;
 use App\Models\Appointment;
 use App\Models\Progress;
 use Illuminate\Support\Facades\Auth;
@@ -89,7 +90,11 @@ class AppointmentController extends Controller
             ->with('therapist')
             ->get();
 
-        return view('patients.patient-index', compact('appointments'));
+        $doneAppointments = Appointment::with(['patient', 'therapist'])
+            ->where('status', 'approved') // Filter for done appointments
+            ->get();
+
+        return view('patients.patient-index', compact('appointments','doneAppointments'));
     }
 
     /**
