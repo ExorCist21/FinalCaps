@@ -57,9 +57,16 @@
                 <strong>Patient Feedbacks:</strong>
             </p>
             <ul class="list-disc text-gray-600 italic">
-                <li class="list-none mb-2">"Dr. {{ $therapist->name }} is extremely patient and understanding. Highly recommend!"</li>
-                <li class="list-none mb-2">"Very professional and knowledgeable. Helped me a lot with my anxiety."</li>
-                <li class="list-none mb-2">"Great listener and provides actionable advice. My sessions have been life-changing."</li>
+                <li class="list-none mb-2">
+                    <strong>Dr. {{ $therapist->name }}</strong>
+                    <ul>
+                        @forelse ($therapist->feedback as $feedback)
+                            <li class="text-gray-700">- {{ $feedback->feedback }}</li>
+                        @empty
+                            <li class="text-gray-500">No feedback available.</li>
+                        @endforelse
+                    </ul>
+                </li>
             </ul>
         </div>
 

@@ -74,10 +74,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/session/{appointmentId}/schedule', [AppointmentController::class, 'viewSession'])->name('therapist.viewSession');
         Route::post('/session/{appointmentId}/schedule', [AppointmentController::class, 'storeSession'])->name('therapist.storeSession');
         Route::put('/session/{appointmentId}/mark-as-done', [TherapistController::class, 'markAsDone'])->name('therapist.markAsDone');
+        Route::post('/session/{appointmentID}/progress', [AppointmentController::class, 'storeProgress'])->name('therapist.storeProgress');
         Route::get('/profile', [TherapistController::class, 'editProfile'])->name('therapist.profile');
         Route::put('/profile', [TherapistController::class, 'updateProfile'])->name('therapist.updateProfile');
         Route::get('/chat', [ChatController::class, 'therapistIndex'])->name('therapist.chats');
         Route::get('/progress', [AppointmentController::class, 'viewProgress'])->name('therapist.progress');
+        Route::get('/progress/{appointmentID}', [AppointmentController::class, 'showProgress'])->name('therapist.show.progress');
+        Route::put('/appointments/{appointmentID}/update-progress', [AppointmentController::class, 'storeProgressTherapist'])->name('therapist.appointment.updateProgress');
         Route::get('/background', [TherapistController::class, 'showBackground'])->name('therapist.background');
     });
 
