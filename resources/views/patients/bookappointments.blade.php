@@ -6,9 +6,9 @@
         </h2>
     </x-slot>
 
-    <div class="max-w-6xl mx-auto my-2">
-        <h5 class="text-center text-xl font-semibold text-gray-800">Available Therapists</h5>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 p-2 ">
+    <div class="max-w-7xl mx-auto">
+        <h5 class="text-start text-xl font-semibold text-gray-800 mb-5">Available Therapists</h5>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             @foreach ($therapists as $therapist)
             {{-- Therapist Card --}}
             <div class="bg-white rounded-md border flex flex-col items-center text-center">

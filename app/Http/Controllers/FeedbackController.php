@@ -10,19 +10,20 @@ class FeedbackController extends Controller
     public function create($appointmentID)
     {
         // Resolve the appointment using the ID
-        $appointment = Appointment::findOrFail($appointmentID);
-
+        $appointment = Appointment::with('therapist')->findOrFail($appointmentID);
+    
         // Check if the patient has already left feedback
         $existingFeedback = Feedback::where('appointment_id', $appointment->id)
             ->where('patient_id', auth()->id())
             ->first();
-
+    
         if ($existingFeedback) {
             return redirect()->route('patients.dashboard')->with('error', 'You have already left feedback for this appointment.');
         }
-
+    
+        // Pass the appointment and therapist information to the view
         return view('patients.feedback', compact('appointment'));
-    }
+    }    
 
     public function store(Request $request, $appointmentID)
     {

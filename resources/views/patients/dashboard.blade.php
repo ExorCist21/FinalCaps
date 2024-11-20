@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="py-2">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
             <!-- Display Admin's Posted Content -->
             <div class="mt-8">
                 <h3 class="text-2xl font-semibold">Contents Feed</h3>

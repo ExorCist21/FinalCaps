@@ -49,6 +49,8 @@ Route::middleware('auth')->group(function () {
 
     // **Patient Routes** - All routes for patients
     Route::prefix('patient')->middleware('role:patient', 'verified')->group(function () {
+        Route::get('/patient/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
+        Route::get('/patient/session/{appointmentId}/schedule', [AppointmentController::class, 'viewPatient'])->name('patient.viewSession');
         Route::get('/dashboard', [PatientController::class, 'index'])->name('patients.dashboard');
         Route::get('/appointment', [PatientController::class, 'viewApp'])->name('patients.appointment');
         Route::get('/bookappointment', [PatientController::class, 'appIndex'])->name('patients.bookappointments');
@@ -74,7 +76,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/subscriptions/{id}', [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
     });
 
-    // **Therapist Routes** - All routes for therapists
+    // *Therapist Routes* - All routes for therapists
     Route::prefix('therapist')->middleware('role:therapist', 'verified')->group(function () {
         Route::get('/dashboard', [TherapistController::class, 'index'])->name('therapist.dashboard');
         Route::get('/appointment', [TherapistController::class, 'appIndex'])->name('therapist.appointment');
@@ -116,11 +118,8 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('/patient/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
-Route::get('/patient/session/{appointmentId}/schedule', [AppointmentController::class, 'viewPatient'])->name('patient.viewSession');
-Route::get('/chat/conversation-list', [ChatController::class, 'fetchConversationList']);
-
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/chat/conversation-list', [ChatController::class, 'fetchConversationList']);
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index'); // Added name here
     Route::get('/chat/load-initial-messages', [ChatController::class, 'loadInitialMessages']);
     Route::get('/chat/fetch-unread-messages', [ChatController::class, 'fetchUnreadMessages']);
