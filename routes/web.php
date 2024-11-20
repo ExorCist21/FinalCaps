@@ -56,9 +56,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/appointment/{appointmentID}', [AppointmentController::class, 'cancelApp'])->name('patients.cancelApp');
         Route::get('/progress', [AppointmentController::class, 'showPatientAppointments'])->name('patient.progress');
         Route::get('/progress/{appointmentID}', [AppointmentController::class, 'showProgress'])->name('patient.show.progress');
-        Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-        Route::get('/chat/with/{therapist}/{appointment}', [ChatController::class, 'show'])->name('chat.show');
-        Route::post('/chat/send/{conversation}', [ChatController::class, 'sendMessage'])->name('chat.send');
         Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.all');
         Route::get('/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
         Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
@@ -112,8 +109,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index'); // Added name here
     Route::get('/chat/load-initial-messages', [ChatController::class, 'loadInitialMessages']);
     Route::get('/chat/fetch-unread-messages', [ChatController::class, 'fetchUnreadMessages']);
-    Route::post('/chat/send-message', [ChatController::class, 'sendMessage']); // POST request only
-
+    Route::post('/chat/send-message', [ChatController::class, 'sendMessage']); 
+});
 
 // Ensure routes are only accessible by authenticated users with the `verified` email
 Route::middleware('auth')->group(function () {
