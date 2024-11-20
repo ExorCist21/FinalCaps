@@ -33,8 +33,16 @@
             <!-- Ratings with Stars -->
             <div class="flex items-center mb-4">
                 <strong class="text-gray-600 mr-2">Ratings:</strong>
-                <div class="flex" data-rating="2">
-                    <!-- Stars will be rendered here -->
+                <div class="flex">
+                        @if($therapist->feedback->count() > 0)
+                            <p class="text-sm text-gray-700 mb-2">
+                                <div class="flex justify-center" data-rating="{{ round($therapist->feedback->avg('rating'), 1) }}">
+                                    <!-- Stars will be rendered here -->
+                                </div>
+                            </p>
+                        @else
+                            <p class="text-sm text-gray-700 text-gray-500">No feedback yet</p>
+                        @endif
                 </div>
             </div>
             <!-- Awards Section -->

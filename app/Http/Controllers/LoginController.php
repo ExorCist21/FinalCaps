@@ -20,6 +20,12 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $users)
     {
+
+        if (!$user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
+
         // Check the user's role and redirect accordingly
         if ($users->role === 'admin') {
             return redirect()->route('admin.dashboard');
@@ -43,9 +49,10 @@ class LoginController extends Controller
 
         // Attempt to log the user in
         if (Auth::attempt($request->only('email', 'password'))) {
-            // Check if the user is deactivated
             $user = Auth::user();
-            if ($user->isActive === 0) {
+
+            // Check if the user is deactivated
+            if ($user->is_deactivated) {
                 Auth::logout(); // Log out the user if deactivated
                 return back()->withErrors([
                     'email' => 'Your account has been deactivated. Please contact support.',
