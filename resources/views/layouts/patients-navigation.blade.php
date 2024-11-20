@@ -23,6 +23,10 @@
                         {{ __('Chats') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('patient.session')" :active="request()->routeIs('patient.session')">
+                        {{ __('View Session') }}
+                    </x-nav-link>
+
                     <x-nav-link>
                         {{ __('Progress') }}
                     </x-nav-link>

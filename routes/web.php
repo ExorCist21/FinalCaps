@@ -94,6 +94,16 @@ Route::middleware(['auth', 'role:therapist'])->post('/therapist/appointment/{app
 Route::middleware(['auth', 'role:therapist'])->post('/therapist/appointment/{appointmentID}/disapprove', [TherapistController::class, 'disapproveApp'])->name('therapist.disapprove');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/therapist/session', [AppointmentController::class, 'index'])->name('therapist.session');
+    Route::get('/therapist/session/{appointmentId}/schedule', [AppointmentController::class, 'viewSession'])->name('therapist.viewSession');
+    Route::post('/therapist/session/{appointmentId}/schedule', [AppointmentController::class, 'storeSession'])->name('therapist.storeSession');
+    Route::put('/therapist/session/{appointmentId}/mark-as-done', [TherapistController::class, 'markAsDone'])->name('therapist.markAsDone');
+});
+
+Route::get('/patient/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
+Route::get('/patient/session/{appointmentId}/schedule', [AppointmentController::class, 'viewPatient'])->name('patient.viewSession');
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/patient/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/patient/chat/with/{therapist}/{appointment}', [ChatController::class, 'show'])->name('chat.show');
     Route::post('/patient/chat/send/{conversation}', [ChatController::class, 'sendMessage'])->name('chat.send');

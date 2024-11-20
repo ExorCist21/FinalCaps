@@ -24,7 +24,7 @@
                         {{ __('Chats') }}
                     </x-nav-link>
 
-                    <x-nav-link>
+                    <x-nav-link :href="route('therapist.session')" :active="request()->routeIs('therapist.session')">
                         {{ __('View Session') }}
                     </x-nav-link>
 

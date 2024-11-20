@@ -21,7 +21,12 @@ class Appointment extends Model
         'created_at',
         'updated_at',
         'status',
+        'session_meeting',
+        'meeting_type',
+        'isDone'
     ];
+    
+    protected $dates = ['meeting_date'];
     
     public function patient()
     {
@@ -32,5 +37,9 @@ class Appointment extends Model
     public function therapist()
     {
         return $this->belongsTo(User::class, 'therapistID');
+    }
+
+    public function progress() {
+        return $this->hasOne(Progress::class,);
     }
 }

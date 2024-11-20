@@ -12,7 +12,8 @@ class TherapistController extends Controller
 {
     public function index()
     {
-        $therapists = User::where('role', 'therapist')->get();
+        $therapists = User::where('role', 'therapist')
+        ->where('id', auth()->id())->get();
         return view('therapist.dashboard', compact('therapists'));
     }
 
@@ -61,6 +62,18 @@ class TherapistController extends Controller
         $therapist->save();
 
         return redirect()->back()->with('success', 'Therapist has been activated successfully.');
+    }
+
+    public function markAsDone($appointmentId)
+    {
+        // Find the appointment
+        $appointment = Appointment::findOrFail($appointmentId);
+
+        // Update the isDone field
+        $appointment->isDone = true;
+        $appointment->save();
+
+        return redirect()->route('therapist.session')->with('success', 'Appointment marked as done.');
     }
 
 }
