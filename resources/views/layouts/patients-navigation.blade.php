@@ -20,7 +20,11 @@
                             {{ __('Appointment') }}
                         </x-nav-link>
 
-                        <x-nav-link>
+                        <x-nav-link :href="route('chat.index')" :active="request()->routeIs('chat.index')">
+                            {{ __('Chats') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('patient.session')" :active="request()->routeIs('patient.session')">
                             {{ __('View Session') }}
                         </x-nav-link>
 
@@ -59,17 +63,10 @@
                 </button>
             </x-slot>
 
-                    <x-nav-link :href="route('patient.session')" :active="request()->routeIs('patient.session')">
-                        {{ __('View Session') }}
-                    </x-nav-link>
-
-                    <x-nav-link>
-                        {{ __('Progress') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('subscriptions.index')" :active="request()->routeIs('subscriptions.*')">
-                        {{ __('Subscriptions') }}
-                    </x-nav-link>
-                    
+            <x-slot name="content">
+                <x-dropdown-link :href="route('profile.edit')">
+                    {{ __('Profile') }}
+                </x-dropdown-link>
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
