@@ -4,8 +4,8 @@
     <div id="chat-container" class="flex max-w-7xl mx-auto border rounded-lg">
         <!-- Conversation List -->
         <div class="w-1/3 overflow-y-auto max-h-screen border-r border-gray-200 min-h-[600px] max-h-[600px]">
-            <h3 class="text-lg font-bold mb-5 text-gray-700 text-center p-4">Connections</h3>
-            <div id="conversation-list" class="text-gray-500 text-center">Loading conversations...</div>
+            <h3 class="text-lg font-bold text-gray-700 text-center py-7">Your Connections</h3>
+            <div id="conversation-list" class="text-gray-500"></div>
         </div>
 
         <!-- Chat Window -->
@@ -61,7 +61,7 @@
         let receiverId = null; // This will be set dynamically when a user is selected
 
         function fetchConversationList() {
-            $('#conversation-list').html('<div class="loading text-gray-500">Loading conversations...</div>');
+            $('#conversation-list').html('<div class="loading text-gray-500 text-center">Loading conversations...</div>');
 
             $.ajax({
                 url: '/chat/conversation-list',
@@ -77,13 +77,13 @@
 
                     users.forEach(user => {
                         $('#conversation-list').append(
-                            `<div class="conversation-item flex items-center pl-5 py-5 cursor-pointer hover:bg-gray-200"
+                            `<div class="conversation-item flex items-center pl-10 py-5 cursor-pointer hover:bg-gray-200"
                                 data-user-id="${user.id}">
                                 <img src="https://i.pravatar.cc/150?img=${user.email}" alt="User Avatar"
                                     class="w-12 h-12 ring-2 ring-indigo-600 rounded-full object-cover mr-4">
                                 <div>
                                     <h3 class="text-lg font-semibold text-gray-800 capitalize">${user.name}</h3>
-                                    <p class="text-sm text-gray-600 ml-2">${user.email}</p>
+                                    <p class="text-sm text-gray-600">${user.email}</p>
                                 </div>
                             </div>`
                         );

@@ -57,22 +57,16 @@
 
                 <!-- User Settings Dropdown -->
                 <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" class="flex items-center text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        <span>{{ Auth::user()->name }}</span>
-                        <svg class="ml-1 h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a 1 1 0 01-1.414 0l-4-4a 1 1 0 010-1.414z" />
-                        </svg>
+                    <button @click="open = !open" class="text-gray-500 hover:text-gray-900">
+                        <i class="fa-regular fa-user-circle text-xl"></i>
                     </button>
 
                     <!-- Dropdown Menu -->
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
-                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-                            Edit Password
-                        </a>
-                        <a href="{{ route('therapist.background') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-                            Profile
-                        </a>
                         <form method="POST" action="{{ route('logout') }}">
+                            <a href="{{ route('profile.edit') }}" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 capitalize">
+                                {{ Auth::user()->name }} Account
+                            </a>    
                             @csrf
                             <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
                                 Log Out
