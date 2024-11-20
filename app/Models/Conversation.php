@@ -15,7 +15,8 @@ class Conversation extends Model
 
     protected $fillable=[
         'receiver_id',
-        'sender_id'
+        'sender_id',
+        'appointment_id'
     ];
 
 

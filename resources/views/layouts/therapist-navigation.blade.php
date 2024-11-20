@@ -20,6 +20,10 @@
                         {{ __('Appointment') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('therapist.chats')" :active="request()->routeIs('therapist.chats')">
+                        {{ __('Chats') }}
+                    </x-nav-link>
+
                     <x-nav-link>
                         {{ __('View Session') }}
                     </x-nav-link>

@@ -93,20 +93,22 @@ Route::middleware(['auth', 'role:therapist'])->get('/therapist/appointment', [Th
 Route::middleware(['auth', 'role:therapist'])->post('/therapist/appointment/{appointmentID}/approve', [TherapistController::class, 'approveApp'])->name('therapist.approve');
 Route::middleware(['auth', 'role:therapist'])->post('/therapist/appointment/{appointmentID}/disapprove', [TherapistController::class, 'disapproveApp'])->name('therapist.disapprove');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/patient/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/patient/chat/with/{therapist}/{appointment}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/patient/chat/send/{conversation}', [ChatController::class, 'sendMessage'])->name('chat.send');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/therapist/chat', [ChatController::class, 'therapistIndex'])->name('therapist.chats');
+    Route::get('/therapist/chat/with/{patient}/{appointment}', [ChatController::class, 'showTherapist'])->name('therapist.show');
+    Route::post('/therapist/chat/send/{conversation}', [ChatController::class, 'sendMessage'])->name('therapist.send');
+});
+
 
 
 // Authentication routes
 Route::post('/login', [LoginController::class, 'login'])->name('login');
-
-Route::middleware(['auth', 'role:patient'])->group(function () {
-    // Livewire chat routes
-    Route::get('/patient/chat', Index::class)->name('chat.index');
-    Route::get('/patient/chat/create', [ChatController::class, 'create'])->name('chat.create');
-    Route::get('/patient/chat/conversation/{id}', [ChatController::class, 'show'])->name('chat.show'); // Renamed
-    Route::get('/patient/chat/{query}', Chat::class)->name('chat.show.livewire'); // Renamed
-    Route::get('/patient/users', Users::class)->name('chat.users');
-});
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
