@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use App\Models\User;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
@@ -32,7 +34,22 @@ class PaymentController extends Controller
             $payment->status = 'pending'; // Set status to pending until admin approval
             $payment->save();
         }
-
+        $this->notifyAdmin($payment);
         return redirect('/patient/subscriptions')->with('success', 'Payment proof uploaded successfully. Awaiting admin approval.');
+    }
+    protected function notifyAdmin(Payment $payment)
+    {
+        // Get all admins
+        $patient = User::find($payment->subscription->patient_id);
+        $admins = User::where('role', 'admin')->get();
+        
+        // Loop through each admin and send a notification
+        foreach ($admins as $admin) {
+            Notification::create([
+                'n_userID' => $admin->id,
+                'type' => 'payment',
+                'data' => $patient->name,
+            ]);
+        }
     }
 }
