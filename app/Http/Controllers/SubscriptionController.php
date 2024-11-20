@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Subscription;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class SubscriptionController extends Controller
 {
@@ -47,9 +48,10 @@ class SubscriptionController extends Controller
     // Store a new subscription
     public function store(Request $request)
     {
+        
         $validated = $request->validate([
             'service_name' => 'required|string|max:255',
-            'duration' => 'required|integer|in:3,6,12', // Validate duration
+            'duration' => 'required|integer|in:2,5,10', // Validate duration
             'payment_method' => 'required|string|in:gcash,maya,credit_card,paypal',
             'price' => 'required|numeric|min:1|max:10000',
         ]);
@@ -120,18 +122,39 @@ class SubscriptionController extends Controller
             $subscription->status = 'active';
             $subscription->save();
 
-            // Also approve the payment if you have a Payment model related to the subscription
+            // Approve the payment if you have a Payment model related to the subscription
             $payment = Payment::where('subscription_id', $subscriptionId)->first();
             if ($payment && $payment->status === 'pending') {
                 $payment->status = 'approved';
                 $payment->save();
             }
 
-            return redirect()->back()->with('success', 'Payment and subscription approved successfully.');
+            $user = User::findOrFail($subscription->patient_id); 
+
+            // Increment session_left based on the service_name
+            switch ($subscription->service_name) {
+                case 'Standard':
+                    $user->session_left += 2; // Add 2 sessions for Standard
+                    break;
+                case 'Pro':
+                    $user->session_left += 5; // Add 5 sessions for Pro
+                    break;
+                case 'Enterprise':
+                    $user->session_left += 10; // Add 10 sessions for Enterprise
+                    break;
+                default:
+                    return redirect()->back()->with('error', 'Unknown service name.');
+            }
+
+            // Save the updated user data
+            $user->save();
+
+            return redirect()->back()->with('success', 'Payment, subscription approved, and sessions added successfully.');
         }
 
         return redirect()->back()->with('error', 'Subscription not found or already processed.');
     }
+
 
 
 

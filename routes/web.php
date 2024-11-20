@@ -115,6 +115,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/therapist/{id}/deactivate', [TherapistController::class, 'deactivate'])->name('therapist.deactivate');
         Route::post('/patients/{id}/activate', [PatientController::class, 'activate'])->name('patients.activate');
         Route::post('/therapist/{id}/activate', [TherapistController::class, 'activate'])->name('therapist.activate');
+        Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.all');
+        Route::get('/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
+        Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     });
 });
 

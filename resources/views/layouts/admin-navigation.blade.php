@@ -84,3 +84,147 @@
         </nav>
     </header>
 </nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const notificationIcon = document.getElementById('notification-icon');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    const notificationDot = document.getElementById('notification-dot');
+    const notificationList = document.getElementById('notification-list');
+    const seePreviousBtn = document.getElementById('see-previous-btn');
+
+    let offset = 0; // Tracks loaded notifications
+    let hasPrevious = false;
+
+    // Load notifications from the server
+    function loadNotifications() {
+        fetch(`/notifications?offset=${offset}&limit=8`)
+            .then(response => response.json())
+            .then(data => {
+                const unreadNotifications = data.filter(notification => notification.read_at === null);
+
+                // Show or hide red dot based on unread notifications
+                notificationDot.style.display = unreadNotifications.length > 0 ? 'inline-block' : 'none';
+
+                if (data.length > 0) {
+                    if (offset === 0) {
+                        notificationList.innerHTML = ''; // Clear the list for the first load
+                    }
+
+                    data.forEach(notification => {
+                        const notificationLink = document.createElement('a');
+                        notificationLink.classList.add(
+                            'block',
+                            'px-4',
+                            'py-2',
+                            'text-gray-800',
+                            'hover:bg-gray-100',
+                            'cursor-pointer'
+                        );
+
+                        // Style based on read status
+                        if (notification.read_at === null) {
+                            notificationLink.classList.add('bg-gray-200'); // Unread
+                        } else {
+                            notificationLink.classList.add('bg-white'); // Read
+                        }
+
+                        notificationLink.href = getNotificationUrl(notification);
+                        notificationLink.setAttribute('data-id', notification.notificationID);
+
+                        // Mark as read on click
+                        notificationLink.addEventListener('click', function (event) {
+                            event.preventDefault();
+                            const url = this.href;
+                            const notificationId = this.getAttribute('data-id');
+                            markAsRead(notificationId, url);
+                        });
+
+                        const notificationMessage = document.createElement('div');
+                        notificationMessage.innerHTML = getNotificationMessage(notification);
+
+                        const notificationDate = document.createElement('span');
+                        notificationDate.classList.add('text-gray-400', 'text-sm');
+                        notificationDate.textContent = new Date(notification.updated_at).toLocaleString();
+
+                        notificationLink.appendChild(notificationMessage);
+                        notificationLink.appendChild(notificationDate);
+
+                        notificationList.appendChild(notificationLink);
+                    });
+
+                    // Show "See previous notifications" button if more notifications exist
+                    if (data.length === 8) {
+                        seePreviousBtn.style.display = 'block';
+                        hasPrevious = true;
+                    } else {
+                        seePreviousBtn.style.display = 'none';
+                        hasPrevious = false;
+                    }
+
+                    offset += data.length; // Increment offset
+                } else if (offset === 0) {
+                    notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+                }
+            })
+            .catch(error => console.error('Error loading notifications:', error));
+    }
+
+    // Determine notification message content
+    function getNotificationMessage(notification) {
+        if (notification.type === 'payment') {
+            return `Patient <strong>${notification.data}</strong> has booked.`;
+        } else if (notification.type === 'appointment_approved') { 
+            return `Appointment for <strong>${notification.data}</strong> has been approved.`;
+        }
+        return notification.description || 'You have a new notification.';
+    }
+
+    // Generate URL based on notification type
+    function getNotificationUrl(notification) {
+        if (notification.type === 'payment') {
+            return '/payments';
+        } else if (notification.type === 'appointment') {
+            return '/appointments';
+        } else if (notification.type === 'feedback') {
+            return '/feedback';
+        }
+        return '/dashboard'; // Default URL
+    }
+
+    // Mark notification as read and redirect
+    function markAsRead(notificationId, redirectUrl) {
+        fetch(`/notifications/${notificationId}/read`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: JSON.stringify({ read_at: new Date() }),
+        })
+            .then(response => response.json())
+            .then(() => {
+                window.location.href = redirectUrl; // Redirect after marking as read
+            })
+            .catch(error => console.error('Error marking notification as read:', error));
+    }
+
+    // Toggle dropdown visibility
+    notificationIcon.addEventListener('click', function () {
+        notificationDropdown.classList.toggle('hidden');
+    });
+
+    // Hide dropdown on outside click
+    document.addEventListener('click', function (event) {
+        if (!notificationDropdown.contains(event.target) && !notificationIcon.contains(event.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    // Load previous notifications on button click
+    seePreviousBtn.addEventListener('click', loadNotifications);
+
+    // Initial load
+    loadNotifications();
+});
+
+</script>
