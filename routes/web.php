@@ -104,12 +104,16 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-// Profile Management Routes
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+Route::get('/patient/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
+Route::get('/patient/session/{appointmentId}/schedule', [AppointmentController::class, 'viewPatient'])->name('patient.viewSession');
+Route::get('/chat/conversation-list', [ChatController::class, 'fetchConversationList']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index'); // Added name here
+    Route::get('/chat/load-initial-messages', [ChatController::class, 'loadInitialMessages']);
+    Route::get('/chat/fetch-unread-messages', [ChatController::class, 'fetchUnreadMessages']);
+    Route::post('/chat/send-message', [ChatController::class, 'sendMessage']); // POST request only
+
 
 // Ensure routes are only accessible by authenticated users with the `verified` email
 Route::middleware('auth')->group(function () {
@@ -120,8 +124,6 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
     ->middleware(['signed', 'auth'])
     ->name('verification.verify');
@@ -129,7 +131,7 @@ Route::get('/email/verify', function () {
         return view('auth.verify-email');
     })->middleware(['auth'])->name('verification.notice');
 
-
+  
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

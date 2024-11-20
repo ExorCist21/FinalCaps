@@ -1,18 +1,32 @@
-<!-- resources/views/therapist/view-session.blade.php -->
 <title>Scheduling</title>
 <x-app-layout>
     <div class="container mx-auto p-4">
-        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md">
-            <div class="p-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold">Edit Consultation Schedule</h2>
-                <p class="text-gray-500 text-sm">Modify the meeting type and details for this appointment.</p>
+        <div class="max-w-4xl mx-auto">
+            <!-- Patient Information -->
+            <div class="bg-gray-100 p-4 rounded-md mb-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Patient Information</h3>
+                <div class="flex items-center mb-4">
+                    <img src="https://i.pravatar.cc/150?img={{ $appointment->patient->email ?? '1' }}" alt="Patient Image" class="w-12 h-12 ring-2 ring-indigo-600 rounded-full object-cover mr-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 capitalize">{{ $appointment->patient->name ?? 'N/A' }}</h3>
+                        <p class="text-sm text-gray-600 lower-case">{{ $appointment->patient->email ?? 'Unavailable' }}</p>
+                    </div>
+                    <p class="text-gray-700 ml-auto">{{ $appointment->datetime }}</p>
+                </div>
             </div>
 
+            <!-- Header Section -->
+            <div class="p-4 border-b border-gray-200">
+                <h2 class="text-lg font-semibold">Update Consultation</h2>
+                <p class="text-gray-500 text-sm">You can modify the meeting type and details for this appointment.</p>
+            </div>
+
+            <!-- Form Section -->
             <form action="{{ route('therapist.storeSession', $appointment->appointmentID) }}" method="POST" class="p-4">
                 @csrf
                 @method('POST')
 
-                <div class="mb-4">
+                <div class="mb-6">
                     <label for="meeting_type" class="block text-sm font-medium text-gray-700">Meeting Type</label>
                     <select 
                         name="meeting_type" 
@@ -27,7 +41,7 @@
                     @enderror
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-6">
                     <label for="session_meeting" class="block text-sm font-medium text-gray-700">Meeting Details</label>
                     <input 
                         type="text" 
@@ -42,8 +56,8 @@
                     @enderror
                 </div>
 
-                <button type="submit" class="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200">
-                    Save Schedule
+                <button type="submit" class="w-full py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-200">
+                    Update Consultation
                 </button>
             </form>
         </div>

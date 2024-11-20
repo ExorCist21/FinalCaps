@@ -1,7 +1,14 @@
 <x-app-layout>
+<div class="max-w-4xl mx-auto mt-10">
+    <div class="flex justify-start">
+        <button id="backButton" class="w-auto mb-6 flex items-center text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+        <span class="mr-2" aria-hidden="true">&larr;</span>
+            Back
+        </button>
+    </div>
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Appointment Progress</h1>
     <div class="max-w-4xl mx-auto mt-10">
         <h1 class="text-2xl font-bold text-gray-800 mb-4">Health Progress</h1>
-
         <!-- Progress Timeline -->
         @if ($appointment->progress->isNotEmpty())
             <div class="bg-white shadow rounded-lg p-6">
