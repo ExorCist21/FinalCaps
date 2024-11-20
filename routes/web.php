@@ -28,6 +28,7 @@ Route::get('/register/therapist', [TherapistController::class, 'showRegistration
 Route::post('/register/patient', [RegisteredUserController::class, 'storePatient'])->name('patient.store');
 Route::post('/register/therapist', [RegisteredUserController::class, 'storeTherapist'])->name('therapist.store');
 
+// Determine what users role is gonna log in
 Route::get('/dashboard', function () {
     $user = auth()->user();
 
@@ -64,6 +65,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
         Route::get('/session/{appointmentId}/feedback', [FeedbackController::class, 'create'])->name('appointments.feedback.create');
         Route::post('/session/{appointmentId}/feedback', [FeedbackController::class, 'store'])->name('appointments.feedback.store');
+        Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+        Route::get('/subscriptions/plans', [SubscriptionController::class, 'subPlan'])->name('subscriptions.plan');
+        Route::get('/subscriptions/create', [SubscriptionController::class, 'create'])->name('subscriptions.create');
+        Route::post('/subscriptions', [SubscriptionController::class, 'store'])->name('subscriptions.store');
+        Route::get('/subscriptions/payment/proceed', [SubscriptionController::class, 'payment'])->name('subscriptions.payment');
+        Route::post('/subscriptions/payment', [PaymentController::class, 'store'])->name('payments.store');
+        Route::get('/subscriptions/{id}/edit', [SubscriptionController::class, 'edit'])->name('subscriptions.edit');
+        Route::post('/subscriptions/{id}', [SubscriptionController::class, 'update'])->name('subscriptions.update');
+        Route::delete('/subscriptions/{id}', [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
     });
 
     // *Therapist Routes* - All routes for therapists
@@ -99,6 +109,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/content/{content_id}/edit', [ContentController::class, 'edit'])->name('admin.contentmng.edit');
         Route::put('/content/{content_id}/edit', [ContentController::class, 'update'])->name('admin.contentmng.update');
         Route::post('/content', [ContentController::class, 'store'])->name('admin.contentmng.store');
+        Route::get('/subscription', [SubscriptionController::class, 'pendingPayments'])->name('admin.subscribe');
+        Route::post('/subscription/{subscriptionId}/approve', [SubscriptionController::class, 'approvePayment'])->name('admin.subscriptions.approve');
         Route::post('/patients/{id}/deactivate', [PatientController::class, 'deactivate'])->name('patients.deactivate');
         Route::post('/therapist/{id}/deactivate', [TherapistController::class, 'deactivate'])->name('therapist.deactivate');
         Route::post('/patients/{id}/activate', [PatientController::class, 'activate'])->name('patients.activate');

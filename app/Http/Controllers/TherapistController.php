@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Models\Content;
 use App\Models\User;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
@@ -12,9 +13,15 @@ class TherapistController extends Controller
 {
     public function index()
     {
+        // Fetch the authenticated user by their ID
         $therapists = User::where('role', 'therapist')
-        ->where('id', auth()->id())->get();
-        return view('therapist.dashboard', compact('therapists'));
+                        ->where('id', auth()->id()) // Filter by authenticated user's ID
+                        ->get();
+
+        // Fetch all the contents posted by the admin
+        $contents = Content::all(); // You can modify this query if needed, e.g., based on content type or visibility
+
+        return view('patients.dashboard', compact('therapists', 'contents'));
     }
 
     public function appIndex()

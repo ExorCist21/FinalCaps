@@ -4,26 +4,26 @@
         <h1 class="text-2xl font-bold mb-4">Edit Subscription</h1>
         <form action="{{ route('subscriptions.update', $subscription->id) }}" method="POST" class="bg-white shadow rounded-lg p-4">
             @csrf
+            @method('PUT') <!-- Use PUT for update -->
+
+            <!-- Service Name -->
             <div class="mb-4">
                 <label for="service_name" class="block text-sm font-medium">Service Name:</label>
-                <input type="text" name="service_name" id="service_name" value="{{ old('service_name', $subscription->service_name) }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">
+                <input type="text" name="service_name" id="service_name" value="{{ old('service_name', $subscription->service_name) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">
                 @error('service_name')
                     <span class="text-red-600 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
+            <!-- Duration -->
             <div class="mb-4">
-                <label for="start_date" class="block text-sm font-medium">Start Date:</label>
-                <input type="datetime-local" name="start_date" id="start_date" value="{{ old('start_date', \Carbon\Carbon::parse($subscription->start_date)->format('Y-m-d\TH:i')) }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">
-                @error('start_date')
-                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <label for="end_date" class="block text-sm font-medium">End Date (optional):</label>
-                <input type="datetime-local" name="end_date" id="end_date" value="{{ old('end_date', $subscription->end_date ? \Carbon\Carbon::parse($subscription->end_date)->format('Y-m-d\TH:i') : '') }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">
-                @error('end_date')
+                <label for="duration" class="block text-sm font-medium">Duration (Months):</label>
+                <select name="duration" id="duration" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">
+                    <option value="3" {{ old('duration', $subscription->duration) == 3 ? 'selected' : '' }}>3 Months</option>
+                    <option value="6" {{ old('duration', $subscription->duration) == 6 ? 'selected' : '' }}>6 Months</option>
+                    <option value="12" {{ old('duration', $subscription->duration) == 12 ? 'selected' : '' }}>12 Months</option>
+                </select>
+                @error('duration')
                     <span class="text-red-600 text-sm">{{ $message }}</span>
                 @enderror
             </div>

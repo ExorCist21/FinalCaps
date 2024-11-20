@@ -52,8 +52,9 @@ class PatientController extends Controller
         // Fetch the therapist by ID
         $therapist = User::findOrFail($id);
 
-        // Pass the therapist to the view
-        return view('patients.therapist-details', compact('therapist'));
+        $session_left = auth()->user()->session_left;
+
+        return view('patients.therapist-details', compact('therapist', 'session_left'));
     }
 
     public function showRegistrationForm()
