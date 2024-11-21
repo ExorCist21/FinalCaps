@@ -65,7 +65,7 @@ class AppointmentController extends Controller
             'created_at' => now(),
         ]);
 
-        // Redirect with success message
+        // Redirect with success messages
         return redirect()->route('patients.appointment')->with('success', 'Appointment successfully booked!');
     }
 
@@ -177,7 +177,7 @@ class AppointmentController extends Controller
     public function storeProgress(Request $request, $appointmentID)
     {
         // Validate the input
-        $request->validate([
+        $validatedData = $request->validate([
             'mental_condition' => 'required|string|max:255',
             'mood' => 'required|string|max:255',
             'symptoms' => 'required|string|max:1000',
@@ -192,13 +192,16 @@ class AppointmentController extends Controller
         // Create new progress record
         $progress = new Progress();
         $progress->appointment_id = $appointment->appointmentID;
-        $progress->mental_condition = $request->mental_condition;
-        $progress->mood = $request->mood;
-        $progress->symptoms = $request->symptoms;
-        $progress->remarks = $request->remarks;
-        $progress->risk = $request->risk;
-        $progress->status = $request->status;
+        $progress->mental_condition = $validatedData['mental_condition'];
+        $progress->mood = $validatedData['mood'];
+        $progress->symptoms = $validatedData['symptoms'];
+        $progress->remarks = $validatedData['remarks'];
+        $progress->risk = $validatedData['risk'];
+        $progress->status = $validatedData['status'];
         $progress->save();
+
+        $appointment->isDone = true;
+        $appointment->save();
 
         // Redirect back to the appointment page or a confirmation page
         return redirect()->route('therapist.session')->with('success', 'Progress added successfully.');
@@ -207,10 +210,12 @@ class AppointmentController extends Controller
     public function viewProgress()
     {
         // Fetch all appointments for the authenticated therapist along with their related progress and patient
-        $appointments = Appointment::with('progress', 'patient')
-            ->where('isDone', true)
-            ->where('therapistID', auth()->id()) // Only fetch appointments for the authenticated therapist
-            ->get();
+        $appointments = Appointment::with(['progress' => function ($query) {
+            $query->latest('created_at'); // Get the most recent progress
+        }, 'patient'])
+        ->where('isDone', true)
+        ->where('therapistID', auth()->id())
+        ->get();
 
         // Return the appointments and their progress to the view
         return view('therapist.viewProgress', compact('appointments'));

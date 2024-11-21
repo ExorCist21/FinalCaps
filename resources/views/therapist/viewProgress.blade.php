@@ -56,9 +56,14 @@
                             <a href="{{ route('therapist.show.progress', ['appointmentID' => $appointment->appointmentID]) }}" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
                                 Detailed
                             </a>
-                            <button type="submit" onclick="openModal({{ json_encode($appointment->progress) }}, {{ $appointment->appointmentID }})" class="text-sm font-medium text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
-                                Add Progress
-                            </button>
+                            @if($appointment->progress && !$appointment->progress->contains('status', 'Completed'))
+                                <button 
+                                    type="submit" 
+                                    onclick="openModal({{ json_encode($appointment->progress) }}, {{ $appointment->appointmentID }})" 
+                                    class="text-sm font-medium text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
+                                    Add Progress
+                                </button>
+                            @endif
                         </div>
                     </div>
 

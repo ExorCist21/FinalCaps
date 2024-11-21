@@ -33,6 +33,7 @@ class PaymentController extends Controller
             $payment->save();
         }
 
+        
         return redirect('/patient/subscriptions')->with('success', 'Payment proof uploaded successfully. Awaiting admin approval.');
     }
 }

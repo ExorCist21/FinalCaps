@@ -60,6 +60,42 @@
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                 </div>
 
+                <!-- Expertise -->
+                <div>
+                    <label for="expertise" class="block text-sm font-medium text-gray-900">Expertise</label>
+                    <div class="mt-2">
+                        <input type="text" id="expertise" name="expertise"
+                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                    </div>
+                    <x-input-error :messages="$errors->get('expertise')" class="mt-2" />
+                </div>
+
+                <!-- Awards -->
+                <div>
+                    <label for="awards" class="block text-sm font-medium text-gray-900">Awards</label>
+                    <div class="mt-2">
+                        <select name="awards" id="awards" class="p-2 mt-1 block w-full">
+                            <option value="">Select an Award</option>
+                            <option value="Best Therapist of the Year">Best Therapist of the Year</option>
+                            <option value="Most Compassionate Therapist">Most Compassionate Therapist</option>
+                            <option value="Outstanding Achievement in Mental Health">Outstanding Achievement in Mental Health</option>
+                            <option value="Certified Cognitive Behavioral Therapist">Certified Cognitive Behavioral Therapist</option>
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                    <x-input-error :messages="$errors->get('awards')" class="mt-2" />
+                </div>
+
+                <!-- Clinic Name -->
+                <div>
+                    <label for="clinic_name" class="block text-sm font-medium text-gray-900">Clinic Name (Optional)</label>
+                    <div class="mt-2">
+                        <input type="text" id="clinic_name" name="clinic_name"
+                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                    </div>
+                    <x-input-error :messages="$errors->get('clinic_name')" class="mt-2" />
+                </div>
+
                 <!-- Submit Button -->
                 <div>
                     <button type="submit"

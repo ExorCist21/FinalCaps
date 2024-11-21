@@ -63,35 +63,79 @@
                     @csrf
                     <input type="hidden" id="appointmentID" name="appointmentID">
                     
-                    <!-- Mental Condition -->
                     <div class="mb-4">
-                        <label for="mental_condition" class="block text-sm font-medium text-gray-700">Mental Condition</label>
-                        <select id="mental_condition" name="mental_condition" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" required>
-                            <option value="Anxiety">Anxiety</option>
-                            <option value="Depression">Depression</option>
-                            <option value="Bipolar Disorder">Bipolar Disorder</option>
-                            <option value="PTSD">PTSD</option>
-                            <option value="Schizophrenia">Schizophrenia</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
+                                    <label for="mental_condition" class="block text-sm font-medium text-gray-700">Mental Condition</label>
+                                    <select id="mental_condition" name="mental_condition" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" required>
+                                        <option value="Anxiety">Anxiety</option>
+                                        <option value="Depression">Depression</option>
+                                        <option value="Bipolar Disorder">Bipolar Disorder</option>
+                                        <option value="PTSD">Post-Traumatic Stress Disorder (PTSD)</option>
+                                        <option value="Schizophrenia">Schizophrenia</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
 
-                    <!-- Additional Fields -->
-                    <div class="mb-4">
-                        <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
-                        <textarea id="remarks" name="remarks" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" rows="3"></textarea>
-                    </div>
+                                <!-- Mood -->
+                                <div class="mb-4">
+                                    <label for="mood" class="block text-sm font-medium text-gray-700">Mood</label>
+                                    <select id="mood" name="mood" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" required>
+                                        <option value="Happy">Happy</option>
+                                        <option value="Sad">Sad</option>
+                                        <option value="Irritable">Irritable</option>
+                                        <option value="Anxious">Anxious</option>
+                                        <option value="Calm">Calm</option>
+                                        <option value="Angry">Angry</option>
+                                        <option value="Euphoric">Euphoric</option>
+                                    </select>
+                                </div>
 
-                    <div class="flex justify-between items-center">
-                        <button type="button" onclick="closeModal()"
-                                class="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300">
-                            Cancel
-                        </button>
-                        <button type="submit" 
-                                class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600">
-                            Save Information
-                        </button>
-                    </div>
+                                <!-- Symptoms -->
+                                <div class="mb-4">
+                                    <label for="symptoms" class="block text-sm font-medium text-gray-700">Symptoms</label>
+                                    <textarea id="symptoms" name="symptoms" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" rows="1" required></textarea>
+                                </div>
+
+                                <!-- Remarks -->
+                                <div class="mb-4">
+                                    <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
+                                    <textarea id="remarks" name="remarks" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" rows="1"></textarea>
+                                </div>
+
+                                <!-- Risk -->
+                                <div class="mb-4">
+                                    <label for="risk" class="block text-sm font-medium text-gray-700">Risk</label>
+                                    <select id="risk" name="risk" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" required>
+                                        <option value="Low">Low</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="High">High</option>
+                                        <option value="Critical">Critical</option>
+                                        <option value="None">None</option>
+                                    </select>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="mb-4">
+                                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                                    <select id="status" name="status" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" required>
+                                        <option value="Ongoing">Ongoing</option>
+                                        <option value="Completed">Completed</option>
+                                        <option value="Discharged">Discharged</option>
+                                        <option value="In Remission">In Remission</option>
+                                        <option value="Follow-up Scheduled">Follow-up Scheduled</option>
+                                        <option value="In Crisis">In Crisis</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex justify-between items-center">
+                                    <button type="button" onclick="closeModal()"
+                                            class="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" 
+                                            class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600">
+                                        Save Information
+                                    </button>
+                                </div>
                 </form>
             </div>
         </div>
@@ -101,6 +145,7 @@
         function openModal(appointmentID) {
             const form = document.getElementById('addInfoForm');
             form.action = `/therapist/session/${appointmentID}/progress`;
+            document.getElementById('appointmentID').value = appointmentID;
             document.getElementById('addInfoModal').classList.remove('hidden');
         }
 

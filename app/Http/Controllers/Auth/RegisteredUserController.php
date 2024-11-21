@@ -99,6 +99,9 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'expertise' => ['required', 'string', 'max:255'], // Validate expertise
+            'awards' => ['nullable', 'string', 'max:255'], // Validate awards (optional)
+            'clinic_name' => ['nullable', 'string', 'max:255'], // Validate clinic name (optional)
         ]);
 
         // Create the user with the therapist role
@@ -108,6 +111,12 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'therapist',
             'session_left' => 0,
+        ]);
+
+        $user->therapistInformation()->create([
+            'expertise' => $request->expertise,
+            'awards' => $request->awards,
+            'clinic_name' => $request->clinic_name,
         ]);
 
         event(new Registered($user));

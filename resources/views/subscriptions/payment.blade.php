@@ -22,7 +22,6 @@
         <form action="{{ route('payments.store') }}" method="POST" enctype="multipart/form-data" class="bg-white shadow rounded-lg p-4">
             @csrf
             <input type="hidden" name="subscription_id" value="{{ $subscription_id }}">
-
             <div class="mb-4">
                 <label for="payment_method" class="block text-sm font-medium">Payment Method:</label>
                 <input type="text" name="payment_method" value="{{ $payment_method }}" readonly class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">

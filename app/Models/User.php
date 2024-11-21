@@ -67,7 +67,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function therapistInformation()
     {
-        return $this->hasOne(TherapistInformation::class);
+        return $this->hasOne(TherapistInformation::class, 'user_id');
     }
 
     public function appointmentsAsTherapist()

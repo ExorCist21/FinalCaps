@@ -87,7 +87,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/session/{appointmentId}/schedule', [AppointmentController::class, 'storeSession'])->name('therapist.storeSession');
         Route::put('/session/{appointmentId}/mark-as-done', [TherapistController::class, 'markAsDone'])->name('therapist.markAsDone');
         Route::post('/session/{appointmentID}/progress', [AppointmentController::class, 'storeProgress'])->name('therapist.storeProgress');
-        Route::get('/profile', [TherapistController::class, 'editProfile'])->name('therapist.profile');
+        Route::get('/profile', [TherapistController::class, 'editProfile'])->name('profile.therapist');
         Route::put('/profile', [TherapistController::class, 'updateProfile'])->name('therapist.updateProfile');
         Route::get('/chat', [ChatController::class, 'therapistIndex'])->name('therapist.chats');
         Route::get('/progress', [AppointmentController::class, 'viewProgress'])->name('therapist.progress');
