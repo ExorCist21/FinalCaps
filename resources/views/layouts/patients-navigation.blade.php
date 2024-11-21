@@ -70,13 +70,16 @@
                     </button>
 
                     <!-- Dropdown Menu -->
-                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
-                        <form method="POST" action="{{ route('logout') }}">
-                            <a href="{{ route('profile.edit') }}" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 capitalize">
+                    <div x-show="open" @click.away="open = false" class="absolute right-0 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                        <form method="POST" action="{{ route('logout') }}" class="mt-4">
+                            <a href="{{ route('profile.edit') }}" class="block w-full text-center px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                                <span class="font-semibold text-white text-sm bg-indigo-600 p-2 rounded-full">{{ Auth::user()->session_left }}</span> sessions left
+                            </a>      
+                            <a href="{{ route('profile.edit') }}" class="block w-full text-center px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900 capitalize">
                                 {{ Auth::user()->name }} Account
                             </a>    
                             @csrf
-                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                            <button type="submit" class="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
                                 Log Out
                             </button>
                         </form>
@@ -111,7 +114,7 @@
         let hasPrevious = false;
 
         function loadNotifications() {
-                fetch(/notifications?offset=${offset}&limit=8)
+                fetch(`/notifications?offset=${offset}&limit=8`)
                     .then(response => response.json())
                     .then(data => {
                         const unreadNotifications = data.filter(notification => notification.read_at === null);
@@ -236,7 +239,7 @@
 
                 // If the appointmentID exists, redirect to the specific appointment
                 if (data && data.appointmentID) {
-                    return ${baseNegotiationUrl}/${data.appointmentID};  // Corrected URL format
+                    return `${baseNegotiationUrl}/${data.appointmentID}`;  // Corrected URL format
                 } else {
                     return baseNegotiationUrl;  // Return the base appointment URL if no appointmentID
                 }
@@ -255,7 +258,7 @@
 
         // AJAX function to mark a notification as read
         function markAsRead(notificationId, redirectUrl) {
-            fetch(/notifications/${notificationId}/read, {
+            fetch(`/notifications/${notificationId}/read`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
