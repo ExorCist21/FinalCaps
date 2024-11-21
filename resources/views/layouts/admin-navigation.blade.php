@@ -97,7 +97,7 @@
 
     // Load notifications from the server
     function loadNotifications() {
-        fetch(`/notifications?offset=${offset}&limit=8`)
+        fetch(/notifications?offset=${offset}&limit=8)
             .then(response => response.json())
             .then(data => {
                 const unreadNotifications = data.filter(notification => notification.read_at === null);
@@ -172,9 +172,9 @@
     // Determine notification message content
     function getNotificationMessage(notification) {
         if (notification.type === 'payment') {
-            return `Patient <strong>${notification.data}</strong> has booked.`;
+            return Patient <strong>${notification.data}</strong> has purchased a session.;
         } else if (notification.type === 'appointment_approved') { 
-            return `Appointment for <strong>${notification.data}</strong> has been approved.`;
+            return Appointment for <strong>${notification.data}</strong> has been approved.;
         }
         return notification.description || 'You have a new notification.';
     }
@@ -193,7 +193,7 @@
 
     // Mark notification as read and redirect
     function markAsRead(notificationId, redirectUrl) {
-        fetch(`/notifications/${notificationId}/read`, {
+        fetch(/notifications/${notificationId}/read, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Subscription;
 use App\Models\Payment;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
@@ -146,6 +147,14 @@ class SubscriptionController extends Controller
                     return redirect()->back()->with('error', 'Unknown service name.');
             }
 
+                $patient = User::find($payment->subscription->patient_id);
+                
+
+                Notification::create([
+                    'n_userID' => $patient->id,
+                    'type' => 'approve_payment',
+                    'data' => 'admin',
+                ]);
             // Save the updated user data
             $user->save();
 

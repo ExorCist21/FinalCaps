@@ -45,9 +45,13 @@ Route::get('/dashboard', function () {
 
 // Authenticated User Routes (after login)
 Route::middleware('auth')->group(function () {
+
+
+    Route::get('/notifications', [NotificationController::class, 'getNotifications']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
     // Grouped by Role
 
-    // **Patient Routes** - All routes for patients
+    // *Patient Routes* - All routes for patients
     Route::prefix('patient')->middleware('role:patient', 'verified')->group(function () {
         Route::get('/patient/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
         Route::get('/patient/session/{appointmentId}/schedule', [AppointmentController::class, 'viewPatient'])->name('patient.viewSession');
@@ -59,9 +63,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/appointment/{appointmentID}', [AppointmentController::class, 'cancelApp'])->name('patients.cancelApp');
         Route::get('/progress', [AppointmentController::class, 'showPatientAppointments'])->name('patient.progress');
         Route::get('/progress/{appointmentID}', [AppointmentController::class, 'showProgress'])->name('patient.show.progress');
-        Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.all');
-        Route::get('/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
-        Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
         Route::get('/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
         Route::get('/session/{appointmentId}/feedback', [FeedbackController::class, 'create'])->name('appointments.feedback.create');
         Route::post('/session/{appointmentId}/feedback', [FeedbackController::class, 'store'])->name('appointments.feedback.store');
@@ -76,7 +77,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/subscriptions/{id}', [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
     });
 
-    // *Therapist Routes* - All routes for therapists
+    // Therapist Routes - All routes for therapists
     Route::prefix('therapist')->middleware('role:therapist', 'verified')->group(function () {
         Route::get('/dashboard', [TherapistController::class, 'index'])->name('therapist.dashboard');
         Route::get('/appointment', [TherapistController::class, 'appIndex'])->name('therapist.appointment');
@@ -96,7 +97,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/background', [TherapistController::class, 'showBackground'])->name('therapist.background');
     });
 
-    // **Admin Routes** - All routes for admin
+    // *Admin Routes* - All routes for admin
     Route::prefix('admin')->middleware('role:admin', 'verified')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
         Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
@@ -115,9 +116,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/therapist/{id}/deactivate', [TherapistController::class, 'deactivate'])->name('therapist.deactivate');
         Route::post('/patients/{id}/activate', [PatientController::class, 'activate'])->name('patients.activate');
         Route::post('/therapist/{id}/activate', [TherapistController::class, 'activate'])->name('therapist.activate');
-        Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.all');
-        Route::get('/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
-        Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     });
 });
 
@@ -129,7 +127,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/chat/send-message', [ChatController::class, 'sendMessage']); 
 });
 
-// Ensure routes are only accessible by authenticated users with the `verified` email
+// Ensure routes are only accessible by authenticated users with the verified email
 Route::middleware('auth')->group(function () {
     // Default fallback for non-verified users
     Route::get('/home', function () {

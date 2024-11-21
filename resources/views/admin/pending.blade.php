@@ -52,6 +52,7 @@
                                 <td class="py-3 px-4 flex items-center justify-center space-x-2">
                                     <form action="{{ route('admin.subscriptions.approve', $subscription->id) }}" method="POST">
                                         @csrf
+                                        <input type="hidden" name="subscription_id" value="{{ $subscription->patient->id }}">
                                         <button type="submit" class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 transition">Approve</button>
                                         <button type="button" class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 transition"
                                             onclick="showModal('{{ $subscription->payment->proof ?? '' }}', '{{ $subscription->payment->amount ?? 'N/A' }}', '{{ ucfirst($subscription->payment->payment_method ?? 'N/A') }}')">

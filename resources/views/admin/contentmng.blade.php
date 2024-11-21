@@ -151,7 +151,7 @@
                 @if($content->image_path)
                     <img src="{{ Storage::url($content->image_path) }}" 
                     alt="Content Image" 
-                    class="w-full aspect-w-16 aspect-h-9 object-cover rounded-md py-5">
+                    class="w-full aspect-w-16 aspect-h-9 max-h-[800px] object-cover rounded-md py-5">
                 @endif
                 <h3 class="text-lg font-semibold text-gray-900">{{ $content->title }}</h3>
                 <p class="text-sm text-gray-700 mt-2">{{ $content->description }}</p>
@@ -169,8 +169,8 @@
 
     fileInputs.forEach((input) => {
         const contentId = input.id.split('_')[2]; // Extract content ID
-        const previewContainer = document.querySelector(`#image-preview-${contentId}`);
-        const filenameLabel = document.querySelector(`#filename-${contentId}`);
+        const previewContainer = document.querySelector(#image-preview-${contentId});
+        const filenameLabel = document.querySelector(#filename-${contentId});
 
         // Add event listener for each input
         input.addEventListener('change', (event) => {
@@ -178,7 +178,7 @@
 
             if (file) {
                 // Display filename
-                filenameLabel.textContent = `Selected File: ${file.name}`;
+                filenameLabel.textContent = Selected File: ${file.name};
 
                 // Display new image preview
                 const reader = new FileReader();
@@ -191,7 +191,7 @@
             } else {
                 // Reset preview and filename if no file selected
                 filenameLabel.textContent = '';
-                previewContainer.innerHTML = `<p class="text-center text-gray-500">No image uploaded</p>`;
+                previewContainer.innerHTML = <p class="text-center text-gray-500">No image uploaded</p>;
             }
         });
     });

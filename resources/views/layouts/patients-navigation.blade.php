@@ -111,7 +111,7 @@
         let hasPrevious = false;
 
         function loadNotifications() {
-                fetch(`/notifications?offset=${offset}&limit=8`)
+                fetch(/notifications?offset=${offset}&limit=8)
                     .then(response => response.json())
                     .then(data => {
                         const unreadNotifications = data.filter(notification => notification.read_at === null);
@@ -155,6 +155,8 @@
                                     notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> has approved your booking.';         
                                 } else if (notification.type === 'appointment_disapproved') {
                                     notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> disapproved your booking.';         
+                                } else if (notification.type === 'approve_payment') {
+                                    notificationMessage.innerHTML = '<strong>' + notification.data + '</strong> approved your payment.';         
                                 } else {
                                     notificationMessage.textContent = notification.description;  // Default message
                                 }
@@ -234,7 +236,7 @@
 
                 // If the appointmentID exists, redirect to the specific appointment
                 if (data && data.appointmentID) {
-                    return `${baseNegotiationUrl}/${data.appointmentID}`;  // Corrected URL format
+                    return ${baseNegotiationUrl}/${data.appointmentID};  // Corrected URL format
                 } else {
                     return baseNegotiationUrl;  // Return the base appointment URL if no appointmentID
                 }
@@ -242,6 +244,8 @@
                 return '/patient/appointment';  // Ensure absolute path with leading slash
             } else if (notification.type === 'appointment_disapproved') {
                 return '/patient/appointment';  // Ensure absolute path with leading slash
+            } else if (notification.type === 'approve_payment') {
+                return '/patient/subscriptions';  // Ensure absolute path with leading slash
             } else if (notification.type === 'feedback') {
                 return 'patient/appointment';  // This could be adjusted based on your requirement
             }
@@ -251,7 +255,7 @@
 
         // AJAX function to mark a notification as read
         function markAsRead(notificationId, redirectUrl) {
-            fetch(`/notifications/${notificationId}/read`, {
+            fetch(/notifications/${notificationId}/read, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

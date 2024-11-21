@@ -63,7 +63,7 @@ class ChatController extends Controller
         })->orWhere(function ($query) use ($senderId, $receiverId) {
             $query->where('sender_id', $receiverId)
                   ->where('receiver_id', $senderId);
-        })->orderBy('created_at', 'desc')
+        })->orderBy('created_at', 'asc')
           ->limit(50)
           ->get();
     
