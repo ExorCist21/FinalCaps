@@ -154,8 +154,4 @@ class SubscriptionController extends Controller
 
         return redirect()->back()->with('error', 'Subscription not found or already processed.');
     }
-
-
-
-
 }
