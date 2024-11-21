@@ -31,7 +31,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->email }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->expertise ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->therapistInformation->expertise ?? 'N/A' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     @if ($therapist->isActive == 1)
                                         <form action="{{ route('therapist.deactivate', $therapist->id) }}" method="POST" class="inline-block">

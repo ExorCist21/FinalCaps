@@ -38,7 +38,7 @@
                     <div class="bg-white border rounded-lg transition-shadow duration-300 p-6">
                         <h2 class="text-lg font-bold text-gray-800 capitalize">{{ $subscription->service_name }}</h2>
                         <p class="mt-3 text-sm text-gray-600">
-                            <strong>Duration:</strong> {{ $subscription->duration }} Month(s)
+                            <strong>Session Added:</strong> {{ $subscription->duration }} Session(s)
                         </p>
                         <p class="mt-1 text-sm text-gray-600">
                             <strong>Status:</strong>

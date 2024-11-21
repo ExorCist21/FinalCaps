@@ -24,7 +24,10 @@ class AdminController extends Controller
     
     public function therapists()
     {
-        $therapists = User::where('role', 'therapist')->get(); // Assuming 'role' column holds user roles
+        $therapists = User::where('role', 'therapist')
+        ->with('therapistInformation')->get();
+        
+        // Assuming 'role' column holds user roles
         return view('admin.therapist', compact('therapists'));
     }
 
