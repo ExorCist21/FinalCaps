@@ -1,10 +1,10 @@
 <title>Messages</title>
 <title>Messages</title>
 <x-app-layout>
-    <div id="chat-container" class="flex max-w-6xl mx-auto border">
+    <div id="chat-container" class="flex max-w-7xl mx-auto border rounded-lg">
         <!-- Conversation List -->
         <div class="w-1/3 overflow-y-auto max-h-screen border-r border-gray-200 min-h-[600px] max-h-[600px]">
-            <h3 class="text-lg font-bold mb-5 text-gray-700 p-4">Messages</h3>
+            <h3 class="text-lg font-bold mb-5 text-gray-700 text-center p-4">Connections</h3>
             <div id="conversation-list" class="text-gray-500 text-center">Loading conversations...</div>
         </div>
 
@@ -71,7 +71,7 @@
                     $('#conversation-list').empty();
 
                     if (users.length === 0) {
-                        $('#conversation-list').html('<div class="no-data text-gray-500">No conversations found.</div>');
+                        $('#conversation-list').html('<div class="no-data text-gray-500">No conversations found.<br/>Please book an appointment first.</div>');
                         return;
                     }
 
