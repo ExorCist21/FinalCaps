@@ -1,41 +1,72 @@
 <title>Sessions</title>
 <x-app-layout>
-    <div class="container mx-auto p-6 border-2 mt-4 rounded-lg bg-white shadow-md">
-        <h1 class="text-3xl font-bold mb-6 text-gray-800">Your Sessions</h1>
-        
-        <div class="mb-4">
-            <a href="{{ route('subscriptions.plan') }}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">Purchase a Session</a>
+    <x-slot name="header">
+        <h2 class="font-semibold text-2xl text-gray-800 leading-tight text-center">
+            {{ __('Your Sessions') }}
+        </h2>
+    </x-slot>
+
+    <div class="max-w-7xl mx-auto mt-8">
+        <!-- Header Section -->
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-semibold text-gray-800">
+                {{ __('Available Sessions') }}
+            </h3>
+            <a href="{{ route('subscriptions.plan') }}" 
+               class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline focus:ring-2 focus:ring-indigo-500">
+                Purchase a Session
+            </a>
         </div>
 
+        <!-- Success Message -->
         @if (session('success'))
-            <div class="bg-green-500 text-white p-3 mb-6 rounded shadow">
+            <div class="bg-green-500 text-white p-4 mb-6 rounded-lg shadow-lg">
                 {{ session('success') }}
             </div>
         @endif
 
+        <!-- No Sessions Available -->
         @if ($subscriptions->isEmpty())
-            <div class="bg-gray-100 text-gray-600 p-4 rounded text-center">
-                <p>No sessions found. Please purchase a session.</p>
+            <div class="text-center text-gray-600 bg-gray-100 p-8 rounded-lg shadow-md">
+                <p class="text-lg font-semibold">No sessions found.</p>
+                <p class="mt-2 text-sm">Please purchase a session to get started.</p>
             </div>
         @else
-            @foreach ($subscriptions as $subscription)
-                <div class="bg-gray-50 shadow-lg rounded-lg p-6 mt-4 border border-gray-200">
-                    <h2 class="text-2xl font-semibold text-gray-700">{{ $subscription->service_name }}</h2>
-                    <p class="mt-2"><strong>Session Added:</strong> {{ $subscription->duration }} Session(s)</p>
-                    <p class="mt-1"><strong>Status:</strong> <span class="capitalize">{{ ucfirst($subscription->status) }}</span></p>
+            <!-- Sessions List -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach ($subscriptions as $subscription)
+                    <div class="bg-white border rounded-lg transition-shadow duration-300 p-6">
+                        <h2 class="text-lg font-bold text-gray-800 capitalize">{{ $subscription->service_name }}</h2>
+                        <p class="mt-3 text-sm text-gray-600">
+                            <strong>Duration:</strong> {{ $subscription->duration }} Month(s)
+                        </p>
+                        <p class="mt-1 text-sm text-gray-600">
+                            <strong>Status:</strong>
+                            <span class="{{ $subscription->status === 'active' ? 'text-green-600' : 'text-red-500' }}">
+                                {{ ucfirst($subscription->status) }}
+                            </span>
+                        </p>
 
-                    @if ($subscription->status !== 'active')
-                        <div class="flex-auto justify-between mt-4">
-                            <a href="{{ url('/patient/subscriptions/' . $subscription->id . '/edit') }}" class="text-black font-semibold hover:bg-green-600 border border-green-500 bg-green-400 rounded-lg px-4 py-2 transition duration-200">Edit</a>
-                            <form action="{{ url('/patient/subscriptions/' . $subscription->id) }}" method="POST" class="mt-2">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-black font-semibold hover:bg-red-600 border border-red-500 rounded-lg bg-red-400 px-4 py-2 transition duration-200 mt-2">Cancel</button>
-                            </form>
-                        </div>
-                    @endif
-                </div>
-            @endforeach
+                        <!-- Action Buttons -->
+                        @if ($subscription->status !== 'active')
+                            <div class="flex justify-between items-center mt-4">
+                                <a href="{{ url('/patient/subscriptions/' . $subscription->id . '/edit') }}" 
+                                   class="rounded-md bg-green-500 px-4 py-2 text-sm font-semibold text-white hover:bg-green-600 transition duration-200">
+                                    Edit
+                                </a>
+                                <form action="{{ url('/patient/subscriptions/' . $subscription->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600 transition duration-200">
+                                        Cancel
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
         @endif
     </div>
 </x-app-layout>

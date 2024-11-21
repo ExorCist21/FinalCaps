@@ -21,13 +21,13 @@
                         <span>{{ __('Account Management') }}</span>
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                     </button>
-                    <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg">
-                        <x-nav-link :href="route('admin.patients')" :active="request()->routeIs('admin.patients')" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200">
+                    <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg">
+                        <a href="{{ route('admin.patients') }}" class="block px-4 py-2 text-sm text-gray-900">
                             {{ __('Patients') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.therapists')" :active="request()->routeIs('admin.therapists')" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200">
+                        </a>
+                        <a href="{{ route('admin.therapists') }}" class="block px-4 py-2 text-sm text-gray-900">
                             {{ __('Therapists') }}
-                        </x-nav-link>
+                        </a>
                     </div>
                 </div>
                     <a href="{{ route('admin.contentmng') }}" 
@@ -63,19 +63,16 @@
 
                 <!-- User Settings Dropdown -->
                 <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" class="flex items-center text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        <span>{{ Auth::user()->name }}</span>
-                        <svg class="ml-1 h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a 1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                        </svg>
+                    <button @click="open = !open" class="text-gray-500 hover:text-gray-900">
+                        <i class="fa-regular fa-user-circle text-xl"></i>
                     </button>
 
                     <!-- Dropdown Menu -->
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
-                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-                            Profile
-                        </a>
                         <form method="POST" action="{{ route('logout') }}">
+                            <a href="{{ route('profile.edit') }}" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 capitalize">
+                                {{ Auth::user()->name }} Account
+                            </a>    
                             @csrf
                             <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
                                 Log Out
@@ -87,3 +84,147 @@
         </nav>
     </header>
 </nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const notificationIcon = document.getElementById('notification-icon');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    const notificationDot = document.getElementById('notification-dot');
+    const notificationList = document.getElementById('notification-list');
+    const seePreviousBtn = document.getElementById('see-previous-btn');
+
+    let offset = 0; // Tracks loaded notifications
+    let hasPrevious = false;
+
+    // Load notifications from the server
+    function loadNotifications() {
+        fetch(`/notifications?offset=${offset}&limit=8`)
+            .then(response => response.json())
+            .then(data => {
+                const unreadNotifications = data.filter(notification => notification.read_at === null);
+
+                // Show or hide red dot based on unread notifications
+                notificationDot.style.display = unreadNotifications.length > 0 ? 'inline-block' : 'none';
+
+                if (data.length > 0) {
+                    if (offset === 0) {
+                        notificationList.innerHTML = ''; // Clear the list for the first load
+                    }
+
+                    data.forEach(notification => {
+                        const notificationLink = document.createElement('a');
+                        notificationLink.classList.add(
+                            'block',
+                            'px-4',
+                            'py-2',
+                            'text-gray-800',
+                            'hover:bg-gray-100',
+                            'cursor-pointer'
+                        );
+
+                        // Style based on read status
+                        if (notification.read_at === null) {
+                            notificationLink.classList.add('bg-gray-200'); // Unread
+                        } else {
+                            notificationLink.classList.add('bg-white'); // Read
+                        }
+
+                        notificationLink.href = getNotificationUrl(notification);
+                        notificationLink.setAttribute('data-id', notification.notificationID);
+
+                        // Mark as read on click
+                        notificationLink.addEventListener('click', function (event) {
+                            event.preventDefault();
+                            const url = this.href;
+                            const notificationId = this.getAttribute('data-id');
+                            markAsRead(notificationId, url);
+                        });
+
+                        const notificationMessage = document.createElement('div');
+                        notificationMessage.innerHTML = getNotificationMessage(notification);
+
+                        const notificationDate = document.createElement('span');
+                        notificationDate.classList.add('text-gray-400', 'text-sm');
+                        notificationDate.textContent = new Date(notification.updated_at).toLocaleString();
+
+                        notificationLink.appendChild(notificationMessage);
+                        notificationLink.appendChild(notificationDate);
+
+                        notificationList.appendChild(notificationLink);
+                    });
+
+                    // Show "See previous notifications" button if more notifications exist
+                    if (data.length === 8) {
+                        seePreviousBtn.style.display = 'block';
+                        hasPrevious = true;
+                    } else {
+                        seePreviousBtn.style.display = 'none';
+                        hasPrevious = false;
+                    }
+
+                    offset += data.length; // Increment offset
+                } else if (offset === 0) {
+                    notificationList.innerHTML = '<p class="px-4 py-2 text-gray-800">No new notifications.</p>';
+                }
+            })
+            .catch(error => console.error('Error loading notifications:', error));
+    }
+
+    // Determine notification message content
+    function getNotificationMessage(notification) {
+        if (notification.type === 'payment') {
+            return `Patient <strong>${notification.data}</strong> has booked.`;
+        } else if (notification.type === 'appointment_approved') { 
+            return `Appointment for <strong>${notification.data}</strong> has been approved.`;
+        }
+        return notification.description || 'You have a new notification.';
+    }
+
+    // Generate URL based on notification type
+    function getNotificationUrl(notification) {
+        if (notification.type === 'payment') {
+            return '/payments';
+        } else if (notification.type === 'appointment') {
+            return '/appointments';
+        } else if (notification.type === 'feedback') {
+            return '/feedback';
+        }
+        return '/dashboard'; // Default URL
+    }
+
+    // Mark notification as read and redirect
+    function markAsRead(notificationId, redirectUrl) {
+        fetch(`/notifications/${notificationId}/read`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: JSON.stringify({ read_at: new Date() }),
+        })
+            .then(response => response.json())
+            .then(() => {
+                window.location.href = redirectUrl; // Redirect after marking as read
+            })
+            .catch(error => console.error('Error marking notification as read:', error));
+    }
+
+    // Toggle dropdown visibility
+    notificationIcon.addEventListener('click', function () {
+        notificationDropdown.classList.toggle('hidden');
+    });
+
+    // Hide dropdown on outside click
+    document.addEventListener('click', function (event) {
+        if (!notificationDropdown.contains(event.target) && !notificationIcon.contains(event.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    // Load previous notifications on button click
+    seePreviousBtn.addEventListener('click', loadNotifications);
+
+    // Initial load
+    loadNotifications();
+});
+
+</script>
