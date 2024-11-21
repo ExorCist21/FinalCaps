@@ -8,31 +8,24 @@
             <!-- Service Name -->
             <div class="mb-4">
                 <label for="service_name" class="block text-sm font-medium">Service Name:</label>
-                <input type="text" name="service_name" value="{{ request('service_name') }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">
+                <input type="text" name="service_name" value="{{ request('service_name') }}" readonly class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">
             </div>
 
             <!-- Hidden Price Field -->
             <div class="mb-4">
                 <input type="hidden" name="price" value="{{ request('price') }}">
-                <p class="text-sm font-medium">Price: ₱{{ request('price') }}</p> <!-- Displaying the price -->
+                <p class="text-sm font-medium">Price: ₱{{ request('price') }}</p>
             </div>
 
-            <!-- Start Date -->
+            <!-- Duration -->
             <div class="mb-4">
-                <label for="start_date" class="block text-sm font-medium">Start Date:</label>
-                <input type="date" name="start_date" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">
-            </div>
-
-            <!-- End Date -->
-            <div class="mb-4">
-                <label for="end_date" class="block text-sm font-medium">End Date (optional):</label>
-                <input type="date" name="end_date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">
+                <input type="hidden" name="duration" value="{{ request('duration') }}">
+                <p class="text-sm font-medium">Duration: {{ request('duration') }} Months</p>
             </div>
 
             <!-- Payment Method -->
             <fieldset class="mb-4">
                 <legend class="block text-sm font-medium mb-2">Payment Method:</legend>
-
                 <div>
                     <input type="radio" id="gcash" name="payment_method" value="gcash" required>
                     <label for="gcash">Gcash</label>
@@ -51,7 +44,7 @@
                 </div>
             </fieldset>
 
-            <!-- Display QR code based on selected payment method -->
+            <!-- Display QR Code Based on Selected Payment Method -->
             <div id="qr_code_section" class="hidden mb-4">
                 <p class="block text-sm font-medium">Scan the QR code to complete your payment:</p>
                 <img id="qr_image" src="" alt="Payment QR Code" class="w-48 h-48 mx-auto">
@@ -61,7 +54,6 @@
         </form>
     </div>
 
-    <!-- JavaScript for Dynamic QR Code Display -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
@@ -74,23 +66,22 @@
 
                     switch (this.value) {
                         case 'gcash':
-                            qrCodeUrl = '/images/gcash_qr.jpg'; // Replace with your actual Gcash QR code image path
+                            qrCodeUrl = '/images/gcash_qr.jpg'; // Update to actual Gcash QR code path
                             break;
                         case 'maya':
-                            qrCodeUrl = '/images/maya_qr.png';  // Replace with your actual Maya QR code image path
+                            qrCodeUrl = '/images/maya_qr.png';  // Update to actual Maya QR code path
                             break;
                         case 'credit_card':
-                            qrCodeUrl = '/images/credit_card_qr.png';  // Placeholder for credit card QR if applicable
+                            qrCodeUrl = '/images/credit_card_qr.png';
                             break;
                         case 'paypal':
-                            qrCodeUrl = '/images/paypal_qr.png';  // Replace with your actual PayPal QR code image path
+                            qrCodeUrl = '/images/paypal_qr.png'; 
                             break;
                         default:
                             qrCodeSection.classList.add('hidden');
                             return;
                     }
 
-                    // Show QR code section
                     qrImage.src = qrCodeUrl;
                     qrCodeSection.classList.remove('hidden');
                 });

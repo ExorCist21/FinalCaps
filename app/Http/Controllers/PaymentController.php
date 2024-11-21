@@ -22,14 +22,17 @@ class PaymentController extends Controller
         // Handle the image upload
         if ($request->hasFile('proof')) {
             // Store the image in the 'proofs' directory inside the storage/app/public directory
-            $path = $request->file('proof')->store('public/proofs');
+            $path = $request->file('proof')->store('proofs', 'public');
             
-            // Save the filename (path) in the payment record
-            $payment->proof = Storage::url($path);
+            // Generate the public URL for the file (making sure it's publicly accessible)
+            $proofUrl = Storage::url($path); // This generates a public URL
+    
+            // Save the URL of the file in the database
+            $payment->proof = $proofUrl; // Save URL to database
             $payment->status = 'pending'; // Set status to pending until admin approval
             $payment->save();
         }
 
-        return redirect('/patient/my-subscriptions')->with('success', 'Payment proof uploaded successfully. Awaiting admin approval.');
+        return redirect('/patient/subscriptions')->with('success', 'Payment proof uploaded successfully. Awaiting admin approval.');
     }
 }

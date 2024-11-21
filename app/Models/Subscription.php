@@ -16,15 +16,15 @@ class Subscription extends Model
     protected $fillable = [
         'patient_id',
         'service_name',
-        'start_date',
-        'end_date',
+        'duration',
         'status',
     ];
 
-    protected $casts = [
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
-    ];
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'subscription_id');
+    }
+
 
     public function patient()
     {

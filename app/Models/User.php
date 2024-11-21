@@ -25,6 +25,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'role',
         'isActive',
+        'session_left',
     ];
 
     protected $dates = ['email_verified_at'];

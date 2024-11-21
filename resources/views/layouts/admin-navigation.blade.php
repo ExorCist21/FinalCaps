@@ -38,6 +38,10 @@
                     <x-nav-link :href="route('admin.contentmng')" :active="request()->routeIs('admin.reports')">
                         {{ __('Content Management') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('admin.subscribe')" :active="request()->routeIs('admin.subscribe')">
+                        {{ __('Subscription') }}
+                    </x-nav-link>
                 </div>
             </div>
 

@@ -43,6 +43,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role, // Store the role in the database
+            'session_left' => 2,
         ]);
 
         event(new Registered($user));
@@ -70,6 +71,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'patient',
+            'session_left' => 2,
         ]);
 
         event(new Registered($user));
@@ -105,6 +107,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'therapist',
+            'session_left' => 2,
         ]);
 
         event(new Registered($user));

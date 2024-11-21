@@ -21,4 +21,14 @@ class Payment extends Model
         'status',
         'proof'
     ];
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class, 'subscription_id');
+    }
+
+    public function getProofUrlAttribute()
+    {
+        return asset('storage/' . $this->proof); 
+    }
 }
