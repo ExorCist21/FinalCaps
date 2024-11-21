@@ -1,7 +1,7 @@
 <title>Subscribe a Plan</title>
 <x-app-layout>
     <div class="container mx-auto p-4">
-        <h1 class="text-2xl font-bold mb-4">Subscribe to a Service</h1>
+        <h1 class="text-2xl font-bold mb-4">Purchase Session Plan</h1>
 
         <form action="{{ route('subscriptions.store') }}" method="POST" class="bg-white shadow rounded-lg p-4">
             @csrf
@@ -20,7 +20,7 @@
             <!-- Duration -->
             <div class="mb-4">
                 <input type="hidden" name="duration" value="{{ request('duration') }}">
-                <p class="text-sm font-medium">Duration: {{ request('duration') }} Months</p>
+                <p class="text-sm font-medium">Session: +{{ request('duration') }} Sessions</p>
             </div>
 
             <!-- Payment Method -->

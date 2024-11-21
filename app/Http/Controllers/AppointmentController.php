@@ -21,26 +21,50 @@ class AppointmentController extends Controller
             'therapist_id' => 'required|exists:users,id',
         ]);
 
+        // Find the therapist
+        $therapist = User::findOrFail($request->therapist_id);
+
+        // Check if the therapist has sessions left
+        if ($therapist->session_left <= 0) {
+            // If no sessions left for the therapist, return an error message
+            return redirect()->back()->with('error', 'The therapist has no sessions left. Please purchase more sessions.');
+        }
+
         // Create a new appointment
-        $patient = Appointment::create([
+        $appointment = Appointment::create([
             'datetime' => $request->datetime,
             'description' => $request->description,
             'therapistID' => $request->therapist_id,
-            'patientID' => Auth::id(), // therapist's ID
+            'patientID' => Auth::id(), // Use the logged-in patient's ID
             'created_at' => now(),
             'updated_at' => now(),
             'status' => 'pending',
             'session_meeting' => 'online',
         ]);
 
-        $patientName = Auth::user()->name;
+        // Get the logged-in patient
+        $patient = Auth::user();
+
+        // Check if the patient has sessions left
+        if ($patient->session_left <= 0) {
+            // If no sessions left, return an error message
+            return redirect()->back()->with('error', 'You have no sessions left. Please purchase more sessions.');
+        }
+
+        // Reduce the patient's session_left by 1
+        $patient->session_left = $patient->session_left - 1;
+        $patient->save(); // Save the updated patient data
+
+        // Send notification to the therapist
+        $patientName = $patient->name; // Get the patient's name
 
         Notification::create([
             'n_userID' => $request->therapist_id,  // Notify the therapist
-            'type' => 'appointment',  // You can define this type for negotiation
-            'data' => $patientName, // Custom message
+            'type' => 'appointment',  // Define type for the notification
+            'data' => $patientName, // Patient's name in the notification
             'created_at' => now(),
         ]);
+
         // Redirect with success message
         return redirect()->route('patients.appointment')->with('success', 'Appointment successfully booked!');
     }

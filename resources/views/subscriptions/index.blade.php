@@ -21,7 +21,7 @@
             @foreach ($subscriptions as $subscription)
                 <div class="bg-gray-50 shadow-lg rounded-lg p-6 mt-4 border border-gray-200">
                     <h2 class="text-2xl font-semibold text-gray-700">{{ $subscription->service_name }}</h2>
-                    <p class="mt-2"><strong>Duration:</strong> {{ $subscription->duration }} Month(s)</p>
+                    <p class="mt-2"><strong>Session Added:</strong> {{ $subscription->duration }} Session(s)</p>
                     <p class="mt-1"><strong>Status:</strong> <span class="capitalize">{{ ucfirst($subscription->status) }}</span></p>
 
                     @if ($subscription->status !== 'active')
