@@ -28,6 +28,7 @@ Route::get('/register/therapist', [TherapistController::class, 'showRegistration
 Route::post('/register/patient', [RegisteredUserController::class, 'storePatient'])->name('patient.store');
 Route::post('/register/therapist', [RegisteredUserController::class, 'storeTherapist'])->name('therapist.store');
 
+// Determine what users role is gonna log in
 Route::get('/dashboard', function () {
     $user = auth()->user();
 
