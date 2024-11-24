@@ -163,49 +163,49 @@
 
     <!-- JavaScript for Modal -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-    // Select all file inputs
-    const fileInputs = document.querySelectorAll('[id^="image_path_"]');
+    document.addEventListener('DOMContentLoaded', () => {
+        const fileInputs = document.querySelectorAll('[id^="image_path_"]');
 
-    fileInputs.forEach((input) => {
-        const contentId = input.id.split('_')[2]; // Extract content ID
-        const previewContainer = document.querySelector(#image-preview-${contentId});
-        const filenameLabel = document.querySelector(#filename-${contentId});
+        fileInputs.forEach((input) => {
+            const contentId = input.id.split('_')[2]; // Extract content ID
+            const previewContainer = document.querySelector(`#image-preview-${contentId}`);
+            const filenameLabel = document.querySelector(`#filename-${contentId}`);
 
-        // Add event listener for each input
-        input.addEventListener('change', (event) => {
-            const file = event.target.files[0];
+            input.addEventListener('change', (event) => {
+                const file = event.target.files[0];
 
-            if (file) {
-                // Display filename
-                filenameLabel.textContent = Selected File: ${file.name};
+                if (file) {
+                    // Update filename label
+                    filenameLabel.textContent = `Selected File: ${file.name}`;
 
-                // Display new image preview
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewContainer.innerHTML = `
-                        <img src="${e.target.result}" class="w-full h-48 object-cover rounded-lg" alt="New Image Preview">
-                    `;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Reset preview and filename if no file selected
-                filenameLabel.textContent = '';
-                previewContainer.innerHTML = <p class="text-center text-gray-500">No image uploaded</p>;
-            }
+                    // Display new image preview
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        previewContainer.innerHTML = `
+                            <img src="${e.target.result}" class="w-full h-48 object-cover rounded-lg" alt="New Image Preview">
+                        `;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Reset preview and filename
+                    filenameLabel.textContent = '';
+                    previewContainer.innerHTML = `<p class="text-center text-gray-500">No image uploaded</p>`;
+                }
+            });
         });
     });
-});
+    // Open the modal
+    function openModal() {
+        const modal = document.getElementById('contentModal');
+        modal.classList.remove('hidden'); // Remove 'hidden' to display modal
+        modal.classList.add('flex'); // Add 'flex' to enable centering
+    }
 
-
-        // Open the modal
-        function openModal() {
-            document.getElementById('contentModal').classList.remove('hidden');
-        }
-
-        // Close the modal
-        function closeModal() {
-            document.getElementById('contentModal').classList.add('hidden');
-        }
+    // Close the modal
+    function closeModal() {
+        const modal = document.getElementById('contentModal');
+        modal.classList.add('hidden'); // Add 'hidden' to hide modal
+        modal.classList.remove('flex'); // Remove 'flex'
+    }
     </script>
 </x-app-layout>
