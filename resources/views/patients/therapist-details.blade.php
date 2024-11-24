@@ -86,7 +86,6 @@
                     <form action="{{ route('appointments.store') }}" method="POST" class="p-4 space-y-4">
                         @csrf
                         <input type="hidden" name="therapist_id" value="{{ $therapist->id }}">
-                        <input type="hidden" name="receiverID" value="{{ $therapist->id }}">
 
                         <div>
                             <label for="appointmentDate" class="block text-sm font-medium text-gray-700">Appointment Date</label>

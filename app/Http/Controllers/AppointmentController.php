@@ -20,16 +20,10 @@ class AppointmentController extends Controller
             'description' => 'required|string|max:255',
             'therapist_id' => 'required|exists:users,id',
         ]);
-
+    
         // Find the therapist
         $therapist = User::findOrFail($request->therapist_id);
-
-        // Check if the therapist has sessions left
-        if ($therapist->session_left <= 0) {
-            // If no sessions left for the therapist, return an error message
-            return redirect()->back()->with('error', 'The therapist has no sessions left. Please purchase more sessions.');
-        }
-
+    
         // Create a new appointment
         $appointment = Appointment::create([
             'datetime' => $request->datetime,
@@ -41,33 +35,34 @@ class AppointmentController extends Controller
             'status' => 'pending',
             'session_meeting' => 'online',
         ]);
-
+    
         // Get the logged-in patient
         $patient = Auth::user();
-
+    
         // Check if the patient has sessions left
         if ($patient->session_left <= 0) {
             // If no sessions left, return an error message
             return redirect()->back()->with('error', 'You have no sessions left. Please purchase more sessions.');
         }
-
+    
         // Reduce the patient's session_left by 1
         $patient->session_left = $patient->session_left - 1;
         $patient->save(); // Save the updated patient data
-
+    
         // Send notification to the therapist
         $patientName = $patient->name; // Get the patient's name
-
+    
         Notification::create([
             'n_userID' => $request->therapist_id,  // Notify the therapist
             'type' => 'appointment',  // Define type for the notification
             'data' => $patientName, // Patient's name in the notification
             'created_at' => now(),
         ]);
-
-        // Redirect with success messages
+    
+        // Redirect with success message
         return redirect()->route('patients.appointment')->with('success', 'Appointment successfully booked!');
     }
+
 
     public function cancelApp($appointmentID)
     {
@@ -212,7 +207,7 @@ class AppointmentController extends Controller
         // Fetch all appointments for the authenticated therapist along with their related progress and patient
         $appointments = Appointment::with(['progress' => function ($query) {
             $query->latest('created_at'); // Get the most recent progress
-        }, 'patient'])
+        }, 'patient','payments'])
         ->where('isDone', true)
         ->where('therapistID', auth()->id())
         ->get();

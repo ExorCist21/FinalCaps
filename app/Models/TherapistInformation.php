@@ -18,6 +18,7 @@ class TherapistInformation extends Model
         'awards',
         'clinic_name',
         'expertise',
+        'gcash_number',
     ];
 
     public function therapist()

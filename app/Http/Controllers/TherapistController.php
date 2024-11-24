@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Content;
 use App\Models\User;
 use App\Models\Appointment;
+use App\Models\TherapistInformation;
 use Illuminate\Support\Facades\Auth;
 
 class TherapistController extends Controller
@@ -106,6 +107,44 @@ class TherapistController extends Controller
         
         return view('therapist.profile', compact('therapistInformation'));
     }
+
+    public function confirmPayment(Request $request, $appointmentID)
+    {
+        $appointment = Appointment::findOrFail($appointmentID);
+
+        // Ensure that the payment exists and is in 'pending' status
+        $payment = $appointment->payments->firstWhere('status', 'Pending'); // Get the first payment with 'pending' status
+
+        if ($payment) {
+            // Update the payment status to 'Confirmed'
+            $payment->status = 'Confirmed';
+            $payment->save(); // Save the changes
+        }
+
+        return redirect()->route('therapist.dashboard')->with('success', 'Payment confirmed successfully.');
+    }
+
+    public function addGcashNumber(Request $request)
+    {
+        // Validate the GCash number
+        $validated = $request->validate([
+            'gcash_number' => 'required|string|max:15',
+            'appointment_id' => 'required|exists:appointments,appointmentID',
+        ]);
+
+        // Find the therapist's information and update the GCash number
+        $therapistInformation = TherapistInformation::where('user_id', auth()->id())->first();
+        
+        if ($therapistInformation) {
+            $therapistInformation->gcash_number = $validated['gcash_number'];
+            $therapistInformation->save();
+
+            return back()->with('success', 'GCash number added successfully.');
+        }
+
+        return back()->with('error', 'Unable to update GCash number. Please try again.');
+}
+
 
     public function updateProfile(Request $request)
     {

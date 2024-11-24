@@ -82,6 +82,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [TherapistController::class, 'index'])->name('therapist.dashboard');
         Route::get('/appointment', [TherapistController::class, 'appIndex'])->name('therapist.appointment');
         Route::post('/appointment/{appointmentID}/approve', [TherapistController::class, 'approveApp'])->name('therapist.approve');
+        Route::put('/appointment/{appointmentID}/confirm-payment', [TherapistController::class, 'confirmPayment'])->name('therapist.payment.confirm');
         Route::post('/appointment/{appointmentID}/disapprove', [TherapistController::class, 'disapproveApp'])->name('therapist.disapprove');
         Route::get('/session', [AppointmentController::class, 'index'])->name('therapist.session');
         Route::get('/session/{appointmentId}/schedule', [AppointmentController::class, 'viewSession'])->name('therapist.viewSession');
@@ -92,6 +93,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/profile', [TherapistController::class, 'updateProfile'])->name('therapist.updateProfile');
         Route::get('/chat', [ChatController::class, 'therapistIndex'])->name('therapist.chats');
         Route::get('/progress', [AppointmentController::class, 'viewProgress'])->name('therapist.progress');
+        Route::post('/progress/add-gcash', [TherapistController::class, 'addGcashNumber'])->name('therapist.addGcashNumber');
         Route::get('/progress/{appointmentID}', [AppointmentController::class, 'showProgress'])->name('therapist.show.progress');
         Route::put('/appointments/{appointmentID}/update-progress', [AppointmentController::class, 'storeProgressTherapist'])->name('therapist.appointment.updateProgress');
         Route::get('/background', [TherapistController::class, 'showBackground'])->name('therapist.background');
@@ -116,6 +118,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/therapist/{id}/deactivate', [TherapistController::class, 'deactivate'])->name('therapist.deactivate');
         Route::post('/patients/{id}/activate', [PatientController::class, 'activate'])->name('patients.activate');
         Route::post('/therapist/{id}/activate', [TherapistController::class, 'activate'])->name('therapist.activate');
+        Route::get('/send-payment', [AdminController::class, 'showAppointments'])->name('admin.appointments');
+        Route::get('/send-payment/{appointmentID}', [AdminController::class, 'showPaymentForm'])->name('admin.showPaymentForm');
+        Route::post('/send-payment/{appointmentID}', [AdminController::class, 'sendPayment'])->name('admin.sendPayment');
     });
 });
 

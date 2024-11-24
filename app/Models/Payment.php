@@ -31,4 +31,8 @@ class Payment extends Model
     {
         return asset('storage/' . $this->proof); 
     }
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class, 'transaction_id', 'appointmentID');
+    }
 }

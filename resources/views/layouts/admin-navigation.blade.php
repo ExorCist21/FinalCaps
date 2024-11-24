@@ -38,6 +38,10 @@
                         class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
                         Session Management
                     </a>
+                    <a href="{{ route('admin.appointments') }}" 
+                        class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+                        Payment Management
+                    </a>
             </div>
 
 

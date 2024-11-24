@@ -1,4 +1,4 @@
-<title>Patient Appointments</title>
+<title>Patient Progress</title>
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-2xl text-gray-800 leading-tight text-center">
@@ -53,7 +53,8 @@
                         <hr class="my-2"/>
 
                         <div class="flex justify-between mt-4 items-center">
-                            <a href="{{ route('therapist.show.progress', ['appointmentID' => $appointment->appointmentID]) }}" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
+                            <a href="{{ route('therapist.show.progress', ['appointmentID' => $appointment->appointmentID]) }}" 
+                            class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
                                 Detailed
                             </a>
                             @if($appointment->progress && !$appointment->progress->contains('status', 'Completed'))
@@ -63,7 +64,122 @@
                                     class="text-sm font-medium text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
                                     Add Progress
                                 </button>
+                            @else
+                                @if($appointment->therapist->therapistInformation->gcash_number)
+                                    @if($appointment->payments->isNotEmpty() && $appointment->payments->first()->status === 'Confirmed')
+                                        <!-- Display 'Done Payment' if status is 'Confirmed' -->
+                                        <button
+                                            type="button" 
+                                            class="text-sm font-medium text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
+                                            Done Payment
+                                        </button>
+                                    @else
+                                        <!-- Display 'View Payment' button if status is not 'Confirmed' -->
+                                        <button
+                                            type="button" 
+                                            onclick="openPaymentModal({{ json_encode($appointment->payment) }}, {{ $appointment->appointmentID }}, '{{ $appointment->therapist->therapistInformation->gcash_number }}')" 
+                                            class="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
+                                            View Payment
+                                        </button>
+                                    @endif
+                                @else
+                                    <!-- Display 'Add GCash Info' button if GCash number is not provided -->
+                                    <button
+                                        type="button" 
+                                        onclick="openGcashModal({{ $appointment->appointmentID }})" 
+                                        class="text-sm font-medium text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
+                                        Add GCash Info
+                                    </button>
+                                @endif
                             @endif
+                        </div>
+                    </div>
+                    
+                    <!-- Modal for Payment Confirmation -->
+                    <div id="payment-modal-{{ $appointment->appointmentID }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                            <h3 class="text-xl font-semibold">Payment Details</h3>
+                            <div class="mb-4">
+                                @if($appointment->payments->isNotEmpty())
+                                    @foreach($appointment->payments as $payment)
+                                        <p class="text-sm font-medium text-gray-700">Amount: ${{ $payment->amount }}</p>
+                                        <p class="text-sm font-medium text-gray-700">Status: {{ $payment->status }}</p>
+                                        <p class="text-sm text-gray-600 mt-2">Transaction ID: {{ $payment->transaction_id ?? 'N/A' }}</p>
+                                        <p class="text-sm text-gray-600 mt-2">Payment Method: {{ $payment->payment_method ?? 'N/A' }}</p>
+                                    @endforeach
+                                @else
+                                    <p class="text-sm text-gray-600">No payment details available.</p>
+                                @endif
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <button type="button" onclick="closePaymentModal({{ $appointment->appointmentID }})" class="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300">Close</button>
+                                @if($appointment->payments->isNotEmpty() && $appointment->payments->first()->status === 'Pending')
+                                    <form action="{{ route('therapist.payment.confirm', ['appointmentID' => $appointment->appointmentID]) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">Confirm</button>
+                                    </form>
+                                @endif
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Modal for Payment Confirmation -->
+                    <div id="payment-modal-{{ $appointment->appointmentID }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                            <h3 class="text-xl font-semibold">Payment Details</h3>
+                            <!-- Payment details -->
+                            <div class="mb-4">
+                                @if($appointment->payments->isNotEmpty())
+                                    @foreach($appointment->payments as $payment)
+                                        <p class="text-sm font-medium text-gray-700">Amount: ${{ $payment->amount }}</p>
+                                        <p class="text-sm font-medium text-gray-700">Status: {{ $payment->status }}</p>
+                                        <p class="text-sm text-gray-600 mt-2">Transaction ID: {{ $payment->transaction_id ?? 'N/A' }}</p>
+                                        <p class="text-sm text-gray-600 mt-2">Payment Method: {{ $payment->payment_method ?? 'N/A' }}</p>
+                                    @endforeach
+                                @else
+                                    <p class="text-sm text-gray-600">No payment details available.</p>
+                                @endif
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <button type="button" onclick="closePaymentModal({{ $appointment->appointmentID }})" class="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300">Close</button>
+                                @if($appointment->payments->isNotEmpty() && $appointment->payments->first()->status === 'Pending')
+                                    <form action="{{ route('therapist.payment.confirm', ['appointmentID' => $appointment->appointmentID]) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">Confirm</button>
+                                    </form>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GCash Info Modal -->
+                    <div id="gcash-modal-{{ $appointment->appointmentID }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                            <h3 class="text-xl font-semibold">Add Your GCash Number</h3>
+                            <form action="{{ route('therapist.addGcashNumber') }}" method="POST">
+                                @csrf
+                                <!-- Hidden Field for Appointment ID -->
+                                <input type="hidden" name="appointment_id" value="{{ $appointment->appointmentID }}">
+                                
+                                <!-- GCash Number -->
+                                <div class="mb-4">
+                                    <label for="gcash_number" class="block text-sm font-medium text-gray-700">GCash Number</label>
+                                    <input type="text" id="gcash_number" name="gcash_number" 
+                                        class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" 
+                                        placeholder="Enter GCash Number" required>
+                                </div>
+
+                                <!-- Submit and Cancel Buttons -->
+                                <div class="flex justify-between items-center">
+                                    <button type="button" onclick="closeGcashModal({{ $appointment->appointmentID }})" class="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300">Cancel</button>
+                                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">Add GCash Info</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -174,6 +290,27 @@
         function closeModal(appointmentID) {
             // Hide the modal based on the unique appointmentID
             document.getElementById('progress-modal-' + appointmentID).classList.add('hidden');
+        }
+        function openPaymentModal(paymentData, appointmentID) {
+            // Populate the modal with payment data
+            const modal = document.getElementById('payment-modal-' + appointmentID);
+            modal.classList.remove('hidden');
+        }
+
+        function closePaymentModal(appointmentID) {
+            // Hide the payment modal
+            const modal = document.getElementById('payment-modal-' + appointmentID);
+            modal.classList.add('hidden');
+        }
+
+        function openGcashModal(appointmentID) {
+            // Show the modal
+            document.getElementById('gcash-modal-' + appointmentID).classList.remove('hidden');
+        }
+
+        function closeGcashModal(appointmentID) {
+            // Hide the modal
+            document.getElementById('gcash-modal-' + appointmentID).classList.add('hidden');
         }
     </script>
 </x-app-layout>
