@@ -71,7 +71,7 @@
                                         <button
                                             type="button" 
                                             class="text-sm font-medium text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
-                                            Done Payment
+                                            Payment Received
                                         </button>
                                     @else
                                         <!-- Display 'View Payment' button if status is not 'Confirmed' -->
