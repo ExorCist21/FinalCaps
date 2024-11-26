@@ -28,6 +28,10 @@
                    class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
                    Progress
                 </a>
+                <a href="{{ route('therapist.reports.index') }}" 
+                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+                   Reports
+                </a>
             </div>
 
             <!-- Right-Aligned Notification and User Dropdown -->

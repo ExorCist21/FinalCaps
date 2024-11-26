@@ -14,6 +14,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\Chat\Index;
 
 // Default Routes (e.g., for login/registration)
@@ -97,6 +98,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/progress/{appointmentID}', [AppointmentController::class, 'showProgress'])->name('therapist.show.progress');
         Route::put('/appointments/{appointmentID}/update-progress', [AppointmentController::class, 'storeProgressTherapist'])->name('therapist.appointment.updateProgress');
         Route::get('/background', [TherapistController::class, 'showBackground'])->name('therapist.background');
+        Route::get('/reports', [ReportsController::class, 'therapistIndex'])->name('therapist.reports.index');
     });
 
     // *Admin Routes* - All routes for admin
@@ -121,6 +123,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/send-payment', [AdminController::class, 'showAppointments'])->name('admin.appointments');
         Route::get('/send-payment/{appointmentID}', [AdminController::class, 'showPaymentForm'])->name('admin.showPaymentForm');
         Route::post('/send-payment/{appointmentID}', [AdminController::class, 'sendPayment'])->name('admin.sendPayment');
+        Route::get('/reports', [ReportsController::class, 'adminIndex'])->name('admin.reports.index');
     });
 });
 

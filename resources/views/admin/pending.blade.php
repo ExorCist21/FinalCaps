@@ -22,7 +22,7 @@
 
         @if ($subscriptions->isEmpty())
             <div class="bg-gray-100 text-center p-6 rounded-lg shadow">
-                <p class="text-lg text-gray-700">No pending subscriptions available.</p>
+                <p class="text-lg text-gray-700">No pending sessions for approval.</p>
             </div>
         @else
             <div class="overflow-x-auto">

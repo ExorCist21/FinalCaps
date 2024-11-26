@@ -18,7 +18,7 @@
                 </a>
                 <div x-data="{ open: false }" class="relative text-sm text-gray-600">
                     <button @click="open = !open" class="flex items-center space-x-1 px-3 py-2 text-sm font-semibold text-gray-900 rounded-md transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        <span>{{ __('Account Management') }}</span>
+                        <span>{{ __('Accounts') }}</span>
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                     </button>
                     <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg">
@@ -32,15 +32,19 @@
                 </div>
                     <a href="{{ route('admin.contentmng') }}" 
                         class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        Content Management
+                        Contents
                     </a>
                     <a href="{{ route('admin.subscribe') }}" 
                         class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        Session Management
+                        Sessions
                     </a>
                     <a href="{{ route('admin.appointments') }}" 
                         class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        Payment Management
+                        Payments
+                    </a>
+                    <a href="{{ route('admin.reports.index') }}" 
+                        class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
+                        Reports
                     </a>
             </div>
 
