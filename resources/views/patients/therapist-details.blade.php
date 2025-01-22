@@ -41,7 +41,7 @@
             </div>
             <!-- Awards Section -->
             <p class="text-gray-600 mb-2">
-                <strong>Awards:</strong>
+                <strong>License Number:</strong>
             </p>
             <ul class="list-disc ml-5 text-gray-600 mb-4">
                 <li class="mb-2"> {{ $therapist->therapistInformation->awards ?? 'None' }} </li>
@@ -66,43 +66,45 @@
 
         <!-- Modal -->
         <div id="static-modal" class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
-            <div class="relative p-4 w-full max-w-md md:max-w-lg">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow-md">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 border-b rounded-t">
-                        <h3 class="text-lg font-semibold text-gray-800">
-                            Book Appointment
-                        </h3>
-                        <button id="closeModalButton" type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 flex justify-center items-center">
-                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                            <span class="sr-only">Close</span>
-                        </button>
-                    </div>
+        <div class="relative p-4 w-full max-w-md md:max-w-lg bg-gradient-to-r from-indigo-50 via-blue-50 to-indigo-100 rounded-lg shadow-lg">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow-xl overflow-hidden">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-5 bg-indigo-600 text-white rounded-t-lg shadow-md">
+                    <h3 class="text-lg font-semibold">
+                        Book Appointment
+                    </h3>
+                    <button id="closeModalButton" type="button" class="text-gray-300 hover:bg-indigo-700 hover:text-white rounded-lg w-8 h-8 flex justify-center items-center transition-colors duration-200">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span class="sr-only">Close</span>
+                    </button>
+                </div>
 
                     <!-- Modal body -->
-                    <form action="{{ route('appointments.store') }}" method="POST" class="p-4 space-y-4">
+                    <form action="{{ route('appointments.store') }}" method="POST" class="p-6 space-y-4">
                         @csrf
                         <input type="hidden" name="therapist_id" value="{{ $therapist->id }}">
 
-                        <div>
+                        <!-- Appointment Date -->
+                        <div class="mb-4">
                             <label for="appointmentDate" class="block text-sm font-medium text-gray-700">Appointment Date</label>
-                            <input type="datetime-local" id="appointmentDate" name="datetime" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required>
+                            <input type="datetime-local" id="appointmentDate" name="datetime" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" required>
                         </div>
 
-                        <div>
+                        <!-- Message -->
+                        <div class="mb-4">
                             <label for="appointmentMessage" class="block text-sm font-medium text-gray-700">Message</label>
-                            <textarea id="appointmentMessage" name="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required></textarea>
+                            <textarea id="appointmentMessage" name="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" required></textarea>
                         </div>
 
                         <!-- Modal footer -->
                         <div class="flex items-center justify-end space-x-3 border-t pt-4">
-                            <button id="closeModalButtonFooter" type="button" class="py-2 px-4 text-sm font-medium text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none">
+                            <button id="closeModalButtonFooter" type="button" class="py-2 px-4 text-sm font-medium text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none transition-all duration-200">
                                 Cancel
                             </button>
-                            <button id="submitModal" type="submit" class="py-2 px-4 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <button id="submitModal" type="submit" class="py-2 px-4 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
                                 Submit
                             </button>
                         </div>
@@ -213,5 +215,19 @@
         };
     });
 </script>
+<style>
+    #static-modal {
+        transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+    }
+    #static-modal.flex {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease, visibility 0s;
+    }
+    #static-modal.hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+</style>
 
 </x-app-layout>

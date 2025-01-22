@@ -31,8 +31,8 @@
 
                 <!-- Duration -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Duration</label>
-                    <p class="mt-1 text-lg font-semibold text-gray-800">{{ request('duration') }} Month(s)</p>
+                    <label class="block text-sm font-medium text-gray-700">Session</label>
+                    <p class="mt-1 text-lg font-semibold text-gray-800">{{ request('duration') }} Session(s)</p>
                     <input type="hidden" name="duration" value="{{ request('duration') }}">
                 </div>
             </div>
@@ -88,7 +88,7 @@
 
                     switch (this.value) {
                         case 'gcash':
-                            qrCodeUrl = '/images/gcash_qr.jpg'; // Replace with actual Gcash QR code path
+                            qrCodeUrl = '/images/gcashqr.jpg'; // Replace with actual Gcash QR code path
                             break;
                         case 'maya':
                             qrCodeUrl = '/images/maya_qr.png';  // Replace with actual Maya QR code path

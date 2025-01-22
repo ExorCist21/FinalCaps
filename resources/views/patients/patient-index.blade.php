@@ -1,44 +1,51 @@
 <title>Patient Session</title>
 <x-app-layout>
-    <div class="container mx-auto p-4">
+    <div class="container mx-auto p-6">
         <div class="max-w-7xl mx-auto">
-            <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 bg-gradient-to-r from-pastel-mint-100 to-pastel-peach-100 rounded-lg shadow-2xl relative overflow-hidden">
+                <!-- Background Pattern -->
+                <div class="absolute inset-0 bg-pastel-gray-100 opacity-30 rounded-lg -z-10"></div>
+
                 <!-- Upcoming Appointments -->
-                <div>
-                    <h2 class="text-lg font-semibold mb-2">Upcoming Appointments</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg border border-pastel-gray-100 hover:shadow-2xl transform transition duration-300 hover:scale-105">
+                    <h2 class="text-2xl font-semibold text-pastel-indigo-500 mb-3">Upcoming Appointments</h2>
                     <p class="text-gray-500 text-sm mb-4">Here are your upcoming appointments. Click to view the details.</p>
                     <div>
                         @forelse($appointments as $appointment)
-                            <div class="flex justify-between items-center border-b border-gray-200 py-3">
-                                <div>
-                                    <p class="font-semibold capitalize">{{ $appointment->description }}</p>
-                                    <p class="text-gray-500 text-sm"> with <span class="capitalize font-semibold text-gray-700">{{ $appointment->therapist->name }}</span></p>
+                            <div class="appointment-card flex justify-between items-center border-b border-gray-200 py-4 relative bg-gradient-to-r from-pastel-blue-100 to-pastel-indigo-100 rounded-lg shadow-sm hover:shadow-xl transition duration-300">
+                                <div class="w-full">
+                                    <p class="font-semibold text-pastel-blue-100 capitalize">{{ $appointment->description }}</p>
+                                    <p class="text-gray-600 text-sm"> with <span class="capitalize font-semibold text-pastel-indigo-500">{{ $appointment->therapist->name }}</span></p>
                                     <p class="text-gray-500 text-sm"> on {{ $appointment->datetime }}</p>
                                 </div>
                                 <div>
-                                    <button 
-                                        class="text-blue-600 hover:border-b-2 hover:border-b-blue-600 mx-2 py-1"
-                                        onclick="openModal('{{ $appointment->datetime }}', '{{ $appointment->session_meeting }}', '{{ $appointment->meeting_type }}')">
-                                        View Details
-                                    </button>
+                                <button
+                                    class="text-pastel-indigo-500 hover:text-pastel-indigo-400 border-b-2 border-transparent hover:border-pastel-indigo-500 py-1 flex items-center transition duration-300 transform hover:scale-105"
+                                    onclick="openModal('{{ $appointment->datetime }}', '{{ $appointment->session_meeting }}', '{{ $appointment->meeting_type }}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                    </svg>
+                                    View Details
+                                </button>
+
                                 </div>
                             </div>
                         @empty
-                            <p class="text-gray-500">No upcoming appointments.</p>
+                            <p class="text-gray-500 text-sm">No upcoming appointments.</p>
                         @endforelse
                     </div>
                 </div>
 
                 <!-- Completed Appointments -->
-                <div>
-                    <h2 class="text-lg font-semibold mb-2">Completed Appointments</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg border border-pastel-gray-100 hover:shadow-2xl transform transition duration-300 hover:scale-105">
+                    <h2 class="text-2xl font-semibold text-pastel-indigo-500 mb-3">Completed Appointments</h2>
                     <p class="text-gray-500 text-sm mb-4">Here are your completed appointments. Click to give feedback.</p>
                     <div>
                         @forelse ($doneAppointments as $appointment)
-                            <div class="flex justify-between items-center border-b border-gray-200 py-3">
-                                <div>
-                                    <p class="font-semibold capitalize">{{ $appointment->description }}</p>
-                                    <p class="text-gray-500 text-sm"> with <span class="capitalize font-semibold text-gray-700">{{ $appointment->therapist->name }}</span></p>
+                            <div class="appointment-card flex justify-between items-center border-b border-gray-200 py-4 relative bg-gradient-to-r from-pastel-lavender-100 to-pastel-pink-100 rounded-lg shadow-sm hover:shadow-xl transition duration-300">
+                                <div class="w-full">
+                                    <p class="font-semibold text-pastel-blue-100 capitalize">{{ $appointment->description }}</p>
+                                    <p class="text-gray-600 text-sm"> with <span class="capitalize font-semibold text-pastel-indigo-500">{{ $appointment->therapist->name }}</span></p>
                                     <p class="text-gray-500 text-sm"> on {{ $appointment->datetime }}</p>
                                 </div>
                                 <div>
@@ -52,30 +59,33 @@
                                         <span class="text-green-600 font-semibold">Feedback Provided</span>
                                     @else
                                         <a href="{{ route('appointments.feedback.create', ['appointmentId' => $appointment->appointmentID]) }}" 
-                                           class="text-blue-600 hover:border-b-2 hover:border-b-blue-600 mx-2 py-1">
+                                           class="text-pastel-green-500 hover:text-pastel-green-400 mx-2 py-1 flex items-center transition duration-300 transform hover:scale-105">
+                                           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                               <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m9-9l-9 9-9-9"></path>
+                                           </svg>
                                            Provide Feedback
                                         </a>
-                                    @endif
+                                    @endif  
                                 </div>
                             </div>
                         @empty
-                            <p class="text-gray-500">No completed appointments available.</p>
+                            <p class="text-gray-500 text-sm">No completed appointments available.</p>
                         @endforelse
                     </div>
                 </div>
             </div>
 
             <!-- View Details Modal -->
-            <div id="appointmentModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
-                <div class="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
-                    <h3 class="text-xl font-semibold mb-4">Appointment Details</h3>
-                    <p id="modalDatetime" class="text-gray-700 mb-2"><strong>Datetime:</strong> </p>
-                    <p id="modalSessionMeeting" class="text-gray-700 mb-2"><strong>Session Meeting:</strong> </p>
-                    <p id="modalMeetingType" class="text-gray-700 mb-4"><strong>Meeting Type:</strong> </p>
+            <div id="appointmentModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-500 opacity-0">
+                <div class="bg-white rounded-lg shadow-2xl p-8 max-w-lg w-full transform transition-all duration-500 scale-90 opacity-0">
+                    <h3 class="text-2xl font-semibold text-pastel-indigo-500 mb-6">Appointment Details</h3>
+                    <p id="modalDatetime" class="text-gray-700 mb-4"><strong>Datetime:</strong> </p>
+                    <p id="modalSessionMeeting" class="text-gray-700 mb-4"><strong>Session Meeting:</strong> </p>
+                    <p id="modalMeetingType" class="text-gray-700 mb-6"><strong>Meeting Type:</strong> </p>
 
                     <div class="flex justify-end">
                         <button 
-                            class="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300"
+                            class="bg-pastel-gray-100 text-gray-900 px-6 py-3 rounded-md hover:bg-pastel-gray-200 transition duration-300"
                             onclick="closeModal()">Close</button>
                     </div>
                 </div>
@@ -88,11 +98,23 @@
             document.getElementById('modalDatetime').innerHTML = `<strong>Datetime:</strong> ${datetime}`;
             document.getElementById('modalSessionMeeting').innerHTML = `<strong>Session Meeting:</strong> ${session_meeting}`;
             document.getElementById('modalMeetingType').innerHTML = `<strong>Meeting Type:</strong> ${meeting_type}`;
-            document.getElementById('appointmentModal').classList.remove('hidden');
+
+            // Show modal with smooth transition
+            let modal = document.getElementById('appointmentModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('opacity-100');
+            modal.querySelector('div').classList.remove('scale-90', 'opacity-0');
+            modal.querySelector('div').classList.add('scale-100', 'opacity-100');
         }
 
         function closeModal() {
-            document.getElementById('appointmentModal').classList.add('hidden');
+            let modal = document.getElementById('appointmentModal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-90', 'opacity-0');
+            modal.querySelector('div').classList.remove('scale-100', 'opacity-100');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 500); // Timeout to allow transition to complete
         }
     </script>
 </x-app-layout>

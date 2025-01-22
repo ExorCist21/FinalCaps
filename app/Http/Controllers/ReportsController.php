@@ -19,7 +19,12 @@ class ReportsController extends Controller
         $completedAppointments = Appointment::where('isDone', true)->count();
         $pendingAppointments = Appointment::where('status', 'Pending')->count();
 
-        $totalRevenue = Payment::where('status', 'Confirmed')->sum('amount');
+        // Get the admin user and their total_revenue
+        $admin = User::where('role', 'admin')->first();
+        
+        // If the admin is not found, set totalRevenue to 0 (or handle as needed)
+        $totalRevenue = $admin ? $admin->total_revenue : 0;
+
         $pendingPayments = Payment::where('status', 'Pending')->count();
 
         $activeSubscriptions = Subscription::where('status', 'Active')->count();
@@ -42,6 +47,7 @@ class ReportsController extends Controller
             'topTherapists'
         ));
     }
+
 
     // Therapist Reports
     public function therapistIndex()

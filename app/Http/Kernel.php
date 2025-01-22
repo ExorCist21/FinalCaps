@@ -26,6 +26,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // Other middleware...
         'role' => \App\Http\Middleware\RoleMiddleware::class, // Register the role middleware
+        'check.isActive' => \App\Http\Middleware\CheckIsActive::class,
     ];
 
     /**
@@ -70,4 +71,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'prevent.back.history' => \App\Http\Middleware\PreventBackHistory::class,
     ];
+
+
+
 }

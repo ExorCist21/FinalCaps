@@ -11,28 +11,29 @@
             </div>
 
             <!-- Centered Navigation Links -->
-            <div class="hidden lg:flex lg:gap-x-5 justify-center flex-grow">
+            <div class="hidden lg:flex lg:gap-x-5 justify-center items-center flex-grow">
                 <a href="{{ route('therapist.dashboard') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Dashboard
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                Dashboard
                 </a>
                 <a href="{{ route('therapist.appointment') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Appointments
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                Appointments
                 </a>
                 <a href="{{ route('therapist.session') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Activity
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                Activity
                 </a>
                 <a href="{{ route('therapist.progress') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Progress
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                Progress
                 </a>
                 <a href="{{ route('therapist.reports.index') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Reports
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                Reports
                 </a>
             </div>
+
 
             <!-- Right-Aligned Notification and User Dropdown -->
             <div class="flex items-center gap-4 lg:flex lg:flex-1 lg:justify-end">

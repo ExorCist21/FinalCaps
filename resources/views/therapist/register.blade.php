@@ -72,23 +72,17 @@
 
                 <!-- Awards -->
                 <div>
-                    <label for="awards" class="block text-sm font-medium text-gray-900">Awards</label>
+                    <label for="awards" class="block text-sm font-medium text-gray-900">License Number:</label>
                     <div class="mt-2">
-                        <select name="awards" id="awards" class="p-2 mt-1 block w-full">
-                            <option value="">Select an Award</option>
-                            <option value="Best Therapist of the Year">Best Therapist of the Year</option>
-                            <option value="Most Compassionate Therapist">Most Compassionate Therapist</option>
-                            <option value="Outstanding Achievement in Mental Health">Outstanding Achievement in Mental Health</option>
-                            <option value="Certified Cognitive Behavioral Therapist">Certified Cognitive Behavioral Therapist</option>
-                            <option value="none">None</option>
-                        </select>
+                        <input type="text" id="awards" name="awards"
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                     </div>
                     <x-input-error :messages="$errors->get('awards')" class="mt-2" />
                 </div>
 
                 <!-- Clinic Name -->
                 <div>
-                    <label for="clinic_name" class="block text-sm font-medium text-gray-900">Clinic Name (Optional)</label>
+                    <label for="clinic_name" class="block text-sm font-medium text-gray-900">Clinic Name </label>
                     <div class="mt-2">
                         <input type="text" id="clinic_name" name="clinic_name"
                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">

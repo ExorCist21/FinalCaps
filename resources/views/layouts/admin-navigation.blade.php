@@ -4,7 +4,7 @@
         <nav class="flex items-center justify-between p-6 lg:px-8 max-w-7xl mx-auto" aria-label="Global">
             <!-- Logo -->
             <div class="flex lg:flex-1">
-                <a href="{{ route('patients.dashboard') }}" class="flex items-center">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center">
                     <img src="https://i.ibb.co/mC0RNNS/M-1-removebg-preview.png" class="h-8 w-auto" alt="MentalWell Logo">
                     <span class="ml-2 text-lg font-bold text-gray-900">MentalWell</span>
                 </a>
@@ -12,41 +12,57 @@
 
             <!-- Centered Navigation Links -->
             <div class="hidden lg:flex lg:gap-x-5 justify-center items-center flex-grow">
-                <a href="{{ route('admin.dashboard') }}" 
-                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                Dashboard
-                </a>
-                <div x-data="{ open: false }" class="relative text-sm text-gray-600">
-                    <button @click="open = !open" class="flex items-center space-x-1 px-3 py-2 text-sm font-semibold text-gray-900 rounded-md transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        <span>{{ __('Accounts') }}</span>
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
-                    </button>
-                    <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg">
-                        <a href="{{ route('admin.patients') }}" class="block px-4 py-2 text-sm text-gray-900">
-                            {{ __('Patients') }}
-                        </a>
-                        <a href="{{ route('admin.therapists') }}" class="block px-4 py-2 text-sm text-gray-900">
-                            {{ __('Therapists') }}
-                        </a>
-                    </div>
-                </div>
-                    <a href="{{ route('admin.contentmng') }}" 
-                        class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        Contents
-                    </a>
-                    <a href="{{ route('admin.subscribe') }}" 
-                        class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        Sessions
-                    </a>
-                    <a href="{{ route('admin.appointments') }}" 
-                        class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        Payments
-                    </a>
-                    <a href="{{ route('admin.reports.index') }}" 
-                        class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                        Reports
-                    </a>
-            </div>
+    <!-- Dashboard Link -->
+    <a href="{{ route('admin.dashboard') }}" 
+       class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+        Dashboard
+    </a>
+
+    <!-- Accounts Dropdown -->
+    <div x-data="{ open: false }" class="relative text-sm text-gray-600">
+        <button @click="open = !open" 
+                class="flex items-center space-x-1 px-3 py-2 text-sm font-semibold text-gray-900 rounded-md transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+            <span>{{ __('Accounts') }}</span>
+            <svg class="w-4 h-4 transform transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+        </button>
+        <div x-show="open" @click.away="open = false" 
+             class="absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg transition-all duration-300 ease-in-out transform opacity-0 scale-95 origin-top" 
+             :class="{ 'opacity-100 scale-100': open }">
+            <a href="{{ route('admin.patients') }}" class="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 transition duration-200">
+                {{ __('Patients') }}
+            </a>
+            <a href="{{ route('admin.therapists') }}" class="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 transition duration-200">
+                {{ __('Therapists') }}
+            </a>
+        </div>
+    </div>
+
+        <!-- Content Management Link -->
+        <a href="{{ route('admin.contentmng') }}" 
+            class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                Contents
+            </a>
+
+            <!-- Sessions Link -->
+            <a href="{{ route('admin.subscribe') }}" 
+            class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                Sessions
+            </a>
+
+            <!-- Payments Link -->
+            <a href="{{ route('admin.appointments') }}" 
+            class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                Payments
+            </a>
+
+            <!-- Reports Link -->
+            <a href="{{ route('admin.reports.index') }}" 
+            class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                Reports
+            </a>
+        </div>
 
 
             <!-- Right-Aligned Notification and User Dropdown -->

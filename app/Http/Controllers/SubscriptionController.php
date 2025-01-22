@@ -113,54 +113,72 @@ class SubscriptionController extends Controller
         return redirect('/patient/subscriptions')->with('success', 'Subscription canceled successfully.');
     }
 
+    // Location: App\Http\Controllers\AdminController.php
+
     public function approvePayment($subscriptionId)
     {
-        // Find the subscription by ID
+        // Find the subscription
         $subscription = Subscription::findOrFail($subscriptionId);
 
-        if ($subscription->status === 'pending') {
-            // Update the subscription status to 'active'
-            $subscription->status = 'active';
-            $subscription->save();
-
-            // Approve the payment if you have a Payment model related to the subscription
-            $payment = Payment::where('subscription_id', $subscriptionId)->first();
-            if ($payment && $payment->status === 'pending') {
-                $payment->status = 'approved';
-                $payment->save();
-            }
-
-            $user = User::findOrFail($subscription->patient_id); 
-
-            // Increment session_left based on the service_name
-            switch ($subscription->service_name) {
-                case 'Standard':
-                    $user->session_left += 2; // Add 2 sessions for Standard
-                    break;
-                case 'Pro':
-                    $user->session_left += 5; // Add 5 sessions for Pro
-                    break;
-                case 'Enterprise':
-                    $user->session_left += 10; // Add 10 sessions for Enterprise
-                    break;
-                default:
-                    return redirect()->back()->with('error', 'Unknown service name.');
-            }
-
-                $patient = User::find($payment->subscription->patient_id);
-                
-
-                Notification::create([
-                    'n_userID' => $patient->id,
-                    'type' => 'approve_payment',
-                    'data' => 'admin',
-                ]);
-            // Save the updated user data
-            $user->save();
-
-            return redirect()->back()->with('success', 'Payment, subscription approved, and sessions added successfully.');
+        if ($subscription->status !== 'pending') {
+            return redirect()->back()->with('error', 'Subscription not found or already processed.');
         }
 
-        return redirect()->back()->with('error', 'Subscription not found or already processed.');
+        // Update subscription status
+        $subscription->status = 'active';
+        $subscription->save();
+
+        // Find related payment
+        $payment = Payment::where('subscription_id', $subscriptionId)->first();
+        if (!$payment || $payment->status !== 'pending') {
+            return redirect()->back()->with('error', 'Payment record not found or already approved.');
+        }
+
+        // Approve payment
+        $payment->status = 'approved';
+        $payment->save();
+
+        // Find the patient
+        $patient = User::find($subscription->patient_id);
+        if (!$patient) {
+            return redirect()->back()->with('error', 'Patient not found.');
+        }
+
+        // Add sessions based on service name
+        switch ($subscription->service_name) {
+            case 'Standard':
+                $patient->session_left += 1; // Standard subscription
+                break;
+            case 'Pro':
+                $patient->session_left += 5; // Pro subscription
+                break;
+            case 'Enterprise':
+                $patient->session_left += 2; // Enterprise subscription
+                break;
+            default:
+                return redirect()->back()->with('error', 'Unknown service name.');
+        }
+
+        // Save patient data
+        $patient->save();
+
+        // Update admin's total revenue
+        $admin = User::where('role', 'admin')->first();
+        if (!$admin) {
+            return redirect()->back()->with('error', 'Admin not found.');
+        }
+
+        $admin->total_revenue += $payment->amount; // Add payment amount to admin's total revenue
+        $admin->save();
+
+        // Create notification for the patient
+        Notification::create([
+            'n_userID' => $patient->id,
+            'type' => 'approve_payment',
+            'data' => 'Your subscription has been approved by the admin.',
+        ]);
+
+        return redirect()->back()->with('success', 'Payment, subscription approved, and sessions added successfully.');
     }
+
 }

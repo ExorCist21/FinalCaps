@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Therapist Routes - All routes for therapists
-    Route::prefix('therapist')->middleware('role:therapist', 'verified')->group(function () {
+    Route::prefix('therapist')->middleware('role:therapist', 'verified', 'check.isActive')->group(function () {
         Route::get('/dashboard', [TherapistController::class, 'index'])->name('therapist.dashboard');
         Route::get('/appointment', [TherapistController::class, 'appIndex'])->name('therapist.appointment');
         Route::post('/appointment/{appointmentID}/approve', [TherapistController::class, 'approveApp'])->name('therapist.approve');
@@ -116,6 +116,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/content', [ContentController::class, 'store'])->name('admin.contentmng.store');
         Route::get('/subscription', [SubscriptionController::class, 'pendingPayments'])->name('admin.subscribe');
         Route::post('/subscription/{subscriptionId}/approve', [SubscriptionController::class, 'approvePayment'])->name('admin.subscriptions.approve');
+        Route::post('/admin/subscriptions/{id}/approve', [AdminController::class, 'approvePayment'])->name('admin.subscriptions.approve');
         Route::post('/patients/{id}/deactivate', [PatientController::class, 'deactivate'])->name('patients.deactivate');
         Route::post('/therapist/{id}/deactivate', [TherapistController::class, 'deactivate'])->name('therapist.deactivate');
         Route::post('/patients/{id}/activate', [PatientController::class, 'activate'])->name('patients.activate');
@@ -157,6 +158,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/inactive', function () {
+    return view('inactive');
+})->name('inactive.user.page');
 
 // Additional routes
 require __DIR__.'/auth.php';

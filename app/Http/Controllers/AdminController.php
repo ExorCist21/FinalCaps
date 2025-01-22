@@ -6,12 +6,27 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Payment;
 use App\Models\Appointment;
+use App\Models\Subscription;
+use App\Models\Notification;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard');
+        // Get the total number of users
+        $totalUsers = User::count();
+
+        // Get the number of active users
+        $activeUsers = User::where('isActive', 1)->count();
+
+        // Get the number of inactive users
+        $inactiveUsers = User::where('isActive', 0)->count();
+
+        // Get the most recent users
+        $recentUsers = User::latest()->take(5)->get();
+
+        // Pass the data to the view
+        return view('admin.dashboard', compact('totalUsers', 'activeUsers', 'inactiveUsers', 'recentUsers'));
     }
 
     public function users()
@@ -23,7 +38,7 @@ class AdminController extends Controller
     {
         return view('admin.reports');
     }
-    
+
     public function therapists()
     {
         $therapists = User::where('role', 'therapist')
@@ -74,8 +89,7 @@ class AdminController extends Controller
         return view('admin.send-payment', compact('appointment'));
     }
 
-    // app/Http/Controllers/AdminController.php
-
+    // Send Payment method to process the payment and upload proof
     public function sendPayment(Request $request, $appointmentID)
     {
         // Validate the input fields
@@ -114,4 +128,71 @@ class AdminController extends Controller
             ->with('success', 'Payment sent and proof uploaded successfully.');
     }
 
+    // Approve payment and update subscription and patient data
+    public function approvePayment($subscriptionId)
+    {
+        // Find the subscription
+        $subscription = Subscription::findOrFail($subscriptionId);
+
+        if ($subscription->status !== 'pending') {
+            return redirect()->back()->with('error', 'Subscription not found or already processed.');
+        }
+
+        // Update subscription status
+        $subscription->status = 'active';
+        $subscription->save();
+
+        // Find related payment
+        $payment = Payment::where('subscription_id', $subscriptionId)->first();
+        if (!$payment || $payment->status !== 'pending') {
+            return redirect()->back()->with('error', 'Payment record not found or already approved.');
+        }
+
+        // Approve payment
+        $payment->status = 'approved';
+        $payment->save();
+
+        // Find the patient
+        $patient = User::find($subscription->patient_id);
+        if (!$patient) {
+            return redirect()->back()->with('error', 'Patient not found.');
+        }
+
+        // Add sessions based on service name
+        switch ($subscription->service_name) {
+            case 'Standard':
+                $patient->session_left += 1; // Standard subscription
+                break;
+            case 'Pro':
+                $patient->session_left += 5; // Pro subscription
+                break;
+            case 'Enterprise':
+                $patient->session_left += 2; // Enterprise subscription
+                break;
+            default:
+                return redirect()->back()->with('error', 'Unknown service name.');
+        }
+
+        // Save patient data
+        $patient->save();
+
+        // Update admin's total revenue
+        $admin = User::where('role', 'admin')->first();
+        if (!$admin) {
+            return redirect()->back()->with('error', 'Admin not found.');
+        }
+
+        // Increment the admin's total revenue by the payment amount
+        $admin->total_revenue += $payment->amount;
+        $admin->save();
+
+        // Create notification for the patient
+        Notification::create([
+            'n_userID' => $patient->id,
+            'type' => 'approve_payment',
+            'data' => 'Your subscription has been approved by the admin.',
+        ]);
+
+        return redirect()->back()->with('success', 'Payment, subscription approved, and sessions added successfully.');
+    }
 }

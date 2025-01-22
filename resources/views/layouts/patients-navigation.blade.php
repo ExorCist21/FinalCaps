@@ -11,32 +11,33 @@
             </div>
 
             <!-- Centered Navigation Links -->
-            <div class="hidden lg:flex lg:gap-x-5 justify-center flex-grow">
+            <div class="hidden lg:flex lg:gap-x-5 justify-center items-center flex-grow">
                 <a href="{{ route('patients.dashboard') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Dashboard
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                    Dashboard
                 </a>
                 <a href="{{ route('patients.appointment') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Appointments
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                    Appointments
                 </a>
                 <a href="{{ route('patients.bookappointments') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Therapists
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                    Therapists
                 </a>
                 <a href="{{ route('patient.session') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Activity
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                    Activity
                 </a>
                 <a href="{{ route('patient.progress') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Progress
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                    Progress
                 </a>
                 <a href="{{ route('subscriptions.index') }}" 
-                   class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 hover:bg-white/30 hover:backdrop-blur-lg border border-transparent hover:border-gray-300">
-                   Buy Sessions
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                    Buy Sessions
                 </a>
             </div>
+
 
             <!-- Right-Aligned Notification and User Dropdown -->
             <div class="flex items-center gap-4 lg:flex lg:flex-1 lg:justify-end">

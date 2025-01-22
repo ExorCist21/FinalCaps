@@ -110,6 +110,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'therapist',
+            'isActive'=> 0,
             'session_left' => 0,
         ]);
 

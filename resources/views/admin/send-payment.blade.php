@@ -36,11 +36,17 @@
             </div>
 
             <div class="mb-4">
-                <label for="payment_method" class="block text-sm font-medium text-gray-700">Payment Method</label>
-                <input type="text" name="payment_method" id="payment_method" class="mt-1 block w-full text-sm border-gray-300 rounded-md" required value="{{ old('payment_method') }}">
-                @error('payment_method')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
+        <label for="payment_method" class="block text-sm font-medium text-gray-700">Payment Method</label>
+        <select name="payment_method" id="payment_method" class="mt-1 block w-full text-sm border-gray-300 rounded-md" required>
+        <option value="">Select a payment method</option>
+        <option value="credit_card" {{ old('payment_method') == 'credit_card' ? 'selected' : '' }}>Maya</option>
+        <option value="paypal" {{ old('payment_method') == 'paypal' ? 'selected' : '' }}>PayPal</option>
+        <option value="bank_transfer" {{ old('payment_method') == 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
+        <option value="gcash" {{ old('payment_method') == 'gcash' ? 'selected' : '' }}>Gcash</option>
+        </select>
+        @error('payment_method')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+         @enderror
             </div>
 
             <div class="mb-4">

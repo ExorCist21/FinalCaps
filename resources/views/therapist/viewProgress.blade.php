@@ -102,7 +102,7 @@
                             <div class="mb-4">
                                 @if($appointment->payments->isNotEmpty())
                                     @foreach($appointment->payments as $payment)
-                                        <p class="text-sm font-medium text-gray-700">Amount: ${{ $payment->amount }}</p>
+                                        <p class="text-sm font-medium text-gray-700">Amount: ₱{{ $payment->amount }}</p>
                                         <p class="text-sm font-medium text-gray-700">Status: {{ $payment->status }}</p>
                                         <p class="text-sm text-gray-600 mt-2">Transaction ID: {{ $payment->transaction_id ?? 'N/A' }}</p>
                                         <p class="text-sm text-gray-600 mt-2">Payment Method: {{ $payment->payment_method ?? 'N/A' }}</p>

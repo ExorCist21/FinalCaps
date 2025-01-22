@@ -1,22 +1,23 @@
 <title>Leave Feedback</title>
 <x-app-layout>
-    <div class="container mx-auto p-4">
-        <div class="max-w-7xl mx-auto">
+    <div class="container mx-auto p-6">
+        <div class="max-w-7xl mx-auto bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
             
-            <!-- Therapist Image -->
-            <div class="flex items-center p-6">
-                <img src="https://i.pravatar.cc/150?img={{ $appointment->therapist->email }}" alt="Therapist Image" class="w-12 h-12 ring-2 ring-indigo-600 rounded-full object-cover mr-4">
+            <!-- Therapist Image and Info -->
+            <div class="flex items-center mb-8">
+                <img src="https://i.pravatar.cc/150?img={{ $appointment->therapist->email }}" alt="Therapist Image" class="w-16 h-16 ring-4 ring-indigo-600 rounded-full object-cover mr-6 transform transition-transform duration-300 hover:scale-110">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 capitalize">{{ $appointment->therapist->name }}</h3>
-                    <p class="text-sm text-gray-600 lower-case">{{ $appointment->therapist->email }}</p>
+                    <h3 class="text-2xl font-semibold text-gray-800">{{ $appointment->therapist->name }}</h3>
+                    <p class="text-sm text-gray-500">{{ $appointment->therapist->email }}</p>
                 </div>
             </div>
 
-            <form action="{{ route('appointments.feedback.store', ['appointmentId' => $appointment->appointmentID]) }}" method="POST" class="p-6">
+            <!-- Feedback Form -->
+            <form action="{{ route('appointments.feedback.store', ['appointmentId' => $appointment->appointmentID]) }}" method="POST">
                 @csrf
 
-                <h2 class="text-2xl font-bold text-gray-800">Leave Feedback</h2>
-                <p class="text-sm text-gray-500 mb-6">We value your feedback to improve our services. Please share your experience below.</p>
+                <h2 class="text-3xl font-semibold text-gray-800 mb-4">Leave Your Feedback</h2>
+                <p class="text-sm text-gray-500 mb-6">Your feedback helps us improve. Please share your experience with us.</p>
 
                 <!-- Feedback Textarea -->
                 <div class="mb-6">
@@ -24,9 +25,9 @@
                     <textarea 
                         name="feedback" 
                         id="feedback" 
-                        rows="5" 
+                        rows="6" 
                         placeholder="Write your feedback here..." 
-                        class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm resize-none"
+                        class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm resize-none"
                         required></textarea>
                 </div>
 
@@ -37,7 +38,7 @@
                     <select 
                         name="rating" 
                         id="rating" 
-                        class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
                         required>
                         <option value="" disabled selected>Choose a rating</option>
                         <option value="1">1 - Very Poor</option>
@@ -52,7 +53,7 @@
                 <div class="flex justify-end">
                     <button 
                         type="submit" 
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-md shadow-md focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-md shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         Submit Feedback
                     </button>
                 </div>
