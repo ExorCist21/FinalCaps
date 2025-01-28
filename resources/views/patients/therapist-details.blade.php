@@ -9,6 +9,13 @@
 
     <div class="max-w-7xl mx-auto">
         <div class="bg-white rounded-md p-6 border">
+            <!-- Display Errors -->
+            @if ($errors->any())
+                <div class="bg-red-100 text-red-700 p-4 rounded-md mb-4">
+                    <strong>Invalid:</strong> {{ $errors->first() }}
+                </div>
+            @endif
+            
             <!-- Therapist Image -->
             <div class="flex items-center mb-4">
                 <img src="https://i.pravatar.cc/150?img={{ $therapist->email }}" alt="Therapist Image" class="w-12 h-12 ring-2 ring-indigo-600 rounded-full object-cover mr-4">

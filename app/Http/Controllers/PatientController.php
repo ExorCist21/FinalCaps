@@ -7,19 +7,28 @@ use App\Models\User;
 use App\Models\Content;
 use App\Models\Feedback;
 use App\Models\Appointment;
+use App\Models\TherapistInformation;
 use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch the authenticated user by their ID
+        // Get the authenticated patient
         $patients = User::where('role', 'patient')
-                        ->where('id', auth()->id()) // Filter by authenticated user's ID
+                        ->where('id', auth()->id())
                         ->get();
 
-        // Fetch all the contents posted by the admin
-        $contents = Content::all(); // You can modify this query if needed, e.g., based on content type or visibility
+        // Initialize the query for filtering content
+        $query = Content::query();
+
+        // Apply category filter if selected
+        if ($request->has('category') && $request->category != '') {
+            $query->where('category', $request->category);
+        }
+
+        // Fetch filtered content with creator relationship
+        $contents = $query->with('creator')->get();
 
         return view('patients.dashboard', compact('patients', 'contents'));
     }
@@ -39,13 +48,25 @@ class PatientController extends Controller
     }
 
 
-    public function appIndex() {
-        $therapists = User::where('role', 'therapist')
-        ->with('therapistInformation','feedback')->get();
-        
-        // Pass therapists to the view
+    public function appIndex(Request $request)
+    {
+        // Base query to get therapists with their related information
+        $query = User::where('role', 'therapist')->with('therapistInformation', 'feedback');
+
+        // Apply expertise filter if selected
+        if ($request->has('expertise') && $request->expertise != '') {
+            $query->whereHas('therapistInformation', function ($q) use ($request) {
+                $q->where('expertise', $request->expertise);
+            });
+        }
+
+        // Get the filtered or all therapists
+        $therapists = $query->get();
+
+        // Pass the therapists and expertise filter value to the view
         return view('patients.bookappointments', compact('therapists'));
     }
+
 
     public function appDetails($id)
     {

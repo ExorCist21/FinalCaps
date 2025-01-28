@@ -16,14 +16,33 @@ class AppointmentController extends Controller
     {
         // Validate the input data
         $request->validate([
-            'datetime' => 'required|date',
+            'datetime' => 'required|date|after_or_equal:today', // Ensure the date is not in the past
             'description' => 'required|string|max:255',
             'therapist_id' => 'required|exists:users,id',
         ]);
-    
+
         // Find the therapist
         $therapist = User::findOrFail($request->therapist_id);
-    
+
+        // Check for existing appointments at the same time for the therapist (pending or approved)
+        $conflictingAppointment = Appointment::where('therapistID', $request->therapist_id)
+            ->where('datetime', $request->datetime)
+            ->whereIn('status', ['pending', 'approved']) 
+            ->exists();
+
+        if ($conflictingAppointment) {
+            return redirect()->back()->withErrors(['error' => 'This time slot is already taken. Please choose a different time.']);
+        }
+
+        // Get the logged-in patient
+        $patient = Auth::user();
+
+        // Check if the patient has sessions left
+        if ($patient->session_left <= 0) {
+            // If no sessions left, return an error message
+            return redirect()->back()->with('error', 'You have no sessions left. Please purchase more sessions.');
+        }
+
         // Create a new appointment
         $appointment = Appointment::create([
             'datetime' => $request->datetime,
@@ -35,33 +54,26 @@ class AppointmentController extends Controller
             'status' => 'pending',
             'session_meeting' => 'online',
         ]);
-    
-        // Get the logged-in patient
-        $patient = Auth::user();
-    
-        // Check if the patient has sessions left
-        if ($patient->session_left <= 0) {
-            // If no sessions left, return an error message
-            return redirect()->back()->with('error', 'You have no sessions left. Please purchase more sessions.');
-        }
-    
+
         // Reduce the patient's session_left by 1
         $patient->session_left = $patient->session_left - 1;
         $patient->save(); // Save the updated patient data
-    
+
         // Send notification to the therapist
         $patientName = $patient->name; // Get the patient's name
-    
+
         Notification::create([
             'n_userID' => $request->therapist_id,  // Notify the therapist
             'type' => 'appointment',  // Define type for the notification
             'data' => $patientName, // Patient's name in the notification
             'created_at' => now(),
         ]);
-    
+
         // Redirect with success message
         return redirect()->route('patients.appointment')->with('success', 'Appointment successfully booked!');
     }
+
+
 
 
     public function cancelApp($appointmentID)

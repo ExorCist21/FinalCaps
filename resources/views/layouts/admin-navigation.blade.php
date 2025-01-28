@@ -5,7 +5,7 @@
             <!-- Logo -->
             <div class="flex lg:flex-1">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center">
-                    <img src="https://i.ibb.co/mC0RNNS/M-1-removebg-preview.png" class="h-8 w-auto" alt="MentalWell Logo">
+                    <img src="{{ asset('images/logo1.png') }}" class="h-8 w-auto" alt="MentalWell Logo">
                     <span class="ml-2 text-lg font-bold text-gray-900">MentalWell</span>
                 </a>
             </div>

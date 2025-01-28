@@ -34,7 +34,7 @@ Route::get('/dashboard', function () {
     $user = auth()->user();
 
     if ($user->role === 'therapist') {
-        return redirect()->route('therapist.dashboard');
+        return redirect()->route('therapist.progress');
     } elseif ($user->role === 'patient') {
         return redirect()->route('patients.dashboard');
     } elseif ($user->role === 'admin') {
@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     // Grouped by Role
 
     // *Patient Routes* - All routes for patients
-    Route::prefix('patient')->middleware('role:patient', 'verified')->group(function () {
+    Route::prefix('patient')->middleware('role:patient', 'verified', 'prevent.back.history')->group(function () {
         Route::get('/patient/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
         Route::get('/patient/session/{appointmentId}/schedule', [AppointmentController::class, 'viewPatient'])->name('patient.viewSession');
         Route::get('/dashboard', [PatientController::class, 'index'])->name('patients.dashboard');
@@ -80,7 +80,6 @@ Route::middleware('auth')->group(function () {
 
     // Therapist Routes - All routes for therapists
     Route::prefix('therapist')->middleware('role:therapist', 'verified', 'check.isActive')->group(function () {
-        Route::get('/dashboard', [TherapistController::class, 'index'])->name('therapist.dashboard');
         Route::get('/appointment', [TherapistController::class, 'appIndex'])->name('therapist.appointment');
         Route::post('/appointment/{appointmentID}/approve', [TherapistController::class, 'approveApp'])->name('therapist.approve');
         Route::put('/appointment/{appointmentID}/confirm-payment', [TherapistController::class, 'confirmPayment'])->name('therapist.payment.confirm');

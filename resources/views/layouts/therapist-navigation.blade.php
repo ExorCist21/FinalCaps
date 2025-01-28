@@ -4,15 +4,15 @@
         <nav class="flex items-center justify-between p-6 lg:px-8 max-w-7xl mx-auto" aria-label="Global">
             <!-- Logo -->
             <div class="flex lg:flex-1">
-                <a href="{{ route('therapist.dashboard') }}" class="flex items-center">
-                    <img src="https://i.ibb.co/mC0RNNS/M-1-removebg-preview.png" class="h-8 w-auto" alt="MentalWell Logo">
+                <a href="{{ route('therapist.progress') }}" class="flex items-center">
+                    <img src="{{ asset('images/logo1.png') }}" class="h-8 w-auto" alt="MentalWell Logo">
                     <span class="ml-2 text-lg font-bold text-gray-900">MentalWell</span>
                 </a>
             </div>
 
             <!-- Centered Navigation Links -->
             <div class="hidden lg:flex lg:gap-x-5 justify-center items-center flex-grow">
-                <a href="{{ route('therapist.dashboard') }}" 
+                <a href="{{ route('therapist.progress') }}" 
                 class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
                 Dashboard
                 </a>
@@ -23,10 +23,6 @@
                 <a href="{{ route('therapist.session') }}" 
                 class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
                 Activity
-                </a>
-                <a href="{{ route('therapist.progress') }}" 
-                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
-                Progress
                 </a>
                 <a href="{{ route('therapist.reports.index') }}" 
                 class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">

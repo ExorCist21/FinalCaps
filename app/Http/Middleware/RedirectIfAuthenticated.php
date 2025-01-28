@@ -26,7 +26,7 @@ class RedirectIfAuthenticated
 
                 // Role-based redirection
                 return match ($user->role) {
-                    'therapist' => redirect()->route('therapist.dashboard'),
+                    'therapist' => redirect()->route('therapist.progress'),
                     'patient' => redirect()->route('patients.dashboard'),
                     'admin' => redirect()->route('admin.dashboard'),
                     default => redirect('/'),

@@ -8,9 +8,28 @@
 
     <div class="min-h-screen bg-gradient-to-r from-pastel-blue-100 via-pastel-pink-100 to-pastel-lavender-100 py-8"> <!-- Pastel Gradient Background -->
         <div class="max-w-7xl mx-auto px-6">
-            <h5 class="text-start text-2xl font-semibold text-gray-800 mb-8">Available Therapists</h5>
+            <h5 class="text-start text-2xl font-semibold text-gray-800 mb-2">Filter by Expertise</h5>
+
+            <!-- Filter Dropdown -->
+            <form method="GET" action="{{ route('patients.bookappointments') }}" class="mb-2">
+                <select name="expertise" 
+                        class="border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-40 p-2 mb-4">
+                    <option value="">All Categories</option>
+                    <option value="Stress" {{ request('expertise') == 'Stress' ? 'selected' : '' }}>Stress</option>
+                    <option value="Depression" {{ request('expertise') == 'Depression' ? 'selected' : '' }}>Depression</option>
+                    <option value="Relationships" {{ request('expertise') == 'Relationships' ? 'selected' : '' }}>Relationships</option>
+                    <option value="Mental Health" {{ request('expertise') == 'Mental Health' ? 'selected' : '' }}>Mental Health</option>
+                    <option value="Self Care" {{ request('expertise') == 'Self Care' ? 'selected' : '' }}>Self Care</option>
+                </select>
+                <button type="submit" 
+                        class="ml-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring focus:ring-indigo-300">
+                    Filter
+                </button>
+            </form>
+
+            <h5 class="text-start text-2xl font-semibold text-gray-800 mb-6">Available Therapists</h5>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                @foreach ($therapists as $therapist)
+                @forelse ($therapists as $therapist)
                     <!-- Therapist Card -->
                     <div class="bg-white rounded-xl border border-pastel-gray-200 flex flex-col items-center text-center shadow-lg hover:shadow-xl transition-transform duration-300 transform hover:scale-105 hover:rotate-1 cursor-pointer">
                         <a href="{{ route('patients.therapist-details', $therapist->id) }}" class="block w-full py-6 hover:bg-pastel-pink-50 hover:text-gray-800">
@@ -31,11 +50,9 @@
                                 <!-- Rating Section -->
                                 <div class="flex justify-center">
                                     @if($therapist->feedback->count() > 0)
-                                        <p class="text-sm text-gray-700 mb-2">
-                                            <div class="flex justify-center" data-rating="{{ round($therapist->feedback->avg('rating'), 1) }}">
-                                                <!-- Stars will be rendered here -->
-                                            </div>
-                                        </p>
+                                        <div class="flex justify-center" data-rating="{{ round($therapist->feedback->avg('rating'), 1) }}">
+                                            <!-- Stars will be rendered here -->
+                                        </div>
                                     @else
                                         <p class="text-sm text-gray-500">No feedback yet</p>
                                     @endif
@@ -43,7 +60,9 @@
                             </p>
                         </a>
                     </div>
-                @endforeach
+                @empty
+                    <p class="text-gray-600 col-span-full text-center text-lg">No therapists found for the selected category.</p>
+                @endforelse
             </div>
         </div>
     </div>

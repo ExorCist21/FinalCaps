@@ -50,6 +50,23 @@
                             {{ $appointment->description }}
                         </p>
 
+                        <p class="text-gray-600 mb-4">
+                            @if ($appointment->progress && $appointment->progress->isNotEmpty())
+                                @php
+                                    $status = $appointment->progress->first()->status;
+                                    $statusColor = '';
+                                    if ($status === 'Ongoing') {
+                                        $statusColor = 'text-red-500'; // Red for Ongoing
+                                    } elseif ($status === 'Completed') {
+                                        $statusColor = 'text-green-500'; // Green for Completed
+                                    }
+                                @endphp
+                                <strong class="{{ $statusColor }}">Status:</strong> {{ $status }}<br>
+                            @else
+                                <p class="text-gray-600">No progress data available.</p>
+                            @endif
+                        </p>
+
                         <hr class="my-2"/>
 
                         <div class="flex justify-between mt-4 items-center">

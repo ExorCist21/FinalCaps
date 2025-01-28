@@ -28,7 +28,7 @@
         <nav class="flex items-center justify-between p-6 lg:px-8 max-w-7xl mx-auto" aria-label="Global">
             <div class="flex lg:flex-1">
                 <a href="#" class="flex items-center mb-4">
-                    <img src="https://i.ibb.co/mC0RNNS/M-1-removebg-preview.png" class="h-8 w-auto" alt="MentalWell Logo">
+                    <img src="{{ asset('images/logo1.png') }}" class="h-8 w-auto" alt="MentalWell Logo">
                     <span class="ml-2 text-lg font-bold text-gray-900">MentalWell</span>
                 </a>
             </div>
@@ -94,7 +94,7 @@
             <!-- About Section -->
             <div>
               <a href="#" class="flex items-center mb-4">
-                <img src="https://i.ibb.co/mC0RNNS/M-1-removebg-preview.png" class="h-8 w-auto" alt="MentalWell Logo">
+                <img src="{{ asset('images/logo1.png') }}" class="h-8 w-auto" alt="MentalWell Logo">
                 <span class="ml-2 text-lg font-bold text-gray-900">MentalWell</span>
               </a>
               <p class="text-sm text-gray-600">

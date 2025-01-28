@@ -23,6 +23,7 @@ class Content extends Model
         'creatorID', // Foreign key for the user
         'description',
         'title',
+        'category',
         'url',
         'image_path',
     ];

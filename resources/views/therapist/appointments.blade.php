@@ -25,6 +25,30 @@
             </div>
         </div>
 
+        <!-- Calendar View -->
+        <div class="mb-8">
+            <div id="calendar" class="mb-8 rounded-lg shadow-lg border border-gray-200 p-4 bg-white max-w-4xl mx-auto"></div>
+        </div>
+
+        <!-- Appointment Modal -->
+        <div id="appointmentModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modalTitle" class="text-lg font-semibold text-gray-800"></h3>
+                    <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                        &times;
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p id="modalDescription" class="text-gray-600"></p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p id="modalDatetime" class="text-sm text-gray-500"></p>
+                    <span id="modalStatus" class="text-sm font-medium"></span>
+                </div>
+            </div>
+        </div>
+
         <!-- Empty State -->
         @if ($appointments->isEmpty())
             <p class="text-center text-gray-600 text-lg">No appointments found.</p>
@@ -96,34 +120,66 @@
         @endif
     </div>
 
+    <!-- Include FullCalendar CSS & JS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const sortSelect = document.getElementById('sortAppointments');
-            const appointmentsContainer = document.getElementById('appointmentsContainer');
-            const appointmentCards = document.querySelectorAll('.appointment-card');
-            const noAppointmentsMessage = document.getElementById('noAppointmentsMessage');
-
-            sortSelect.addEventListener('change', function () {
-                const filter = this.value;
-                let visibleCount = 0;
-
-                appointmentCards.forEach(card => {
-                    const status = card.getAttribute('data-status');
-
-                    if (filter === 'all' || filter === status) {
-                        card.style.display = 'block';
-                        visibleCount++;
-                    } else {
-                        card.style.display = 'none';
+            // Initialize FullCalendar
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                },
+                events: [
+                    @foreach ($appointments as $appointment)
+                        @if($appointment->status === 'approved')
+                            {
+                                title: "{{ $appointment->patient->name ?? 'Unknown Patient' }}",
+                                start: "{{ $appointment->datetime }}",
+                                description: "{{ $appointment->description }}",
+                                status: "{{ ucfirst($appointment->status) }}",
+                            },
+                        @endif
+                    @endforeach
+                ],
+                eventClick: function(info) {
+                    // Populate modal with event details
+                    document.getElementById('modalTitle').innerText = info.event.title;
+                    document.getElementById('modalDescription').innerText = info.event.extendedProps.description || 'No description available.';
+                    document.getElementById('modalDatetime').innerText = `Date & Time: ${new Date(info.event.start).toLocaleString()}`;
+                    
+                    // Add status styling dynamically
+                    const statusElement = document.getElementById('modalStatus');
+                    statusElement.innerText = `Status: ${info.event.extendedProps.status}`;
+                    if (info.event.extendedProps.status === 'Pending') {
+                        statusElement.className = 'text-sm font-medium text-pink-600';
+                    } else if (info.event.extendedProps.status === 'Approved') {
+                        statusElement.className = 'text-sm font-medium text-green-600';
+                    } else if (info.event.extendedProps.status === 'Disapproved') {
+                        statusElement.className = 'text-sm font-medium text-red-500';
                     }
-                });
 
-                // Show or hide the "No appointments" message based on visibleCount
-                if (visibleCount === 0) {
-                    noAppointmentsMessage.classList.remove('hidden');
-                } else {
-                    noAppointmentsMessage.classList.add('hidden');
-                }
+                    // Show modal
+                    document.getElementById('appointmentModal').classList.remove('hidden');
+                },
+                height: 'auto',
+                eventColor: '#6366f1',
+                eventTextColor: 'white',
+                eventBorderColor: '#6366f1',
+                dayCellClassNames: 'bg-gray-50',
+            });
+
+            calendar.render();
+            // Modal functionality
+            const modal = document.getElementById('appointmentModal');
+            const closeModal = document.getElementById('closeModal');
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('hidden');
             });
         });
     </script>
