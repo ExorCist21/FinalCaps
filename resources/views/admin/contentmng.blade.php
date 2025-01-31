@@ -28,6 +28,17 @@
                                 <label for="url" class="block text-sm font-medium text-gray-700">URL</label>
                                 <input type="url" name="url" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                             </div>
+
+                            <div>
+                                <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                                <select name="category" id="category" class="mt-1 block w-full p-3 rounded-md border border-gray-300 shadow-sm text-sm text-gray-800 focus:ring-2 focus:ring-indigo-500 hover:border-indigo-400 focus:outline-none transition duration-300">
+                                    <option value="Relationships" class="hover:bg-indigo-50">Relationships</option>
+                                    <option value="Self Care" class="hover:bg-indigo-50">Self Care</option>
+                                    <option value="Mental Health" class="hover:bg-indigo-50">Mental Health</option>
+                                    <option value="Stress" class="hover:bg-indigo-50">Stress</option>
+                                    <option value="Therapy & Counseling" class="hover:bg-indigo-50">Therapy & Counseling</option>
+                                </select>
+                            </div>
                         </div>
 
                         <!-- Right Column -->
@@ -116,6 +127,16 @@
                                         <div>
                                             <label for="url_{{ $content->content_id }}" class="block text-sm font-medium text-gray-700">URL</label>
                                             <input type="url" id="url_{{ $content->content_id }}" name="url" value="{{ $content->url }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                        </div>
+                                        <div>
+                                            <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                                            <select name="category" id="category" class="mt-1 block w-full p-3 rounded-md border border-gray-300 shadow-sm text-sm text-gray-800 focus:ring-2 focus:ring-indigo-500 hover:border-indigo-400 focus:outline-none transition duration-300">
+                                                <option value="Relationships" class="hover:bg-indigo-50">Relationships</option>
+                                                <option value="Self Care" class="hover:bg-indigo-50">Self Care</option>
+                                                <option value="Mental Health" class="hover:bg-indigo-50">Mental Health</option>
+                                                <option value="Stress" class="hover:bg-indigo-50">Stress</option>
+                                                <option value="Therapy & Counseling" class="hover:bg-indigo-50">Therapy & Counseling</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <!-- Right Column -->

@@ -24,6 +24,7 @@ class ContentController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'category' => 'required|string|in:Relationships,Self Care,Mental Health,Stress,Therapy & Counseling',
             'url' => 'required|url',
             'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
@@ -36,6 +37,7 @@ class ContentController extends Controller
             'creatorID' => $request->creatorID,
             'title' => $request->title,
             'description' => $request->description,
+            'category' => $request->category,
             'url' => $request->url,
             'image_path' => $imagePath,
         ]);
@@ -63,6 +65,7 @@ class ContentController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'category' => 'required|string|in:Relationships,Self Care,Mental Health,Stress,Therapy & Counseling',
             'url' => 'required|url',
             'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
@@ -86,6 +89,7 @@ class ContentController extends Controller
         $content->update([
             'title' => $request->title,
             'description' => $request->description,
+            'category' => $request->category,
             'url' => $request->url,
             'image_path' => $imagePath,
         ]);
