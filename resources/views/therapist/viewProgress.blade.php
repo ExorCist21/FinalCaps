@@ -268,10 +268,7 @@
                                     <select id="status-{{ $appointment->appointmentID }}" name="status" class="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md" required>
                                         <option value="Ongoing">Ongoing</option>
                                         <option value="Completed">Completed</option>
-                                        <option value="Discharged">Discharged</option>
-                                        <option value="In Remission">In Remission</option>
                                         <option value="Follow-up Scheduled">Follow-up Scheduled</option>
-                                        <option value="In Crisis">In Crisis</option>
                                     </select>
                                 </div>
 

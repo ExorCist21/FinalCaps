@@ -86,6 +86,18 @@
                         <p class="text-gray-600 mb-6">
                             {{ $appointment->description }}
                         </p>
+                        
+                        <!-- Display Risk Level -->
+                        <p class="text-sm font-medium text-gray-500">
+                            <strong>Risk Level:</strong> 
+                            <span class="
+                                {{ $appointment->risk_level == 'Low' ? 'text-green-500' : '' }}
+                                {{ $appointment->risk_level == 'Moderate' ? 'text-yellow-500' : '' }}
+                                {{ $appointment->risk_level == 'High' ? 'text-orange-500' : '' }}
+                                {{ $appointment->risk_level == 'Critical' ? 'text-red-500' : '' }}">
+                                {{ $appointment->risk_level }}
+                            </span>
+                        </p>
 
                         <hr class="my-4 border-gray-200"/>
 

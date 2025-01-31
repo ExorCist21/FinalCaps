@@ -16,6 +16,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\Chat\Index;
+use App\Http\Controllers\ChatbotController;
+
 
 // Default Routes (e.g., for login/registration)
 Route::get('/', function () {
@@ -76,6 +78,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/subscriptions/{id}/edit', [SubscriptionController::class, 'edit'])->name('subscriptions.edit');
         Route::post('/subscriptions/{id}', [SubscriptionController::class, 'update'])->name('subscriptions.update');
         Route::delete('/subscriptions/{id}', [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
+        Route::get('/chat', [ChatbotController::class, 'chat'])->name('chatbot.index');
+        Route::post('/send-message', [ChatbotController::class, 'sendMessage'])->name('send.message');
     });
 
     // Therapist Routes - All routes for therapists

@@ -8,6 +8,7 @@ use App\Models\Progress;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
@@ -16,62 +17,51 @@ class AppointmentController extends Controller
     {
         // Validate the input data
         $request->validate([
-            'datetime' => 'required|date|after_or_equal:today', // Ensure the date is not in the past
+            'datetime' => 'required|date',
             'description' => 'required|string|max:255',
+            'risk_level' => 'required|string|in:Low,Moderate,High,Critical',
             'therapist_id' => 'required|exists:users,id',
         ]);
 
-        // Find the therapist
-        $therapist = User::findOrFail($request->therapist_id);
+        // Convert datetime input to Carbon instance
+        $appointmentTime = Carbon::parse($request->datetime);
+        $startOfHour = $appointmentTime->copy()->startOfHour(); // Start of hour (e.g., 4:00 PM)
+        $endOfHour = $appointmentTime->copy()->endOfHour(); // End of hour (e.g., 4:59 PM)
 
-        // Check for existing appointments at the same time for the therapist (pending or approved)
+        // Check for existing appointments in the same 1-hour range
         $conflictingAppointment = Appointment::where('therapistID', $request->therapist_id)
-            ->where('datetime', $request->datetime)
-            ->whereIn('status', ['pending', 'approved']) 
+            ->whereBetween('datetime', [$startOfHour, $endOfHour]) // Check conflicts in the same hour
+            ->whereIn('status', ['pending', 'approved']) // Ignore cancelled/disapproved
             ->exists();
 
         if ($conflictingAppointment) {
-            return redirect()->back()->withErrors(['error' => 'This time slot is already taken. Please choose a different time.']);
+            return redirect()->back()->withErrors(['error' => 'This time slot is already booked. Please choose a different hour.']);
         }
 
-        // Get the logged-in patient
-        $patient = Auth::user();
-
-        // Check if the patient has sessions left
-        if ($patient->session_left <= 0) {
-            // If no sessions left, return an error message
-            return redirect()->back()->with('error', 'You have no sessions left. Please purchase more sessions.');
-        }
-
-        // Create a new appointment
+        // Create the appointment (pending)
         $appointment = Appointment::create([
             'datetime' => $request->datetime,
             'description' => $request->description,
+            'risk_level' => $request->risk_level,
             'therapistID' => $request->therapist_id,
-            'patientID' => Auth::id(), // Use the logged-in patient's ID
-            'created_at' => now(),
-            'updated_at' => now(),
+            'patientID' => Auth::id(),
             'status' => 'pending',
             'session_meeting' => 'online',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
-        // Reduce the patient's session_left by 1
-        $patient->session_left = $patient->session_left - 1;
-        $patient->save(); // Save the updated patient data
-
         // Send notification to the therapist
-        $patientName = $patient->name; // Get the patient's name
-
         Notification::create([
-            'n_userID' => $request->therapist_id,  // Notify the therapist
-            'type' => 'appointment',  // Define type for the notification
-            'data' => $patientName, // Patient's name in the notification
+            'n_userID' => $request->therapist_id,
+            'type' => 'appointment',
+            'data' => Auth::user()->name,
             'created_at' => now(),
         ]);
 
-        // Redirect with success message
-        return redirect()->route('patients.appointment')->with('success', 'Appointment successfully booked!');
+        return redirect()->route('patients.appointment')->with('success', 'Appointment successfully booked! The next available slot will be in the next hour.');
     }
+
 
 
 

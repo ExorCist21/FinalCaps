@@ -40,10 +40,31 @@ class TherapistController extends Controller
     
     public function approveApp($appointmentID) {
         $appointment = Appointment::findOrFail($appointmentID);
-        $appointment->status = 'approved'; // Set the status to approved
-        $appointment->save();
+
+        // Check if already approved
+        if ($appointment->status === 'approved') {
+            return redirect()->back()->with('info', 'This appointment is already approved.');
+        }
+
+        // Find the patient
+        $patient = User::findOrFail($appointment->patientID);
+
+        // Check if the patient has enough sessions before approving
+        if ($patient->session_left <= 0) {
+            return redirect()->back()->withErrors(['error' => 'Patient has no sessions left. Cannot approve appointment.']);
+        }
+
+        // Deduct session after approval
+        $patient->session_left -= 1;
+        $patient->save();
+
+        // Update appointment status
+        $appointment->update([
+            'status' => 'approved',
+            'updated_at' => now(),
+        ]);
         $this->notifyPatient($appointment, 'appointment_approved');
-        return redirect()->back()->with('success', 'Appointment approved successfully.');
+        return redirect()->back()->with('success', 'Appointment approved successfully. Session deducted.');
     }
 
     public function disapproveApp($appointmentID) {
@@ -62,9 +83,9 @@ class TherapistController extends Controller
         if ($patient) {
             // Create the notification for the patient
             Notification::create([
-                'n_userID' => $patient->id,  // Use $patient->id, not $patient->patientID
-                'data' =>  $therapist->name,  // Store the patient's name in the notification's data field
-                'type' => $type,  // Notification type
+                'n_userID' => $patient->id,  
+                'data' =>  $therapist->name,  
+                'type' => $type,  
             ]);
         }
     }

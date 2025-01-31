@@ -100,10 +100,29 @@
                             <input type="datetime-local" id="appointmentDate" name="datetime" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" required>
                         </div>
 
-                        <!-- Message -->
+                        <!-- Consultation Type Dropdown -->
                         <div class="mb-4">
-                            <label for="appointmentMessage" class="block text-sm font-medium text-gray-700">Message</label>
-                            <textarea id="appointmentMessage" name="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" required></textarea>
+                            <label for="consultationType" class="block text-sm font-medium text-gray-700">Consultation Type</label>
+                            <select id="consultationType" name="description" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" required>
+                                <option value="" disabled selected>Select a Consultation Type</option>
+                                <option value="Relationships">Relationships</option>
+                                <option value="Self Care">Self Care</option>
+                                <option value="Mental Health">Mental Health</option>
+                                <option value="Stress">Stress</option>
+                                <option value="Therapy & Counseling">Therapy & Counseling</option>
+                            </select>
+                        </div>
+
+                        <!-- Risk Level Dropdown -->
+                        <div class="mb-4">
+                            <label for="riskLevel" class="block text-sm font-medium text-gray-700">Risk Level</label>
+                            <select id="riskLevel" name="risk_level" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" required>
+                                <option value="" disabled selected>Select Risk Level</option>
+                                <option value="Low">Low</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical</option>
+                            </select>
                         </div>
 
                         <!-- Modal footer -->

@@ -16,6 +16,7 @@ class Appointment extends Model
     protected $fillable = [
         'datetime',
         'description',
+        'risk_level',
         'therapistID',
         'patientID',
         'created_at',
