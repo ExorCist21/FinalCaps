@@ -52,4 +52,8 @@ class Appointment extends Model
     {
         return $this->hasMany(Payment::class, 'transaction_id', 'appointmentID');
     }
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class, 'appointmentID');
+    }
 }

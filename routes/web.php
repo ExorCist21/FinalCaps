@@ -17,6 +17,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\Chat\Index;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\InvoiceController;
 
 
 // Default Routes (e.g., for login/registration)
@@ -80,6 +81,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/subscriptions/{id}', [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
         Route::get('/chat', [ChatbotController::class, 'chat'])->name('chatbot.index');
         Route::post('/send-message', [ChatbotController::class, 'sendMessage'])->name('send.message');
+        Route::get('/invoice/{invoice}', [InvoiceController::class, 'download'])->name('patient.downloadInvoice');
     });
 
     // Therapist Routes - All routes for therapists

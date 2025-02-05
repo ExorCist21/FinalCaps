@@ -6,6 +6,7 @@ use App\Models\Feedback;
 use App\Models\Appointment;
 use App\Models\Progress;
 use App\Models\User;
+use App\Models\Invoice;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -173,7 +174,6 @@ class AppointmentController extends Controller
     
     public function storeProgress(Request $request, $appointmentID)
     {
-        // Validate the input
         $validatedData = $request->validate([
             'mental_condition' => 'required|string|max:255',
             'mood' => 'required|string|max:255',
@@ -181,26 +181,38 @@ class AppointmentController extends Controller
             'remarks' => 'nullable|string|max:1000',
             'risk' => 'required|string|max:255',
             'status' => 'required|string|max:255',
+            'medicine_name' => 'nullable|string|max:255',
+            'medicine_duration' => 'nullable|string|max:255',
+            'invoice_notes' => 'nullable|string|max:1000',
         ]);
 
-        // Find the appointment
         $appointment = Appointment::findOrFail($appointmentID);
+        $therapist = Auth::user();
 
-        // Create new progress record
-        $progress = new Progress();
-        $progress->appointment_id = $appointment->appointmentID;
-        $progress->mental_condition = $validatedData['mental_condition'];
-        $progress->mood = $validatedData['mood'];
-        $progress->symptoms = $validatedData['symptoms'];
-        $progress->remarks = $validatedData['remarks'];
-        $progress->risk = $validatedData['risk'];
-        $progress->status = $validatedData['status'];
-        $progress->save();
+        Progress::create([
+            'appointment_id' => $appointment->appointmentID,
+            'mental_condition' => $validatedData['mental_condition'],
+            'mood' => $validatedData['mood'],
+            'symptoms' => $validatedData['symptoms'],
+            'remarks' => $validatedData['remarks'],
+            'risk' => $validatedData['risk'],
+            'status' => $validatedData['status'],
+        ]);
 
-        $appointment->isDone = true;
+        if ($therapist->therapistInformation->expertise === 'psychiatrist') {
+            Invoice::create([
+                'appointmentID' => $appointmentID,
+                'therapist_id' => $therapist->id,
+                'patient_id' => $appointment->patientID,
+                'medicine_name' => $validatedData['medicine_name'],
+                'medicine_duration' => $validatedData['medicine_duration'],
+                'notes' => $validatedData['invoice_notes'],
+            ]);
+        }
+
+        $appointment->isDone = 1; // Explicitly setting it as true (1)
         $appointment->save();
 
-        // Redirect back to the appointment page or a confirmation page
         return redirect()->route('therapist.session')->with('success', 'Progress added successfully.');
     }
 
@@ -272,4 +284,11 @@ class AppointmentController extends Controller
         return view('patients.progress', compact('appointment'));
     }
 
+    public function sendEmail($appointmentID)
+    {
+        $invoice = Invoice::where('appointmentID', $appointmentID)->firstOrFail();
+        Mail::to($invoice->patient->email)->send(new InvoiceMail($invoice));
+
+        return response()->json(['message' => 'Invoice sent successfully!']);
+    }
 }
