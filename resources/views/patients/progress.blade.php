@@ -63,18 +63,23 @@
                 <p class="text-gray-500 text-lg">No progress details available for this appointment.</p>
             </div>
         @endif
-        <!-- Download Receipt/Invoice Section -->
-        @if ($appointment->invoice)
-            <div class="text-center mt-8">
-                <a href="{{ route('patient.downloadInvoice', $appointment->invoice->id) }}"
-                   class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700 transition">
-                    Download Receipt/Invoice
-                </a>
-            </div>
-        @else
-            <div class="text-center mt-8 ">
-                <span class="font-semibold py-2 px-4 transition">No prescription provided.</span>
-            </div>
+
+
+        @if (auth()->user()->role == 'patient')
+            <!-- Download Receipt/Invoice Section -->
+            @if ($appointment->invoice)
+                <div class="text-center mt-8">
+                    <a href="{{ route('patient.downloadInvoice', $appointment->invoice->id) }}"
+                    class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700 transition">
+                        Download Receipt/Invoice
+                    </a>
+                </div>
+            @else
+                <div class="text-center mt-8 ">
+                    <span class="font-semibold py-2 px-4 transition">No prescription provided.</span>
+                </div>
+            @endif
         @endif
+
     </div>
 </x-app-layout>
