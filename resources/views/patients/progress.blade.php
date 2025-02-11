@@ -2,9 +2,19 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header with sticky effect -->
-        <div class="mb-6 border-b pb-4 sticky top-0 bg-white z-10 shadow-md">
-            <h1 class="text-3xl font-bold text-gray-800">Progress Timeline</h1>
-            <p class="text-sm text-gray-500">Tracking your progress for Appointment #{{ $appointment->appointmentID }}</p>
+        <div class="mb-6 border-b pb-4 sticky top-0 bg-white z-10 shadow-md px-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                <h1 class="text-3xl font-bold text-gray-800">Progress Timeline</h1>
+                <p class="text-sm text-gray-500">Tracking your progress for Appointment #{{ $appointment->appointmentID }}</p>
+            </div>
+            <p class="text-md font-medium text-gray-700 mt-2">
+                @if(Auth::user()->role === 'patient')
+                    {{ __('Your Progress for: ') }} 
+                @elseif(Auth::user()->role === 'therapist')
+                    {{ __('Your Patient ') . $appointment->patient->name . __('’s Progress in: ') }}
+                @endif
+                <span class="font-semibold text-black">{{ $appointment->description }}</span>
+            </p>
         </div>
 
         <!-- Progress Bar -->
@@ -51,8 +61,9 @@
                             </div>
 
                             <p class="text-lg font-semibold text-gray-700 mb-2">Mental Condition: {{ $progress->mental_condition }}</p>
-                            <p class="text-sm text-gray-600"><strong>Status:</strong> {{ ucfirst($progress->status) }}</p>
+                            <p class="text-sm text-gray-600"><strong>Symptoms:</strong> {{ $progress->symptoms }}</p>
                             <p class="text-sm text-gray-600"><strong>Remarks:</strong> {{ $progress->remarks }}</p>
+                            <p class="text-sm text-gray-600"><strong>Risk:</strong> {{ $progress->risk }}</p>
                         </div>
                     </div>
                 @endforeach

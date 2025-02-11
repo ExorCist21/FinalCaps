@@ -8,7 +8,7 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto">
-        <div class="bg-white rounded-md p-6 border">
+        <div class=" flbg-white rounded-md p-6 border">
             <!-- Display Errors -->
             @if ($errors->any())
                 <div class="bg-red-100 text-red-700 p-4 rounded-md mb-4">
@@ -32,7 +32,7 @@
                 <strong>Expertise:</strong> {{ $therapist->therapistInformation->expertise ?? 'Not Available' }}
             </p>
             <!-- Ratings with Stars -->
-            <div class="flex items-center mb-4">
+            <div class="flex items-center mb-2">
                 <strong class="text-gray-600 mr-2">Ratings:</strong>
                 <div class="flex">
                     @if($therapist->feedback->count() > 0)
@@ -46,6 +46,12 @@
                     @endif
                 </div>
             </div>
+            <p class="text-gray-600 mb-2">
+                <strong>Occupation:</strong> {{ $therapist->therapistInformation->occupation ?? 'Not Available' }}
+            </p>
+            <p class="text-gray-600 mb-2">
+                <strong>Contact No.:</strong> {{ $therapist->therapistInformation->contact_number ?? 'Not Available' }}
+            </p>
             <!-- Awards Section -->
             <p class="text-gray-600 mb-2">
                 <strong>License Number:</strong>
@@ -69,6 +75,24 @@
                     </ul>
                 </li>
             </ul>
+
+            <!-- Google Maps Section Below the Button -->
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Clinic Location</h3>
+                @if ($therapist->therapistInformation->clinic_name)
+                    <iframe 
+                        width="100%" 
+                        height="300" 
+                        style="border:0;" 
+                        loading="lazy"
+                        allowfullscreen 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps?q={{ urlencode($therapist->therapistInformation->clinic_name) }}&output=embed">
+                    </iframe>
+                @else
+                    <p class="text-gray-500 italic">Clinic location is not available.</p>
+                @endif
+            </div>
         </div>
 
         <!-- Modal -->
@@ -155,7 +179,7 @@
                 </div>
             </div>
         </div>
-
+    
     </div>
 
 <!-- Script for rendering 5 stars -->

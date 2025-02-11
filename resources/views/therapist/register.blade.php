@@ -60,6 +60,26 @@
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                 </div>
 
+                <!-- Contact Number -->
+                <div>
+                    <label for="contact_number" class="block text-sm font-medium text-gray-900">Contact/Telephone No.</label>
+                    <div class="mt-2">
+                        <input type="text" id="contact_number" name="contact_number"
+                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                    </div>
+                    <x-input-error :messages="$errors->get('contact_number')" class="mt-2" />
+                </div>
+
+                <!-- Occupation -->
+                <div>
+                    <label for="occupation" class="block text-sm font-medium text-gray-900">Occupation</label>
+                    <div class="mt-2">
+                        <input type="text" id="occupation" name="occupation"
+                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                    </div>
+                    <x-input-error :messages="$errors->get('occupation')" class="mt-2" />
+                </div>
+
                 <!-- Expertise -->
                 <div>
                     <label for="expertise" class="block text-sm font-medium text-gray-900">Expertise</label>

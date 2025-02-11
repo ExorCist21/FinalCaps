@@ -30,6 +30,7 @@
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $appointment->therapist->name }}</h3>
                                 <p class="text-sm text-gray-600">{{ $appointment->therapist->email ?? 'Unavailable' }}</p>
+                                <p class="text-sm text-gray-600">{{ $appointment->therapist->therapistInformation->contact_number ?? 'Unavailable' }}</p>
                             </div>
                         </div>
 
@@ -38,16 +39,28 @@
                         <!-- Appointment Details -->
                         <div class="mb-4">
                             <p class="text-sm font-medium text-gray-500">
-                                <strong>Session Type:</strong> {{ $appointment->meeting_type }}
+                                <strong>Session Type:</strong> {{ ucfirst($appointment->meeting_type) }}
                             </p>
                             <p class="text-sm font-medium text-gray-500">
                                 <strong>Date:</strong> {{ $appointment->datetime }}
                             </p>
+                            <p class="text-sm font-medium text-gray-500">
+                                <strong>Consultation Type:</strong> {{ $appointment->description }}
+                            </p>
                         </div>
 
-                        <p class="text-gray-600 mb-6">
-                            <strong>Status:</strong> <span class="font-semibold text-green-600">{{ ucfirst($appointment->status) }}</span>
-                        </p>
+                        @if ($appointment->progress->isNotEmpty())
+                            <strong>Status:</strong> 
+                            <span class="font-semibold 
+                                @if($appointment->progress->last()->status == 'Completed') text-green-600 
+                                @elseif($appointment->progress->last()->status == 'Ongoing') text-yellow-600 
+                                @else text-red-600 
+                                @endif">
+                                {{ ucfirst($appointment->progress->last()->status) }}
+                            </span>
+                        @else
+                            <strong>Status:</strong> <span class="font-semibold text-gray-600">No progress available</span>
+                        @endif
 
                         <hr class="my-2" />
 

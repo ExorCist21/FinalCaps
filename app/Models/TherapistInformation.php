@@ -18,6 +18,8 @@ class TherapistInformation extends Model
         'awards',
         'clinic_name',
         'expertise',
+        'occupation',
+        'contact_number',
         'gcash_number',
     ];
 

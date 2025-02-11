@@ -1,3 +1,4 @@
+<title>Payments</title>
 <x-app-layout>
     <div class="max-w-7xl mx-auto py-6">
         <!-- Page Header -->
@@ -63,7 +64,11 @@
                                     <span class="text-indigo-600 font-semibold">Payment Done</span>
                                 @else
                                     <a href="{{ route('admin.showPaymentForm', ['appointmentID' => $appointment->appointmentID]) }}" 
-                                       class="text-indigo-600 hover:text-indigo-800 font-semibold transition duration-200">
+                                    class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-md 
+                                            hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c1.1 0 2-.9 2-2V4m-2 4c-1.1 0-2-.9-2-2V4m-2 8h8m-8 4h8m-8 4h8M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
                                         Send Payment
                                     </a>
                                 @endif

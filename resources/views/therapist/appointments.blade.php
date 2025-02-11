@@ -77,9 +77,6 @@
                             <p class="text-sm font-medium text-gray-500">
                                 {{ $appointment->datetime }}
                             </p>
-                            <span class="text-sm font-medium text-gray-500">
-                                {{ ucfirst($appointment->status) }}
-                            </span>
                         </div>
 
                         <!-- Appointment Description -->
@@ -117,9 +114,7 @@
                                     </button>
                                 </form>
                             @elseif ($appointment->status == 'approved')
-                                <span class="text-sm text-green-600 font-medium">
-                                    This appointment has been approved.
-                                </span>
+                                <span class="text-sm text-green-600">This appointment has been <span class="font-semibold text-green-700">approved</span>. Your patient will message you soon, or you may message them directly.</span>
                             @elseif ($appointment->status == 'disapproved')
                                 <span class="text-sm text-red-400 font-medium">
                                     This appointment has been disapproved.
@@ -162,7 +157,7 @@
                 eventClick: function(info) {
                     // Populate modal with event details
                     document.getElementById('modalTitle').innerText = info.event.title;
-                    document.getElementById('modalDescription').innerText = info.event.extendedProps.description || 'No description available.';
+                    document.getElementById('modalDescription').innerHTML = 'Consultation Type: ' + (info.event.extendedProps.description || 'No description available.');
                     document.getElementById('modalDatetime').innerText = `Date & Time: ${new Date(info.event.start).toLocaleString()}`;
                     
                     // Add status styling dynamically

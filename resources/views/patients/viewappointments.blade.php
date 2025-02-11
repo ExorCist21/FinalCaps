@@ -33,6 +33,9 @@
                     <p id="modalDatetime" class="text-sm text-gray-500"></p>
                     <span id="modalStatus" class="text-sm font-medium"></span>
                 </div>
+                <div class="flex justify-between items-center">
+                    <p id="modalContact" class="text-sm text-gray-500"></p>
+                </div>
             </div>
         </div>
 
@@ -65,15 +68,14 @@
                                 @if ($appointment->status == 'pending')
                                     <span class="text-sm text-pink-600">Waiting for approval...</span>
                                 @elseif ($appointment->status == 'approved')
-                                    <span class="text-sm text-green-600">This appointment has been <span class="font-semibold text-green-700">approved</span>.</span>
+                                    <span class="text-sm text-green-600">This appointment has been <span class="font-semibold text-green-700">approved</span>. Your therapist will reach out to you soon, or you may contact them directly for further details.</span>
                                 @elseif ($appointment->status == 'disapproved')
-                                    <span class="text-sm text-red-500">This appointment has been <span class="font-semibold text-red-400">disapproved</span>.</span>
+                                    <span class="text-sm text-red-600">This appointment has been <span class="font-semibold text-red-700">disapproved</span>. Please check your messages for details or consider booking a new appointment.</span>
                                 @endif
                             </div>
                             <hr class="my-4"/>
                             <div class="flex justify-between mb-4">
                                 <p class="text-sm font-medium text-gray-500">{{ $appointment->datetime }}</p>
-                                <span class="text-sm font-medium text-gray-500">{{ ucfirst($appointment->status) }}</span>
                             </div>
                             <p class="text-gray-600">{{ $appointment->description }}</p>
 
@@ -118,6 +120,7 @@
                                 start: "{{ $appointment->datetime }}",
                                 description: "{{ $appointment->description }}",
                                 status: "{{ ucfirst($appointment->status) }}",
+                                contact: "{{ $appointment->therapist->therapistInformation->contact_number }}",
                             },
                         @endif
                     @endforeach
@@ -125,9 +128,10 @@
                 eventClick: function(info) {
                     // Populate modal with event details
                     document.getElementById('modalTitle').innerText = info.event.title;
-                    document.getElementById('modalDescription').innerText = info.event.extendedProps.description || 'No description available.';
+                    document.getElementById('modalDescription').innerHTML = 'Consultation Type: ' + (info.event.extendedProps.description || 'No description available.');
                     document.getElementById('modalDatetime').innerText = `Date & Time: ${new Date(info.event.start).toLocaleString()}`;
-                    
+                    document.getElementById('modalContact').innerHTML = 'Contact Number: ' + (info.event.extendedProps.contact || 'No contact number provided.');
+
                     // Add status styling dynamically
                     const statusElement = document.getElementById('modalStatus');
                     statusElement.innerText = `Status: ${info.event.extendedProps.status}`;
