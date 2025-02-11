@@ -62,13 +62,6 @@
             </div>
         </div>
 
-        <!-- Display Success Message -->
-        @if(session('success'))
-            <div class="alert alert-success mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <!-- Content Display as Cards -->
         <div class="grid grid-cols-1">
             @foreach($contents as $content)
@@ -228,5 +221,27 @@
         modal.classList.add('hidden'); // Add 'hidden' to hide modal
         modal.classList.remove('flex'); // Remove 'flex'
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        @if(session('success'))
+            Swal.fire({
+                title: "Success!",
+                text: "{{ session('success') }}",
+                icon: "success",
+                confirmButtonColor: "#4CAF50",
+                confirmButtonText: "OK"
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                title: "Error!",
+                text: "{{ session('error') }}",
+                icon: "error",
+                confirmButtonColor: "#E53935",
+                confirmButtonText: "OK"
+            });
+        @endif
+    });
     </script>
 </x-app-layout>

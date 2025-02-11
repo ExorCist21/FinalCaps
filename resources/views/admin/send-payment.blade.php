@@ -29,7 +29,7 @@
 
             <div class="mb-4">
                 <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
-                <input type="number" name="amount" id="amount" class="mt-1 block w-full text-sm border-gray-300 rounded-md" required value="{{ old('amount') }}">
+                <input type="text" name="amount" id="amount" class="mt-1 block w-full text-sm border-gray-300 rounded-md" required value="{{ old('amount') }}">
                 @error('amount')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror

@@ -86,6 +86,26 @@
                     }
                 });
             });
+
+            @if(session('success'))
+            Swal.fire({
+                title: "Success!",
+                text: "{{ session('success') }}",
+                icon: "success",
+                confirmButtonColor: "#4CAF50",
+                confirmButtonText: "OK"
+            });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    title: "Error!",
+                    text: "{{ session('error') }}",
+                    icon: "error",
+                    confirmButtonColor: "#E53935",
+                    confirmButtonText: "OK"
+                });
+            @endif
         });
     </script>
 </x-app-layout>

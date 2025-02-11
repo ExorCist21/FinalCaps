@@ -7,27 +7,6 @@
             <p class="text-gray-600">Manage payments for completed sessions.</p>
         </div>
 
-        <!-- Success or error message -->
-        @if(session('success'))
-            <div class="bg-green-500 text-white p-4 rounded-md mb-4 shadow-lg">
-                <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span>{{ session('success') }}</span>
-                </div>
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="bg-red-500 text-white p-4 rounded-md mb-4 shadow-lg">
-                <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 6L6 18M6 6l12 12"></path>
-                    </svg>
-                    <span>{{ session('error') }}</span>
-                </div>
-            </div>
-        @endif
 
         <!-- Appointments Table -->
         <div class="overflow-hidden bg-white shadow-md rounded-lg mb-6">
@@ -79,4 +58,27 @@
             </table>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        @if(session('success'))
+            Swal.fire({
+                title: "Success!",
+                text: "{{ session('success') }}",
+                icon: "success",
+                confirmButtonColor: "#4CAF50",
+                confirmButtonText: "OK"
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                title: "Error!",
+                text: "{{ session('error') }}",
+                icon: "error",
+                confirmButtonColor: "#E53935",
+                confirmButtonText: "OK"
+            });
+        @endif
+    });
+    </script>
 </x-app-layout>
