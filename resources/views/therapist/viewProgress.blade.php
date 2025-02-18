@@ -114,7 +114,7 @@
                     
                     <!-- Modal for Payment Confirmation -->
                     <div id="payment-modal-{{ $appointment->appointmentID }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-                        <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
                             <h3 class="text-xl font-semibold">Payment Details</h3>
                             <div class="mb-4">
                                 @if($appointment->payments->isNotEmpty())
@@ -123,12 +123,23 @@
                                         <p class="text-sm font-medium text-gray-700">Status: {{ $payment->status }}</p>
                                         <p class="text-sm text-gray-600 mt-2">Transaction ID: {{ $payment->transaction_id ?? 'N/A' }}</p>
                                         <p class="text-sm text-gray-600 mt-2">Payment Method: {{ $payment->payment_method ?? 'N/A' }}</p>
+
+                                        @if($payment->proof)
+                                            <div class="mt-4">
+                                                <h4 class="text-sm font-medium text-gray-700">Proof of Payment:</h4>
+                                                <div class="w-full flex justify-center">
+                                                    <img src="{{ asset('storage/' . $payment->proof) }}" 
+                                                        alt="Payment Proof" 
+                                                        class="w-auto max-w-full h-auto max-h-96 rounded-md shadow-md border border-gray-300">
+                                                </div>
+                                            </div>
+                                        @endif
                                     @endforeach
                                 @else
                                     <p class="text-sm text-gray-600">No payment details available.</p>
                                 @endif
                             </div>
-                            
+
                             <div class="flex justify-between items-center">
                                 <button type="button" onclick="closePaymentModal({{ $appointment->appointmentID }})" class="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300">Close</button>
                                 @if($appointment->payments->isNotEmpty() && $appointment->payments->first()->status === 'Pending')
@@ -139,7 +150,6 @@
                                     </form>
                                 @endif
                             </div>
-
                         </div>
                     </div>
 

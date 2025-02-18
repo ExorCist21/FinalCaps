@@ -142,7 +142,7 @@ class TherapistController extends Controller
             $payment->save(); // Save the changes
         }
 
-        return redirect()->route('therapist.dashboard')->with('success', 'Payment confirmed successfully.');
+        return redirect()->route('therapist.progress')->with('success', 'Payment confirmed successfully.');
     }
 
     public function addGcashNumber(Request $request)
