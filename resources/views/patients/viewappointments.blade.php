@@ -24,7 +24,9 @@
                                     <p class="text-sm text-gray-600">{{ $appointment->therapist->email }}</p>
                                 </div>
                             </div>
-                            <p class="text-sm font-medium text-gray-500">{{ $appointment->datetime }}</p>
+                            <p class="text-sm font-medium text-gray-500">
+                                {{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}
+                            </p>
                             <p class="text-gray-600 mt-2">{{ $appointment->description }}</p>
 
                             <!-- Status -->

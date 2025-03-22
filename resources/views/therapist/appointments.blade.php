@@ -50,7 +50,7 @@
                         <!-- Appointment Details -->
                         <div class="flex justify-between mb-4">
                             <p class="text-sm font-medium text-gray-500">
-                                {{ $appointment->datetime }}
+                                {{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}
                             </p>
                         </div>
 
@@ -102,7 +102,7 @@
         @endif
         </div>
             <!-- Right Side: Compact Calendar -->
-            <div class="w-full md:w-1/3 bg-white p-4 rounded-lg shadow-md  h-80">
+            <div class="w-full md:w-1/3 bg-white p-4 rounded-lg shadow-md h-80">
                 <div class="flex justify-between items-center mb-3">
                     <button onclick="changeMonth(-1)" class="px-2 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 text-sm">
                         &larr;

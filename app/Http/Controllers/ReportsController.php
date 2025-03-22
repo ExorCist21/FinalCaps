@@ -8,6 +8,8 @@ use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\Progress;
 use App\Models\User;
+use App\Models\Feedback;
+use App\Models\SystemFeedbacks;
 use Illuminate\Support\Facades\Auth;
 
 class ReportsController extends Controller
@@ -27,6 +29,9 @@ class ReportsController extends Controller
 
         $pendingPayments = Payment::where('status', 'Pending')->count();
 
+        $feedbacks = Feedback::count();
+        $systemfeedbacks = SystemFeedbacks::count();
+
         $activeSubscriptions = Subscription::where('status', 'Active')->count();
         $inactiveSubscriptions = Subscription::where('status', 'Inactive')->count();
 
@@ -44,7 +49,9 @@ class ReportsController extends Controller
             'pendingPayments',
             'activeSubscriptions',
             'inactiveSubscriptions',
-            'topTherapists'
+            'topTherapists',
+            'feedbacks',
+            'systemfeedbacks'
         ));
     }
 
@@ -52,10 +59,16 @@ class ReportsController extends Controller
     // Therapist Reports
     public function therapistIndex()
     {
-        $therapistID = Auth::user()->id; // Assuming therapists are authenticated users
+        $therapistID = Auth::user()->id; 
+        
+        $therapist = Auth::user();
+
+        $totalRevenue = $therapist ? $therapist->total_revenue : 0;
 
         $appointments = Appointment::where('therapistID', $therapistID)->count();
-        $completedAppointments = Appointment::where('therapistID', $therapistID)->where('isDone', true)->count();
+        $completedAppointments = Appointment::where('therapistID', $therapistID)->where('isDone', true)->whereHas('progress', function ($query) {
+            $query->where('status', 'Completed'); // Ensure status is 'Completed'
+        })->count();
 
         $patientProgress = Progress::whereIn(
             'appointment_id',
@@ -68,7 +81,8 @@ class ReportsController extends Controller
         return view('therapist.reports', compact(
             'appointments',
             'completedAppointments',
-            'patientProgress'
+            'patientProgress',
+            'totalRevenue'
         ));
     }
 }

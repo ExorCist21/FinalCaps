@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Payment;
 use App\Models\Appointment;
 use App\Models\Subscription;
+use App\Models\Feedback;
+use App\Models\SystemFeedbacks;
 use App\Models\Notification;
 
 class AdminController extends Controller
@@ -194,5 +196,24 @@ class AdminController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Payment, subscription approved, and sessions added successfully.');
+    }
+
+    public function therapistFeedbacks()
+    {
+        $therapistFeedbacks = Feedback::with('patient','therapist')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.view_reports_therapist', compact('therapistFeedbacks'));
+    }
+
+
+    public function systemFeedbacks()
+    {
+        $systemFeedbacks = SystemFeedbacks::with('user') 
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.view_reports_system', compact('systemFeedbacks'));
     }
 }

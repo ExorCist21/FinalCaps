@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Therapy Prescription Receipt</title>
+    <title>Therapist Prescription Receipt</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -81,7 +81,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">Therapy Prescription Receipt</div>
+        <div class="header">Therapist Prescription Receipt</div>
 
         <!-- Clinic & Therapist Information -->
         <div class="section">
@@ -100,7 +100,7 @@
 
         <!-- Patient Information -->
         <div class="section">
-            <span class="bold">Patient Information</span>
+            <span class="bold flex">Patient Information</span>
             <br>
             <span class="bold">Name:</span> {{ $invoice->patient->name ?? 'N/A' }}  
             <span class="bold">Email:</span> {{ $invoice->patient->email ?? 'N/A' }}

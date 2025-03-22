@@ -140,6 +140,10 @@ class TherapistController extends Controller
             // Update the payment status to 'Confirmed'
             $payment->status = 'Confirmed';
             $payment->save(); // Save the changes
+
+            $therapist = $appointment->therapist;
+            $therapist->total_revenue += $payment->amount;
+            $therapist->save();
         }
 
         return redirect()->route('therapist.progress')->with('success', 'Payment confirmed successfully.');

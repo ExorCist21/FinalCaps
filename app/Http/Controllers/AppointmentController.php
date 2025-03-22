@@ -18,7 +18,7 @@ class AppointmentController extends Controller
     {
         // Validate the input data
         $request->validate([
-            'datetime' => 'required|date',
+            'datetime' => 'required|date|after_or_equal:today', // Ensure the date is today or in the future
             'description' => 'required|string|max:255',
             'risk_level' => 'required|string|in:Low,Moderate,High,Critical',
             'therapist_id' => 'required|exists:users,id',
@@ -26,6 +26,12 @@ class AppointmentController extends Controller
 
         // Convert datetime input to Carbon instance
         $appointmentTime = Carbon::parse($request->datetime);
+
+        // Prevent booking if the selected date/time is in the past
+        if ($appointmentTime->isPast()) {
+            return redirect()->back()->withErrors(['error' => 'You cannot book an appointment in the past. Please select a future date and time.']);
+        }
+
         $startOfHour = $appointmentTime->copy()->startOfHour(); // Start of hour (e.g., 4:00 PM)
         $endOfHour = $appointmentTime->copy()->endOfHour(); // End of hour (e.g., 4:59 PM)
 
@@ -62,9 +68,6 @@ class AppointmentController extends Controller
 
         return redirect()->route('patients.appointment')->with('success', 'Appointment successfully booked! The next available slot will be in the next hour.');
     }
-
-
-
 
 
     public function cancelApp($appointmentID)
@@ -113,11 +116,16 @@ class AppointmentController extends Controller
             ->with('therapist')
             ->get();
 
+        // Fetch completed appointments (where isDone = true AND status = 'Completed')
         $doneAppointments = Appointment::with(['patient', 'therapist'])
-            ->where('status', 'approved') // Filter for done appointments
+            ->where('patientID', Auth::id()) // Ensure only the logged-in patient's records are retrieved
+            ->where('isDone', true)
+            ->whereHas('progress', function ($query) {
+                $query->where('status', 'Completed'); // Ensure status is 'Completed'
+            })
             ->get();
 
-        return view('patients.patient-index', compact('appointments','doneAppointments'));
+        return view('patients.patient-index', compact('appointments', 'doneAppointments'));
     }
 
     /**
@@ -199,7 +207,7 @@ class AppointmentController extends Controller
             'status' => $validatedData['status'],
         ]);
 
-        if ($therapist->therapistInformation->expertise === 'psychiatrist') {
+        if ($therapist->therapistInformation->occupation === 'psychiatrist') {
             Invoice::create([
                 'appointmentID' => $appointmentID,
                 'therapist_id' => $therapist->id,

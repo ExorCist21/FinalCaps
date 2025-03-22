@@ -42,7 +42,7 @@
                         </div>
                         <div class="flex justify-between mb-4">
                             <p class="text-sm font-medium text-gray-500">
-                                Date: {{ $appointment->datetime }}
+                                Date: {{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}
                             </p>
                         </div>
                         
@@ -134,7 +134,7 @@
                                                 </div>
                                             </div>
                                         @endif
-                                    @endforeach
+                                    @endforeach 
                                 @else
                                     <p class="text-sm text-gray-600">No payment details available.</p>
                                 @endif
