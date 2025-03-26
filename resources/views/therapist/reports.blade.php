@@ -14,6 +14,10 @@
                 <h2 class="text-lg font-semibold">Completed Appointments</h2>
                 <p class="text-4xl font-extrabold">{{ $completedAppointments }}</p>
             </div>
+            <div class="bg-gradient-to-r from-green-400 to-teal-500 text-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all">
+                <h2 class="text-lg font-semibold">Total Revenue</h2>
+                <p class="text-4xl font-extrabold">₱{{ $totalRevenue }}</p>
+            </div>
         </div>
 
         <!-- Patient Progress Section -->

@@ -27,4 +27,8 @@ class Feedback extends Model
     {
         return $this->belongsTo(User::class, 'patient_id');
     }
+    public function therapist()
+    {
+        return $this->belongsTo(User::class, 'therapist_id');
+    }
 }

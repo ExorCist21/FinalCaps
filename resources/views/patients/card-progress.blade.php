@@ -42,7 +42,7 @@
                                 <strong>Session Type:</strong> {{ ucfirst($appointment->meeting_type) }}
                             </p>
                             <p class="text-sm font-medium text-gray-500">
-                                <strong>Date:</strong> {{ $appointment->datetime }}
+                                <strong>Date:</strong> {{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}
                             </p>
                             <p class="text-sm font-medium text-gray-500">
                                 <strong>Consultation Type:</strong> {{ $appointment->description }}

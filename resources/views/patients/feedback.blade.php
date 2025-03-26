@@ -12,32 +12,65 @@
                 </div>
             </div>
 
-            <!-- Feedback Form -->
+            <!-- Feedback Form (Therapist & System Feedback) -->
             <form action="{{ route('appointments.feedback.store', ['appointmentId' => $appointment->appointmentID]) }}" method="POST">
                 @csrf
 
                 <h2 class="text-3xl font-semibold text-gray-800 mb-4">Leave Your Feedback</h2>
                 <p class="text-sm text-gray-500 mb-6">Your feedback helps us improve. Please share your experience with us.</p>
 
-                <!-- Feedback Textarea -->
+                <!-- Therapist Feedback -->
                 <div class="mb-6">
-                    <label for="feedback" class="block text-sm font-medium text-gray-700">Your Feedback</label>
+                    <label for="therapist_feedback" class="block text-sm font-medium text-gray-700">Your Feedback to the Therapist</label>
                     <textarea 
-                        name="feedback" 
-                        id="feedback" 
-                        rows="6" 
-                        placeholder="Write your feedback here..." 
+                        name="therapist_feedback" 
+                        id="therapist_feedback" 
+                        rows="4" 
+                        placeholder="Write your feedback about your therapist..." 
                         class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm resize-none"
                         required></textarea>
                 </div>
 
-                <!-- Rating Input -->
+                <!-- Therapist Rating -->
                 <div class="mb-6">
-                    <label for="rating" class="block text-sm font-medium text-gray-700">Rating</label>
-                    <p class="text-sm text-gray-500 mb-2">Rate your experience on a scale of 1 to 5.</p>
+                    <label for="therapist_rating" class="block text-sm font-medium text-gray-700">Rate Your Therapist</label>
                     <select 
-                        name="rating" 
-                        id="rating" 
+                        name="therapist_rating" 
+                        id="therapist_rating" 
+                        class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                        required>
+                        <option value="" disabled selected>Choose a rating</option>
+                        <option value="1">1 - Very Poor</option>
+                        <option value="2">2 - Poor</option>
+                        <option value="3">3 - Average</option>
+                        <option value="4">4 - Good</option>
+                        <option value="5">5 - Excellent</option>
+                    </select>
+                </div>
+
+                <hr class="my-6 border-gray-300">
+
+                <!-- System Feedback -->
+                <h2 class="text-3xl font-semibold text-gray-800 mb-4">System Feedback</h2>
+                <p class="text-sm text-gray-500 mb-6">We value your opinion! Let us know how we can improve the platform.</p>
+
+                <div class="mb-6">
+                    <label for="system_feedback" class="block text-sm font-medium text-gray-700">Your Experience with the System</label>
+                    <textarea 
+                        name="system_feedback" 
+                        id="system_feedback" 
+                        rows="4" 
+                        placeholder="Share your thoughts about using our system..." 
+                        class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm resize-none"
+                        required></textarea>
+                </div>
+
+                <!-- System Rating -->
+                <div class="mb-6">
+                    <label for="system_rating" class="block text-sm font-medium text-gray-700">Rate Our System</label>
+                    <select 
+                        name="system_rating" 
+                        id="system_rating" 
                         class="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
                         required>
                         <option value="" disabled selected>Choose a rating</option>

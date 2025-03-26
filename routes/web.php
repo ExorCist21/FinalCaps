@@ -67,9 +67,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/appointment/{appointmentID}', [AppointmentController::class, 'cancelApp'])->name('patients.cancelApp');
         Route::get('/progress', [AppointmentController::class, 'showPatientAppointments'])->name('patient.progress');
         Route::get('/progress/{appointmentID}', [AppointmentController::class, 'showProgress'])->name('patient.show.progress');
-        Route::get('/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
-        Route::get('/session/{appointmentId}/feedback', [FeedbackController::class, 'create'])->name('appointments.feedback.create');
-        Route::post('/session/{appointmentId}/feedback', [FeedbackController::class, 'store'])->name('appointments.feedback.store');
+        Route::get('/history', [AppointmentController::class, 'indexPatient'])->name('patient.session');
+        Route::get('/history/{appointmentId}/feedback', [FeedbackController::class, 'create'])->name('appointments.feedback.create');
+        Route::post('/history/{appointmentId}/feedback', [FeedbackController::class, 'store'])->name('appointments.feedback.store');
         Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
         Route::get('/subscriptions/plans', [SubscriptionController::class, 'subPlan'])->name('subscriptions.plan');
         Route::get('/subscriptions/create', [SubscriptionController::class, 'create'])->name('subscriptions.create');
@@ -104,6 +104,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/appointments/{appointmentID}/update-progress', [AppointmentController::class, 'storeProgressTherapist'])->name('therapist.appointment.updateProgress');
         Route::get('/background', [TherapistController::class, 'showBackground'])->name('therapist.background');
         Route::get('/reports', [ReportsController::class, 'therapistIndex'])->name('therapist.reports.index');
+        Route::get('/feedback', [FeedbackController::class, 'showFeedbackForm'])->name('feedback.form');
+        Route::post('/feedback/submit', [FeedbackController::class, 'submitFeedback'])->name('feedback.submit');
     });
 
     // *Admin Routes* - All routes for admin
@@ -130,6 +132,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/send-payment/{appointmentID}', [AdminController::class, 'showPaymentForm'])->name('admin.showPaymentForm');
         Route::post('/send-payment/{appointmentID}', [AdminController::class, 'sendPayment'])->name('admin.sendPayment');
         Route::get('/reports', [ReportsController::class, 'adminIndex'])->name('admin.reports.index');
+        Route::get('/reports/feedbacks', [AdminController::class, 'viewFeedbacks'])->name('admin.reports.feedbacks');
+        Route::get('/reports/therapist-feedbacks', [AdminController::class, 'therapistFeedbacks'])->name('admin.therapistFeedbacks');
+        Route::get('/reports/system-feedbacks', [AdminController::class, 'systemFeedbacks'])->name('admin.systemFeedbacks');
     });
 });
 

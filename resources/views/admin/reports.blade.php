@@ -56,6 +56,31 @@
             </div>
         </div>
 
+        <!-- Feedback Sections -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Therapist Feedback -->
+            <div class="bg-gradient-to-r from-blue-500 to-blue-400 p-6 rounded-lg shadow-xl text-white flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold">Therapist Feedbacks</h2>
+                    <p class="text-3xl font-bold">{{ $feedbacks }}</p>
+                </div>
+                <a href="{{ route('admin.therapistFeedbacks') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                    View Feedbacks
+                </a>
+            </div>
+
+            <!-- System Feedback -->
+            <div class="bg-gradient-to-r from-purple-500 to-purple-400 p-6 rounded-lg shadow-xl text-white flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold">System Feedbacks</h2>
+                    <p class="text-3xl font-bold">{{ $systemfeedbacks }}</p>
+                </div>
+                <a href="{{ route('admin.systemFeedbacks') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                    View Feedbacks
+                </a>
+            </div>
+        </div>
+
         <!-- Top Therapists Section -->
         <h2 class="text-xl font-semibold text-gray-800 mb-4">Top Therapists</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

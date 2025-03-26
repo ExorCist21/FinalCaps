@@ -47,7 +47,7 @@
                 </div>
             </div>
             <p class="text-gray-600 mb-2">
-                <strong>Occupation:</strong> {{ $therapist->therapistInformation->occupation ?? 'Not Available' }}
+                <strong>Occupation:</strong> {{ ucfirst($therapist->therapistInformation->occupation ?? 'Not Available') }}
             </p>
             <p class="text-gray-600 mb-2">
                 <strong>Contact No.:</strong> {{ $therapist->therapistInformation->contact_number ?? 'Not Available' }}

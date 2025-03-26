@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Feedback;
 use App\Models\Appointment;
+use App\Models\SystemFeedbacks;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
@@ -28,8 +30,10 @@ class FeedbackController extends Controller
     public function store(Request $request, $appointmentID)
     {
         $request->validate([
-            'feedback' => 'required|string|max:500',
-            'rating' => 'required|integer|between:1,5',
+            'therapist_feedback' => 'required|string',
+            'therapist_rating' => 'required|integer|between:1,5',
+            'system_feedback' => 'required|string',
+            'system_rating' => 'required|integer|between:1,5',
         ]);
 
         $appointment = Appointment::with('therapist')->findOrFail($appointmentID);
@@ -47,10 +51,38 @@ class FeedbackController extends Controller
             'appointment_id' => $appointmentID,
             'patient_id' => auth()->id(),
             'therapist_id' => $appointment->therapistID,
-            'feedback' => $request->feedback,
-            'rating' => $request->rating,
+            'feedback' => $request->therapist_feedback,
+            'rating' => $request->therapist_rating,
+        ]);
+
+
+        SystemFeedbacks::create([
+            'userID' => auth()->id(),
+            'system_feedback' => $request->system_feedback,
+            'system_rating' => $request->system_rating,
         ]);
 
         return redirect()->route('patient.session')->with('success', 'Thank you for your feedback!');
+    }
+
+    public function showFeedbackForm()
+    {
+        return view('feedback.form');
+    }
+
+    public function submitFeedback(Request $request)
+    {
+        $request->validate([
+            'message' => 'required|string|max:500',
+            'rating' => 'required|integer|between:1,5'
+        ]);
+
+        SystemFeedbacks::create([
+            'userID' => Auth::id(),
+            'system_feedback' => $request->message,
+            'system_rating' => $request->rating,
+        ]);
+
+        return redirect()->route('therapist.progress')->with('success', 'Thank you for your feedback!');
     }
 }

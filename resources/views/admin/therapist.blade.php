@@ -28,6 +28,8 @@
                             <th class="px-6 py-3 text-xs font-medium uppercase">Name</th>
                             <th class="px-6 py-3 text-xs font-medium uppercase">Email</th>
                             <th class="px-6 py-3 text-xs font-medium uppercase">Expertise</th>
+                            <th class="px-6 py-3 text-xs font-medium uppercase">License No.</th>
+                            <th class="px-6 py-3 text-xs font-medium uppercase">Contact No.</th>
                             <th class="px-6 py-3 text-center text-xs font-medium uppercase">Actions</th>
                         </tr>
                     </thead>
@@ -38,6 +40,8 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->email }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->therapistInformation->expertise ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->therapistInformation->awards }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->therapistInformation->contact_number }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     @if ($therapist->isActive == 1)
                                         <form action="{{ route('therapist.deactivate', $therapist->id) }}" method="POST" class="inline-block">

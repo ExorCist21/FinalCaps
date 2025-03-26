@@ -11,14 +11,14 @@
                         <div class="flex justify-between items-center border-b border-gray-200 py-3">
                             <div>
                                 <p class="font-semibold capitalize">{{ $appointment->patient->name }}</p>
-                                <p class="text-gray-500 text-sm">{{ $appointment->datetime }}</p>
+                                <p class="text-gray-500 text-sm">{{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}</p>
                             </div>
                             <div class="ml-auto">
                                 <a href="{{ route('therapist.viewSession', $appointment->appointmentID) }}"
                                    class="text-blue-600 hover:border-b-2 hover:border-b-blue-600 mx-2 py-1">
                                     Edit
                                 </a>
-                                <button onclick="openModal({{ $appointment->appointmentID }}, '{{ Auth::user()->therapistInformation->expertise }}')"
+                                <button onclick="openModal({{ $appointment->appointmentID }}, '{{ Auth::user()->therapistInformation->occupation }}')"
                                         class="text-green-600 hover:border-b-2 hover:border-b-green-600 mx-2 py-1">
                                     Complete
                                 </button>
@@ -39,7 +39,7 @@
                         <div class="flex justify-between items-center border-b border-gray-200 py-3">
                             <div>
                                 <p class="font-semibold capitalize">{{ $appointment->patient->name }}</p>
-                                <p class="text-gray-500 text-sm">{{ $appointment->datetime }}</p>
+                                <p class="text-gray-500 text-sm">{{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}</p>
                             </div>
                             <div> 
                                 <a href="{{ route('therapist.progress', ['appointmentID' => $appointment->appointmentID]) }}"
@@ -152,7 +152,7 @@
     </div>
 
     <script>
-        function openModal(appointmentID, expertise) {
+        function openModal(appointmentID, occupation) {
             document.getElementById('appointmentID').value = appointmentID;
             
             let form = document.getElementById('addInfoForm');
@@ -161,7 +161,7 @@
             document.getElementById('addInfoModal').classList.remove('hidden');
 
             // Show the invoice section only if the therapist is a Psychiatrist
-            if (expertise.toLowerCase() === 'psychiatrist') {
+            if (occupation.toLowerCase() === 'psychiatrist') {
                 document.getElementById('invoiceSection').classList.remove('hidden');
             } else {
                 document.getElementById('invoiceSection').classList.add('hidden');

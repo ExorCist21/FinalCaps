@@ -10,7 +10,7 @@
         <!-- Header Section -->
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-xl font-semibold text-gray-800">
-                {{ __('Available Sessions') }}
+                {{ __('Sessions Purchased') }}
             </h3>
             <a href="{{ route('subscriptions.plan') }}" 
             class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline focus:ring-2 focus:ring-indigo-500">

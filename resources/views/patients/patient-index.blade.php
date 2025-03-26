@@ -1,4 +1,4 @@
-<title>Patient Session</title>
+<title>Appointment History</title>
 <x-app-layout>
     <div class="container mx-auto p-6">
         <div class="max-w-7xl mx-auto">
@@ -16,7 +16,7 @@
                                 <div class="w-full">
                                     <p class="font-semibold text-pastel-blue-100 capitalize">{{ $appointment->description }}</p>
                                     <p class="text-gray-600 text-sm"> with <span class="capitalize font-semibold text-pastel-indigo-500">{{ $appointment->therapist->name }}</span></p>
-                                    <p class="text-gray-500 text-sm"> on {{ $appointment->datetime }}</p>
+                                    <p class="text-gray-500 text-sm"> on {{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}</p>
                                 </div>
                                 <div>
                                 <button
@@ -46,7 +46,7 @@
                                 <div class="w-full">
                                     <p class="font-semibold text-pastel-blue-100 capitalize">{{ $appointment->description }}</p>
                                     <p class="text-gray-600 text-sm"> with <span class="capitalize font-semibold text-pastel-indigo-500">{{ $appointment->therapist->name }}</span></p>
-                                    <p class="text-gray-500 text-sm"> on {{ $appointment->datetime }}</p>
+                                    <p class="text-gray-500 text-sm"> on {{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}</p>
                                 </div>
                                 <div>
                                     @php
