@@ -32,24 +32,27 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', 'string', 'in:patient,therapist,admin'], // restrict role input
+            'role' => ['required', 'string', 'in:patient,therapist,admin'],
         ]);
 
-        // Create the user with the requested role
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role, // Store the role in the database
+            'role' => $request->role,
             'session_left' => 2,
         ]);
 
         event(new Registered($user));
+        Auth::login($user);
 
-        // After registration, redirect to the email verification page
-        return redirect()->route('verification.notice');
+        if (!$user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
+        return redirect()->route('terms.show');
     }
 
     /**
@@ -61,11 +64,10 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Create the user with the patient role
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -75,17 +77,13 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
-        // Log the user in after registration
         Auth::login($user);
 
-        // Redirect to the email verification page if not verified
         if (!$user->hasVerifiedEmail()) {
             return redirect()->route('verification.notice');
         }
 
-        // Redirect based on role if email is verified
-        return redirect()->route('patients.dashboard');
+        return redirect()->route('terms.show');
     }
 
     /**
@@ -97,22 +95,21 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'expertise' => ['required', 'string', 'max:255'], 
+            'expertise' => ['required', 'string', 'max:255'],
             'occupation' => ['required', 'string', 'max:255'],
             'contact_number' => ['required', 'string', 'max:255'],
-            'awards' => ['nullable', 'string', 'max:255'], 
-            'clinic_name' => ['nullable', 'string', 'max:255'], 
+            'awards' => ['nullable', 'string', 'max:255'],
+            'clinic_name' => ['nullable', 'string', 'max:255'],
         ]);
 
-        // Create the user with the therapist role
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'therapist',
-            'isActive'=> 0,
+            'isActive' => 0,
             'session_left' => 0,
         ]);
 
@@ -125,16 +122,12 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
-        // Log the user in after registration
         Auth::login($user);
 
-        // Redirect to the email verification page if not verified
         if (!$user->hasVerifiedEmail()) {
             return redirect()->route('verification.notice');
         }
 
-        // Redirect based on role if email is verified
-        return redirect()->route('therapist.dashboard');
+        return redirect()->route('terms.show');
     }
 }

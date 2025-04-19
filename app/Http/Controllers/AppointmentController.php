@@ -5,6 +5,7 @@ use App\Models\Notification;
 use App\Models\Feedback;
 use App\Models\Appointment;
 use App\Models\Progress;
+use App\Models\SystemFeedbacks;
 use App\Models\User;
 use App\Models\Invoice;
 use Illuminate\Support\Facades\Auth;
@@ -234,8 +235,11 @@ class AppointmentController extends Controller
         ->where('therapistID', auth()->id())
         ->get();
 
+        $therapistFeedback = Feedback::with('therapist','patient')->where('therapist_id', auth()->id())
+            ->latest()->get();
+
         // Return the appointments and their progress to the view
-        return view('therapist.viewProgress', compact('appointments'));
+        return view('therapist.viewProgress', compact('appointments','therapistFeedback'));
     }
 
     public function storeProgressTherapist(Request $request, $appointmentID)
@@ -298,5 +302,25 @@ class AppointmentController extends Controller
         Mail::to($invoice->patient->email)->send(new InvoiceMail($invoice));
 
         return response()->json(['message' => 'Invoice sent successfully!']);
+    }
+
+    public function history()
+    {
+        $therapistID = auth()->id();
+
+        $completedAppointments = Appointment::where('therapistID', $therapistID)
+            ->whereHas('progress', function ($query) {
+                $query->where('status', 'Completed');
+            })
+            ->with('patient', 'progress')
+            ->latest('datetime')
+            ->get();
+
+        $therapistFeedback = Feedback::where('therapist_id', $therapistID)
+            ->with('patient')
+            ->latest('created_at')
+            ->get();
+
+        return view('therapist.history', compact('completedAppointments', 'therapistFeedback'));
     }
 }

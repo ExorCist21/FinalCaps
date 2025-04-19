@@ -24,6 +24,10 @@
                 class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
                 Activity
                 </a>
+                <a href="{{ route('therapist.history') }}" 
+                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
+                History
+                </a>
                 <a href="{{ route('therapist.reports.index') }}" 
                 class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
                 Reports

@@ -27,6 +27,7 @@ class Kernel extends HttpKernel
         // Other middleware...
         'role' => \App\Http\Middleware\RoleMiddleware::class, // Register the role middleware
         'check.isActive' => \App\Http\Middleware\CheckIsActive::class,
+        'check.terms' => \App\Http\Middleware\CheckTermsAccepted::class,
     ];
 
     /**

@@ -18,6 +18,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\Chat\Index;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\TermsController;
 
 
 // Default Routes (e.g., for login/registration)
@@ -56,7 +57,7 @@ Route::middleware('auth')->group(function () {
     // Grouped by Role
 
     // *Patient Routes* - All routes for patients
-    Route::prefix('patient')->middleware('role:patient', 'verified', 'prevent.back.history')->group(function () {
+    Route::prefix('patient')->middleware('role:patient', 'verified', 'prevent.back.history','check.terms')->group(function () {
         Route::get('/patient/session', [AppointmentController::class, 'indexPatient'])->name('patient.session');
         Route::get('/patient/session/{appointmentId}/schedule', [AppointmentController::class, 'viewPatient'])->name('patient.viewSession');
         Route::get('/dashboard', [PatientController::class, 'index'])->name('patients.dashboard');
@@ -85,7 +86,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Therapist Routes - All routes for therapists
-    Route::prefix('therapist')->middleware('role:therapist', 'verified', 'check.isActive')->group(function () {
+    Route::prefix('therapist')->middleware('role:therapist', 'verified', 'check.isActive','check.terms')->group(function () {
         Route::get('/appointment', [TherapistController::class, 'appIndex'])->name('therapist.appointment');
         Route::post('/appointment/{appointmentID}/approve', [TherapistController::class, 'approveApp'])->name('therapist.approve');
         Route::put('/appointment/{appointmentID}/confirm-payment', [TherapistController::class, 'confirmPayment'])->name('therapist.payment.confirm');
@@ -106,6 +107,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/reports', [ReportsController::class, 'therapistIndex'])->name('therapist.reports.index');
         Route::get('/feedback', [FeedbackController::class, 'showFeedbackForm'])->name('feedback.form');
         Route::post('/feedback/submit', [FeedbackController::class, 'submitFeedback'])->name('feedback.submit');
+        Route::get('/history', [AppointmentController::class, 'history'])->name('therapist.history');
     });
 
     // *Admin Routes* - All routes for admin
@@ -153,6 +155,9 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('dashboard');
     });
 });
+
+Route::get('/terms-and-conditions', [TermsController::class, 'show'])->name('terms.index')->middleware('auth');
+Route::post('/terms-and-conditions/accept', [TermsController::class, 'accept'])->name('terms.accept')->middleware('auth');
 
 
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
