@@ -21,6 +21,7 @@
         "@fullcalendar/core": "^6.1.15",
         "@fullcalendar/daygrid": "^6.1.15",
         "fullcalendar": "^6.1.15",
-        "js-calendar": "^1.2.3"
+        "js-calendar": "^1.2.3",
+        "peerjs": "^1.5.4"
     }
 }
