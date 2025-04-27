@@ -36,7 +36,7 @@
             <!-- Appointments List -->
             <div id="appointmentsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                 @foreach ($appointments as $appointment)
-                    <div onclick="window.location.href='{{ route('video-call.index', $appointment->appointmentID) }}'" class="appointment-card bg-white rounded-xl p-6 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:rotate-1 ease-in-out"
+                    <div onclick="window.location.href='{{ route('meetingUser') }}?appointmentID={{ $appointment->appointmentID }}'" class="appointment-card bg-white rounded-xl p-6 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:rotate-1 ease-in-out"
                          data-status="{{ $appointment->status }}">
                         <!-- Patient Image -->
                         <div class="flex items-center mb-6">

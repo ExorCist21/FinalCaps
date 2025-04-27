@@ -1,50 +1,39 @@
 <?php
- 
+
 namespace App\Http\Controllers;
- 
-use App\Events\RequestVideoCall;
-use App\Events\RequestVideoCallStatus;
-use App\Models\User;
-use App\Models\Appointment;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
- 
+use App\Services\AgoraTokenGenerator;
+use App\Models\Appointment; // adjust if different model
+
 class VideoCallController extends Controller
 {
-    public function index($appointmentID)
+    public function showVideoCallPage($appointmentID)
     {
-        $authUser = auth()->user();
+        $appointment = Appointment::findOrFail($appointmentID);
 
-        // Retrieve the appointment along with the therapist and patient info
-        $appointment = Appointment::with(['therapist', 'patient'])->findOrFail($appointmentID);
-
-        // Determine the contact user (the other party in the appointment)
-        $contactUser = $authUser->id === $appointment->therapist->id
-            ? $appointment->patient
-            : $appointment->therapist;
-
-        return view('video-call.index', [
-            'auth' => $authUser,
-            'contactUser' => $contactUser,
-            'appointment' => $appointment
+        return view('appointment.show', [
+            'appointmentID' => $appointmentID,
+            'patientName' => $appointment->patient->name  ?? 'Unknown',
+            'therapistName' => $appointment->therapist->name ?? 'Unknown',
         ]);
     }
 
-    public function requestVideoCall(Request $request, User $user) 
+    public function generateAgoraToken($appointmentID)
     {
-        $user->peerId = $request->peerId;
-        $user->fromUser = Auth::user();
- 
-        broadcast(new RequestVideoCall($user));
-  
-        return response()->json($user);
-    }
- 
-    public function requestVideoCallStatus(Request $request, User $user) {
-        $user->peerId = $request->peerId;
-        $user->fromUser = Auth::user();
- 
-        broadcast(new RequestVideoCallStatus($user));
-        return response()->json($user);
+        $appId = env('AGORA_APP_ID');
+        $appCertificate = env('AGORA_APP_CERTIFICATE');
+        $channelName = 'appointment_' . $appointmentID;
+        $uid = auth()->id();
+        $expireTimeInSeconds = 3600;
+
+        $token = AgoraTokenGenerator::buildTokenWithUid($appId, $appCertificate, $channelName, $uid, 1, $expireTimeInSeconds);
+
+        return response()->json([
+            'token' => $token,
+            'appId' => $appId,
+            'channelName' => $channelName,
+            'uid' => $uid,
+        ]);
     }
 }

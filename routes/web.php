@@ -19,7 +19,8 @@ use App\Http\Controllers\Chat\Index;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TermsController;
-use App\Http\Controllers\VideoCallController;
+use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\AgoraController;
 
 
 // Default Routes (e.g., for login/registration)
@@ -168,15 +169,22 @@ Route::get('/email/verify', function () {
         return view('auth.verify-email');
     })->middleware(['auth'])->name('verification.notice');
 
-  
+
+Route::get('get-token' , [ArogaController::class,'getToken']);
+Route::get('/joinMeeting/{url?}', [MeetingController::class, 'joinMeeting'])->name('joinMeeting');
+Route::get('/view-meeting', [MeetingController::class, 'meetinguser'])->name('meetingUser');
+Route::post('/view-meeting', [MeetingController::class, 'meetinguser'])->name('meetingUser');
+Route::get('/create-meeting', [MeetingController::class, 'createMeeting'])->name('createMeeting');
+Route::post('/create-meeting', [MeetingController::class, 'createMeeting'])->name('createMeeting');
+Route::post('/saveUserName', [MeetingController::class, 'saveUserName'])->name('saveUserName');
+Route::post('/meetingApprove', [MeetingController::class, 'meetingApprove'])->name('meetingApprove');
+Route::post('/callRecordTime', [MeetingController::class, 'callRecordTime'])->name('callRecordTime');
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::get('/video-call/{appointmentID}', [VideoCallController::class, 'index'])->name('video-call.index');
-    Route::post('/video-call/request/{user}', [VideoCallController::class, 'requestVideoCall'])->name('video-call.request');
-    Route::post('/video-call/request/status/{user}', [VideoCallController::class, 'requestVideoCallStatus'])->name('video-call.request-status');
 });
 
 Route::get('/inactive', function () {

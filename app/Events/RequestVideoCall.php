@@ -21,7 +21,7 @@ class RequestVideoCall implements ShouldBroadcastNow
      */
     public function __construct(public User $user)
     {
-        //
+        $this->user = $user;
     }
  
     /**
@@ -31,8 +31,6 @@ class RequestVideoCall implements ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
-        return [
-            new PrivateChannel("video-call.{$this->user->id}"),
-        ];
+        return new PrivateChannel('video-call.' . $this->user->id);
     }
 }
