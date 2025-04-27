@@ -36,8 +36,7 @@
             <!-- Appointments List -->
             <div id="appointmentsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                 @foreach ($appointments as $appointment)
-                    <div onclick="window.location.href='{{ route('meetingUser') }}?appointmentID={{ $appointment->appointmentID }}'" class="appointment-card bg-white rounded-xl p-6 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:rotate-1 ease-in-out"
-                         data-status="{{ $appointment->status }}">
+                    <div class="appointment-card bg-white rounded-xl p-6 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:rotate-1 ease-in-out">
                         <!-- Patient Image -->
                         <div class="flex items-center mb-6">
                             <img src="https://i.pravatar.cc/150?img={{ $appointment->patient->email ?? '1' }}" alt="Patient Image" class="w-14 h-14 ring-4 ring-indigo-600 rounded-full object-cover mr-6">
@@ -90,6 +89,10 @@
                                 </form>
                             @elseif ($appointment->status == 'approved')
                                 <span class="text-sm text-green-600">This appointment has been <span class="font-semibold text-green-700">approved</span>. Your patient will message you soon, or you may message them directly.</span>
+                                <button onclick="window.location.href='{{ route('meetingUser') }}?appointmentID={{ $appointment->appointmentID }}'" 
+                                        class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md focus:outline-none transition-all duration-300 transform hover:scale-105">
+                                    Join Meeting
+                                </button>
                             @elseif ($appointment->status == 'disapproved')
                                 <span class="text-sm text-red-400 font-medium">
                                     This appointment has been disapproved.
