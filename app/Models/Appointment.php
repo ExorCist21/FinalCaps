@@ -56,4 +56,9 @@ class Appointment extends Model
     {
         return $this->hasOne(Invoice::class, 'appointmentID');
     }
+
+    public function meeting_channel()
+    {
+        return $this->hasOne(UserMeeting::has, 'url', 'session_meeting');
+    }
 }

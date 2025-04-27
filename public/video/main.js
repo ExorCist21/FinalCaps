@@ -54,14 +54,17 @@ let handleUserJoined = async (user, mediaType) => {
                         <div id="user-${user.uid}" class="w-full h-64 bg-black rounded-lg overflow-hidden"></div>
                       </div>`;
             document.getElementById('remote-streams').insertAdjacentHTML('beforeend', player)
+           
         }
 
         user.videoTrack.play(`user-${user.uid}`)
+
     }
 
     if (mediaType === 'audio') {
         user.audioTrack.play()
     }
+
 }
 
 let handleUserLeft = async (user) => {

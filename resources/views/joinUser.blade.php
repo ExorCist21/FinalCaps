@@ -9,21 +9,18 @@
     <title>Video Stream</title>
 </head>
 <body class="bg-gray-50 font-sans flex items-center justify-center min-h-screen">
-    <!------------@if(!session()->has('meeting'))
-            <input type="text" id="user_name" value="">
-        @endif ---------->    
-    <!-- Main Container -->
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-5xl">
         <!-- User Name Section -->
         @if(!session()->has('meeting'))
         <div class="mb-6">
-            <label for="user_name" class="block text-lg font-semibold text-gray-700">Enter your name:</label>
+            <label for="user_name" class="block text-lg font-semibold text-gray-700">Patient name:</label>
             <input type="text" id="user_name" name="user_name" value="{{ Auth::user()->name }}" placeholder="Enter your name" class="form-input mt-2 p-3 w-full border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
         @endif
 
         <!-- URL and Buttons Section -->
         <div class="mb-6">
+            <label for="linkUrl" class="block text-lg font-semibold text-gray-700">Meeting Link:</label>
             <input type="text" id="linkUrl" value="{{url('joinMeeting')}}/{{$meeting->url}}" class="w-full p-3 border rounded-lg shadow-sm text-gray-700" readonly />
             <div class="flex justify-between mt-4">
                 <button id="join-btn2" class="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300">Join Stream</button>
@@ -33,16 +30,29 @@
 
         <!-- Video Stream and Controls -->
         <div class="mb-6">
-            <div id="local-streams" class="border border-gray-300 rounded-lg p-4 mb-4">
-                <!-- Local video will be here -->
+            <div class="flex flex-wrap gap-4 justify-center mb-4">
+                <!-- Local Video -->
+                <div id="local-streams" class="flex-1 min-w-[50%] aspect-video border border-gray-300 rounded-lg bg-black overflow-hidden relative">
+                    <!-- Local video will appear here -->
+                </div>
+
+                <!-- Remote Video -->
+                <div id="remote-streams" class="flex-1 min-w-[50%] aspect-video border border-gray-300 rounded-lg bg-black overflow-hidden relative">
+                    <!-- Remote videos will appear here -->
+                </div>
             </div>
-            <div id="remote-streams" class="border border-gray-300 rounded-lg p-4 mb-4">
-                <!-- Remote videos will be here -->
-            </div>
-            <div id="stream-controls" class="flex space-x-4 justify-center hidden">
-                <button id="leave-btn" class="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition duration-300">Leave Stream</button>
-                <button id="mic-btn" class="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition duration-300">Mic On</button>
-                <button id="camera-btn" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300">Camera On</button>
+
+            <!-- Controls -->
+            <div id="stream-controls" class="flex justify-center space-x-4 hidden">
+                <button id="leave-btn" class="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition duration-300">
+                    Leave Stream
+                </button>
+                <button id="mic-btn" class="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition duration-300">
+                    Mic On
+                </button>
+                <button id="camera-btn" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300">
+                    Camera On
+                </button>
             </div>
         </div>
 
