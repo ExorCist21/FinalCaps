@@ -1,5 +1,4 @@
 <title>Messages</title>
-<title>Messages</title>
 <x-app-layout>
     <div id="chat-container" class="flex max-w-7xl mx-auto border rounded-lg">
         <!-- Conversation List -->

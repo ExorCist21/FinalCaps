@@ -35,7 +35,7 @@ class PaymentController extends Controller
             $payment->save();
         }
             $this->notifyAdmin($payment);
-        return redirect('/patient/subscriptions')->with('success', 'Payment proof uploaded successfully. Awaiting admin approval.');
+        return redirect('/therapist/subscriptions')->with('success', 'Payment proof uploaded successfully. Awaiting admin approval.');
     }
     protected function notifyAdmin(Payment $payment)
     {

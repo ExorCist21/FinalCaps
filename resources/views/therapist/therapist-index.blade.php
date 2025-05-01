@@ -4,7 +4,7 @@
         <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Upcoming Appointments -->
             <div>
-                <h2 class="text-lg font-semibold mb-2">Upcoming Appointments</h2>
+                <h2 class="text-lg font-semibold mb-2">Appointments</h2>
                 <p class="text-gray-500 text-sm mb-4">Here are your upcoming appointments. Click to edit the details.</p>
                 <div>
                     @forelse($upcomingAppointments as $appointment)

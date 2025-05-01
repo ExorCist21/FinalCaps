@@ -73,22 +73,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/history', [AppointmentController::class, 'indexPatient'])->name('patient.session');
         Route::get('/history/{appointmentId}/feedback', [FeedbackController::class, 'create'])->name('appointments.feedback.create');
         Route::post('/history/{appointmentId}/feedback', [FeedbackController::class, 'store'])->name('appointments.feedback.store');
-        Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
-        Route::get('/subscriptions/plans', [SubscriptionController::class, 'subPlan'])->name('subscriptions.plan');
-        Route::get('/subscriptions/create', [SubscriptionController::class, 'create'])->name('subscriptions.create');
-        Route::post('/subscriptions', [SubscriptionController::class, 'store'])->name('subscriptions.store');
-        Route::get('/subscriptions/payment/proceed', [SubscriptionController::class, 'payment'])->name('subscriptions.payment');
-        Route::post('/subscriptions/payment', [PaymentController::class, 'store'])->name('payments.store');
-        Route::get('/subscriptions/{id}/edit', [SubscriptionController::class, 'edit'])->name('subscriptions.edit');
-        Route::post('/subscriptions/{id}', [SubscriptionController::class, 'update'])->name('subscriptions.update');
-        Route::delete('/subscriptions/{id}', [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
         Route::get('/chat', [ChatbotController::class, 'chat'])->name('chatbot.index');
         Route::post('/send-message', [ChatbotController::class, 'sendMessage'])->name('send.message');
         Route::get('/invoice/{invoice}', [InvoiceController::class, 'download'])->name('patient.downloadInvoice');
     });
 
     // Therapist Routes - All routes for therapists
-    Route::prefix('therapist')->middleware('role:therapist', 'verified', 'check.isActive','check.terms')->group(function () {
+    Route::prefix('therapist')->middleware('role:therapist', 'verified', 'check.isActive','check.terms','check.subscription')->group(function () {
         Route::get('/appointment', [TherapistController::class, 'appIndex'])->name('therapist.appointment');
         Route::post('/appointment/{appointmentID}/approve', [TherapistController::class, 'approveApp'])->name('therapist.approve');
         Route::put('/appointment/{appointmentID}/confirm-payment', [TherapistController::class, 'confirmPayment'])->name('therapist.payment.confirm');
@@ -110,6 +101,21 @@ Route::middleware('auth')->group(function () {
         Route::get('/feedback', [FeedbackController::class, 'showFeedbackForm'])->name('feedback.form');
         Route::post('/feedback/submit', [FeedbackController::class, 'submitFeedback'])->name('feedback.submit');
         Route::get('/history', [AppointmentController::class, 'history'])->name('therapist.history');
+       // Route::get('/send-payment', [AdminController::class, 'showAppointments'])->name('admin.appointments');
+       // Route::get('/send-payment/{appointmentID}', [AdminController::class, 'showPaymentForm'])->name('admin.showPaymentForm');
+       Route::post('/send-payment/{appointmentID}', [AdminController::class, 'sendPayment'])->name('therapist.sendPayment');
+    });
+
+Route::middleware(['auth', 'verified', 'role:therapist','check.isActive','check.terms'])->group(function () {
+        Route::get('/therapist/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+        Route::get('/therapist/subscriptions/plans', [SubscriptionController::class, 'subPlan'])->name('subscriptions.plan');
+        Route::get('/therapist/subscriptions/create', [SubscriptionController::class, 'create'])->name('subscriptions.create');
+        Route::post('/therapist/subscriptions', [SubscriptionController::class, 'store'])->name('subscriptions.store');
+        Route::get('/therapist/subscriptions/payment/proceed', [SubscriptionController::class, 'payment'])->name('subscriptions.payment');
+        Route::post('/therapist/subscriptions/payment', [PaymentController::class, 'store'])->name('payments.store');
+        Route::get('/therapist/subscriptions/{id}/edit', [SubscriptionController::class, 'edit'])->name('subscriptions.edit');
+        Route::post('/therapist/subscriptions/{id}', [SubscriptionController::class, 'update'])->name('subscriptions.update');
+        Route::delete('/therapist/subscriptions/{id}', [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
     });
 
     // *Admin Routes* - All routes for admin
@@ -132,15 +138,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/therapist/{id}/deactivate', [TherapistController::class, 'deactivate'])->name('therapist.deactivate');
         Route::post('/patients/{id}/activate', [PatientController::class, 'activate'])->name('patients.activate');
         Route::post('/therapist/{id}/activate', [TherapistController::class, 'activate'])->name('therapist.activate');
-        Route::get('/send-payment', [AdminController::class, 'showAppointments'])->name('admin.appointments');
-        Route::get('/send-payment/{appointmentID}', [AdminController::class, 'showPaymentForm'])->name('admin.showPaymentForm');
-        Route::post('/send-payment/{appointmentID}', [AdminController::class, 'sendPayment'])->name('admin.sendPayment');
         Route::get('/reports', [ReportsController::class, 'adminIndex'])->name('admin.reports.index');
         Route::get('/reports/feedbacks', [AdminController::class, 'viewFeedbacks'])->name('admin.reports.feedbacks');
         Route::get('/reports/therapist-feedbacks', [AdminController::class, 'therapistFeedbacks'])->name('admin.therapistFeedbacks');
         Route::get('/reports/system-feedbacks', [AdminController::class, 'systemFeedbacks'])->name('admin.systemFeedbacks');
+        Route::get('/admin/therapist-payments', [AdminController::class, 'therapistPayments'])->name('admin.therapistPayments');
+        Route::post('/admin/confirm-therapist-payment/{id}', [AdminController::class, 'confirmTherapistPayment'])->name('admin.confirmTherapistPayment');
     });
 });
+
+Route::get('/subscription-lock', function () {
+    return view('therapist.subscription-lock');
+})->name('subscription.lock')->middleware('auth');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat/conversation-list', [ChatController::class, 'fetchConversationList']);

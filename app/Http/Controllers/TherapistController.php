@@ -49,13 +49,6 @@ class TherapistController extends Controller
         // Find the patient
         $patient = User::findOrFail($appointment->patientID);
 
-        // Check if the patient has enough sessions before approving
-        if ($patient->session_left <= 0) {
-            return redirect()->back()->withErrors(['error' => 'Patient has no sessions left. Cannot approve appointment.']);
-        }
-
-        // Deduct session after approval
-        $patient->session_left -= 1;
         $patient->save();
 
         // Update appointment status

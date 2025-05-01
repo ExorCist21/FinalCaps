@@ -21,6 +21,8 @@ class TherapistInformation extends Model
         'occupation',
         'contact_number',
         'gcash_number',
+        'image_picture',
+        'certificates',
     ];
 
     public function therapist()

@@ -8,23 +8,46 @@
 
     <div class="min-h-screen bg-gradient-to-r from-pastel-blue-100 via-pastel-pink-100 to-pastel-lavender-100 py-8"> <!-- Pastel Gradient Background -->
         <div class="max-w-7xl mx-auto px-6">
-            <h5 class="text-start text-2xl font-semibold text-gray-800 mb-2">Filter by Expertise</h5>
 
-            <!-- Filter Dropdown -->
-            <form method="GET" action="{{ route('patients.bookappointments') }}" class="mb-2">
-                <select name="expertise" 
-                        class="border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-40 p-2 mb-4">
-                    <option value="">All Categories</option>
-                    <option value="Stress" {{ request('expertise') == 'Stress' ? 'selected' : '' }}>Stress</option>
-                    <option value="Depression" {{ request('expertise') == 'Depression' ? 'selected' : '' }}>Depression</option>
-                    <option value="Relationships" {{ request('expertise') == 'Relationships' ? 'selected' : '' }}>Relationships</option>
-                    <option value="Mental Health" {{ request('expertise') == 'Mental Health' ? 'selected' : '' }}>Mental Health</option>
-                    <option value="Self Care" {{ request('expertise') == 'Self Care' ? 'selected' : '' }}>Self Care</option>
-                </select>
-                <button type="submit" 
-                        class="ml-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring focus:ring-indigo-300">
-                    Filter
-                </button>
+            <!-- Filter Section -->
+            <form method="GET" action="{{ route('patients.bookappointments') }}" class="mb-6">
+                <div class="flex flex-col md:flex-row md:items-end md:space-x-6 space-y-4 md:space-y-0">
+                    <!-- Profession Filter -->
+                    <div>
+                        <label for="occupation" class="block text-sm font-medium text-gray-800 mb-1">Filter by Profession</label>
+                        <select name="occupation" id="occupation"
+                                class="border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-48 p-2">
+                            <option value="">All Categories</option>
+                            @foreach ($occuOptions as $occupation)
+                                <option value="{{ $occupation }}" {{ request('occupation') == $occupation ? 'selected' : '' }}>
+                                    {{ ucfirst($occupation) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Expertise Filter -->
+                    <div>
+                        <label for="expertise" class="block text-sm font-medium text-gray-800 mb-1">Filter by Expertise</label>
+                        <select name="expertise" id="expertise"
+                                class="border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-48 p-2">
+                            <option value="">All Expertise</option>
+                            @foreach ($expertiseOptions as $option)
+                                <option value="{{ $option }}" {{ request('expertise') == $option ? 'selected' : '' }}>
+                                    {{ ucfirst($option) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button type="submit"
+                                class="mt-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring focus:ring-indigo-300">
+                            Filter
+                        </button>
+                    </div>
+                </div>
             </form>
 
             <h5 class="text-start text-2xl font-semibold text-gray-800 mb-6">Available Therapists</h5>
@@ -35,7 +58,15 @@
                         <a href="{{ route('patients.therapist-details', $therapist->id) }}" class="block w-full py-6 hover:bg-pastel-pink-50 hover:text-gray-800">
                             <!-- Therapist Image -->
                             <div class="mb-6">
-                                <img src="https://i.pravatar.cc/150?img={{ $therapist->email }}" alt="Therapist Image" class="w-20 h-20 ring-4 ring-indigo-300 rounded-full object-cover mx-auto">
+                                @if ($therapist->therapistInformation && $therapist->therapistInformation->image_picture)
+                                    <img src="{{ asset('storage/' . $therapist->therapistInformation->image_picture) }}" 
+                                        alt="Profile Picture" 
+                                        class="h-20 w-20 rounded-full object-cover mx-auto hover:opacity-80 transition">
+                                @else
+                                    <div class="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+                                        N/A
+                                    </div>
+                                @endif
                             </div>
                             <!-- Therapist Details -->
                             <div>

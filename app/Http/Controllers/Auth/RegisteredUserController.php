@@ -42,7 +42,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'session_left' => 2,
+            'session_left' => 0,
         ]);
 
         event(new Registered($user));
@@ -73,7 +73,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'patient',
-            'session_left' => 2,
+            'session_left' => 0,
         ]);
 
         event(new Registered($user));
@@ -102,7 +102,21 @@ class RegisteredUserController extends Controller
             'contact_number' => ['required', 'string', 'max:255'],
             'awards' => ['nullable', 'string', 'max:255'],
             'clinic_name' => ['nullable', 'string', 'max:255'],
+            'image_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'certificates.*' => ['nullable', 'file', 'mimes:pdf,doc,docx,jpeg,png', 'max:4096'],
         ]);
+        
+        $imagePath = null;
+        if ($request->hasFile('image_picture')) {
+            $imagePath = $request->file('image_picture')->store('images', 'public');
+        }
+
+        $certificatePaths = [];
+        if ($request->hasFile('certificates')) {
+            foreach ($request->file('certificates') as $certificate) {
+                $certificatePaths[] = $certificate->store('certificates', 'public');
+            }
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -119,6 +133,8 @@ class RegisteredUserController extends Controller
             'contact_number' => $request->contact_number,
             'awards' => $request->awards,
             'clinic_name' => $request->clinic_name,
+            'image_picture' => $imagePath,
+            'certificates' => json_encode($certificatePaths),
         ]);
 
         event(new Registered($user));

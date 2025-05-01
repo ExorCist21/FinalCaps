@@ -14,14 +14,14 @@
 
         <!-- Form -->
         <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-md">
-            <form method="POST" action="{{ route('therapist.store') }}" class="space-y-6">
+            <form method="POST" action="{{ route('therapist.store') }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
                 <!-- Name and Email in One Row -->
                 <div class="flex flex-col sm:flex-row sm:space-x-4">
                     <!-- Name -->
                     <div class="w-full sm:w-1/2 mb-4 sm:mb-0">
-                        <label for="name" class="block text-sm font-medium text-gray-900">Name</label>
+                        <label for="name" class="block text-sm font-medium text-gray-900">Full Name</label>
                         <div class="mt-2">
                             <input type="text" id="name" name="name" autofocus
                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
@@ -70,22 +70,46 @@
                     <x-input-error :messages="$errors->get('contact_number')" class="mt-2" />
                 </div>
 
-                <!-- Occupation -->
+                <!-- Occupation Dropdown -->
                 <div>
-                    <label for="occupation" class="block text-sm font-medium text-gray-900">Occupation</label>
+                    <label for="occupation" class="block text-sm font-medium text-gray-900">Profession</label>
                     <div class="mt-2">
-                        <input type="text" id="occupation" name="occupation"
-                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                        <select id="occupation" name="occupation"
+                                class="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 bg-white shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                            <option value="">Select Profession</option>
+                            <option value="Psychologist" {{ old('occupation') == 'Psychologist' ? 'selected' : '' }}>Psychologist</option>
+                            <option value="Psychiatrist" {{ old('occupation') == 'Psychiatrist' ? 'selected' : '' }}>Psychiatrist</option>
+                            <option value="Counselor" {{ old('occupation') == 'Counselor' ? 'selected' : '' }}>Counselor</option>
+                            <option value="Social Worker" {{ old('occupation') == 'Social Worker' ? 'selected' : '' }}>Social Worker</option>
+                            <option value="Life Coach" {{ old('occupation') == 'Life Coach' ? 'selected' : '' }}>Life Coach</option>
+                            <option value="Behavioral Specialist" {{ old('occupation') == 'Behavioral Specialist' ? 'selected' : '' }}>Behavioral Specialist</option>
+                            <option value="Clinical Psychologist" {{ old('occupation') == 'Clinical Psychologist' ? 'selected' : '' }}>Clinical Psychologist</option>
+                            <option value="Mental Health Nurse" {{ old('occupation') == 'Mental Health Nurse' ? 'selected' : '' }}>Mental Health Nurse</option>
+                        </select>
                     </div>
                     <x-input-error :messages="$errors->get('occupation')" class="mt-2" />
                 </div>
 
-                <!-- Expertise -->
+                <!-- Expertise Dropdown -->
                 <div>
                     <label for="expertise" class="block text-sm font-medium text-gray-900">Expertise</label>
                     <div class="mt-2">
-                        <input type="text" id="expertise" name="expertise"
-                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                        <select id="expertise" name="expertise"
+                                class="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 bg-white shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                            <option value="">Select Expertise</option>
+                            <option value="Anxiety" {{ old('expertise') == 'Anxiety' ? 'selected' : '' }}>Anxiety</option>
+                            <option value="Mental Health" {{ old('expertise') == 'Mental Health' ? 'selected' : '' }}>Mental Health</option>
+                            <option value="Stress" {{ old('expertise') == 'Stress' ? 'selected' : '' }}>Stress</option>
+                            <option value="Counseling" {{ old('expertise') == 'Counseling' ? 'selected' : '' }}>Counseling</option>
+                            <option value="Child Psychology" {{ old('expertise') == 'Child Psychology' ? 'selected' : '' }}>Child Psychology</option>
+                            <option value="Marriage Counseling" {{ old('expertise') == 'Marriage Counseling' ? 'selected' : '' }}>Marriage Counseling</option>
+                            <option value="Anger Management" {{ old('expertise') == 'Anger Management' ? 'selected' : '' }}>Anger Management</option>
+                            <option value="Psychiatry" {{ old('expertise') == 'Psychiatry' ? 'selected' : '' }}>Psychiatry</option>
+                            <option value="Addiction Recovery" {{ old('expertise') == 'Addiction Recovery' ? 'selected' : '' }}>Addiction Recovery</option>
+                            <option value="Eating Disorders" {{ old('expertise') == 'Eating Disorders' ? 'selected' : '' }}>Eating Disorders</option>
+                            <option value="OCD" {{ old('expertise') == 'OCD' ? 'selected' : '' }}>OCD</option>
+                            <option value="Panic Disorders" {{ old('expertise') == 'Panic Disorders' ? 'selected' : '' }}>Panic Disorders</option>
+                        </select>
                     </div>
                     <x-input-error :messages="$errors->get('expertise')" class="mt-2" />
                 </div>
@@ -110,6 +134,32 @@
                     <x-input-error :messages="$errors->get('clinic_name')" class="mt-2" />
                 </div>
 
+                <div>
+                    <label for="image_picture" class="block text-sm font-medium text-gray-900">Upload Image</label>
+                    <div class="mt-2">
+                        <input type="file" id="image_picture" name="image_picture"
+                            class="block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4
+                                    file:rounded-md file:border-0
+                                    file:text-sm file:font-semibold
+                                    file:bg-indigo-600 file:text-white
+                                    hover:file:bg-indigo-500">
+                    </div>
+                    <x-input-error :messages="$errors->get('image_picture')" class="mt-2" />
+                </div>
+
+                <!-- Certificates Upload -->
+                <div>
+                    <label for="certificates" class="block text-sm font-medium text-gray-900">Upload Certificates (PDF, DOCX, etc.)</label>
+                    <div class="mt-2">
+                        <input type="file" id="certificates" name="certificates[]" multiple
+                            class="block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4
+                                file:rounded-md file:border-0 file:text-sm file:font-semibold
+                                file:bg-indigo-600 file:text-white hover:file:bg-indigo-500">
+                        <div id="selected-files" class="mt-2 space-y-2"></div>
+                    </div>
+                    <x-input-error :messages="$errors->get('certificates')" class="mt-2" />
+                </div>
+
                 <!-- Submit Button -->
                 <div>
                     <button type="submit"
@@ -125,4 +175,47 @@
             </p>
         </div>
     </div>
+    <script>
+    const fileInput = document.getElementById('certificates');
+    const fileListDisplay = document.getElementById('selected-files');
+    let selectedFiles = [];
+
+    fileInput.addEventListener('change', function (e) {
+        selectedFiles = Array.from(this.files);
+
+        renderFileList();
+    });
+
+    function renderFileList() {
+        fileListDisplay.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+            const fileWrapper = document.createElement('div');
+            fileWrapper.className = 'flex items-center justify-between bg-gray-100 px-3 py-2 rounded-md';
+
+            const fileName = document.createElement('span');
+            fileName.className = 'text-sm text-gray-700 truncate max-w-xs';
+            fileName.textContent = file.name;
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'text-red-500 hover:text-red-700 ml-2';
+            removeBtn.innerHTML = '&times;';
+            removeBtn.onclick = () => {
+                selectedFiles.splice(index, 1);
+                updateFileInput();
+                renderFileList();
+            };
+
+            fileWrapper.appendChild(fileName);
+            fileWrapper.appendChild(removeBtn);
+            fileListDisplay.appendChild(fileWrapper);
+        });
+    }
+
+    function updateFileInput() {
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files;
+    }
+</script>
+
 </x-guest-layout>

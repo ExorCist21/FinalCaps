@@ -26,6 +26,7 @@
                         <tr>
                             <th class="px-6 py-3 text-xs font-medium uppercase">Therapist ID</th>    
                             <th class="px-6 py-3 text-xs font-medium uppercase">Name</th>
+                            <th class="px-6 py-3 text-xs font-medium uppercase">Picture</th>
                             <th class="px-6 py-3 text-xs font-medium uppercase">Email</th>
                             <th class="px-6 py-3 text-xs font-medium uppercase">Expertise</th>
                             <th class="px-6 py-3 text-xs font-medium uppercase">License No.</th>
@@ -38,6 +39,15 @@
                             <tr class="hover:bg-indigo-50 transition duration-150">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    @if ($therapist->therapistInformation && $therapist->therapistInformation->image_picture)
+                                        <a href="{{ asset('storage/' . $therapist->therapistInformation->image_picture) }}" target="_blank">
+                                            <img src="{{ asset('storage/' . $therapist->therapistInformation->image_picture) }}" alt="Therapist Picture" class="h-16 w-16 rounded-full object-cover mx-auto hover:opacity-80 transition">
+                                        </a>
+                                    @else
+                                        <span class="text-gray-500 text-xs">No Image</span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->email }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->therapistInformation->expertise ?? 'N/A' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->therapistInformation->awards }}</td>

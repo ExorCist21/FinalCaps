@@ -18,7 +18,7 @@
                     @foreach ($appointments as $appointment)
                         <div onclick="window.location.href='{{ route('meetingUser') }}?appointmentID={{ $appointment->appointmentID }}'" class="appointment-card bg-white rounded-xl p-6 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                             <div class="flex items-center mb-4">
-                                <img src="https://i.pravatar.cc/150?img={{ $appointment->therapist->email }}" alt="Therapist Image" class="w-14 h-14 ring-4 ring-indigo-600 rounded-full object-cover mr-6">
+                                <img src="{{ asset('storage/' . $appointment->therapist->therapistInformation->image_picture) }}" alt="Therapist Image" class="w-14 h-14 ring-4 ring-indigo-600 rounded-full object-cover mr-6">
                                 <div>
                                     <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $appointment->therapist->name }}</h3>
                                     <p class="text-sm text-gray-600">{{ $appointment->therapist->email }}</p>

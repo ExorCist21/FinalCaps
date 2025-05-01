@@ -17,7 +17,7 @@
                 <!-- Service Name -->
                 <div>
                     <label for="service_name" class="block text-sm font-medium text-gray-700">Service Name</label>
-                    <p class="mt-1 text-lg font-semibold text-gray-800">{{ request('service_name') }}</p>
+                    <p class="mt-1 text-lg font-semibold text-gray-800">{{ ucfirst(request('service_name')) }}</p>
                     <input type="hidden" name="service_name" value="{{ request('service_name') }}" readonly 
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
@@ -31,8 +31,8 @@
 
                 <!-- Duration -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Session</label>
-                    <p class="mt-1 text-lg font-semibold text-gray-800">{{ request('duration') }} Session(s)</p>
+                    <label class="block text-sm font-medium text-gray-700">Duration</label>
+                    <p class="mt-1 text-lg font-semibold text-gray-800">{{ request('duration') }} Day(s)</p>
                     <input type="hidden" name="duration" value="{{ request('duration') }}">
                 </div>
             </div>
@@ -42,7 +42,7 @@
                 <legend class="block text-sm font-medium text-gray-700 mb-2">Payment Method</legend>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div>
-                        <input type="radio" id="gcash" name="payment_method" value="gcash" required>
+                        <input type="radio" id="gcash" name="payment_method" value="gcash" checked>
                         <label for="gcash" class="text-gray-700">Gcash</label>
                     </div>
                     <div>
@@ -78,36 +78,45 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
-            const qrImage = document.getElementById('qr_image');
-            const qrCodeSection = document.getElementById('qr_code_section');
+        const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+        const qrImage = document.getElementById('qr_image');
+        const qrCodeSection = document.getElementById('qr_code_section');
 
-            paymentMethods.forEach(method => {
-                method.addEventListener('change', function () {
-                    let qrCodeUrl = '';
+        // Function to update QR image
+        const updateQRCode = (method) => {
+            let qrCodeUrl = '';
 
-                    switch (this.value) {
-                        case 'gcash':
-                            qrCodeUrl = '/images/gcashqr.jpg'; // Replace with actual Gcash QR code path
-                            break;
-                        case 'maya':
-                            qrCodeUrl = '/images/maya_qr.png';  // Replace with actual Maya QR code path
-                            break;
-                        case 'credit_card':
-                            qrCodeUrl = '/images/credit_card_qr.png';
-                            break;
-                        case 'paypal':
-                            qrCodeUrl = '/images/paypal_qr.png';
-                            break;
-                        default:
-                            qrCodeSection.classList.add('hidden');
-                            return;
-                    }
+            switch (method) {
+                case 'gcash':
+                    qrCodeUrl = '/images/gcashqr.jpg';
+                    break;
+                case 'maya':
+                    qrCodeUrl = '/images/maya_qr.png';
+                    break;
+                case 'credit_card':
+                    qrCodeUrl = '/images/credit_card_qr.png';
+                    break;
+                case 'paypal':
+                    qrCodeUrl = '/images/paypal_qr.png';
+                    break;
+                default:
+                    qrCodeSection.classList.add('hidden');
+                    return;
+            }
 
-                    qrImage.src = qrCodeUrl;
-                    qrCodeSection.classList.remove('hidden');
-                });
+            qrImage.src = qrCodeUrl;
+            qrCodeSection.classList.remove('hidden');
+        };
+
+        // Event listeners
+        paymentMethods.forEach(method => {
+            method.addEventListener('change', function () {
+                updateQRCode(this.value);
             });
+        });
+
+        // Automatically show GCash QR on load
+        updateQRCode('gcash');
 
             @if(session('success'))
             Swal.fire({

@@ -54,7 +54,13 @@ class PatientController extends Controller
         $query = User::where('role', 'therapist')->with('therapistInformation', 'feedback');
 
         // Apply expertise filter if selected
-        if ($request->has('expertise') && $request->expertise != '') {
+        if ($request->has('occupation') && $request->occupation != '') {
+            $query->whereHas('therapistInformation', function ($q) use ($request) {
+                $q->where('occupation', $request->occupation);
+            });
+        }
+
+        if ($request->filled('expertise')) {
             $query->whereHas('therapistInformation', function ($q) use ($request) {
                 $q->where('expertise', $request->expertise);
             });
@@ -63,8 +69,18 @@ class PatientController extends Controller
         // Get the filtered or all therapists
         $therapists = $query->get();
 
+        $expertiseOptions = \App\Models\TherapistInformation::select('expertise')
+        ->whereNotNull('expertise')
+        ->distinct()
+        ->pluck('expertise');
+
+        $occuOptions = \App\Models\TherapistInformation::select('occupation')
+        ->whereNotNull('occupation')
+        ->distinct()
+        ->pluck('occupation');
+
         // Pass the therapists and expertise filter value to the view
-        return view('patients.bookappointments', compact('therapists'));
+        return view('patients.bookappointments', compact('therapists','expertiseOptions','occuOptions'));
     }
 
 
@@ -73,9 +89,7 @@ class PatientController extends Controller
         // Fetch the therapist by ID
         $therapist = User::findOrFail($id);
 
-        $session_left = auth()->user()->session_left;
-
-        return view('patients.therapist-details', compact('therapist', 'session_left'));
+        return view('patients.therapist-details', compact('therapist'));
     }
 
     public function showRegistrationForm()

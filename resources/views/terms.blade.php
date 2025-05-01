@@ -28,6 +28,7 @@
                 <p><strong>8. Termination:</strong> Accounts violating policies may be suspended or removed.</p>
                 <p><strong>9. Updates:</strong> Terms may change. Continued use means you accept changes.</p>
                 <p><strong>10. Performance Issues:</strong> If a patient reports unsatisfactory performance or you are found to be slacking off in your duties, you will first receive a warning. If performance does not improve, your account will be deactivated.</p>
+                <p><strong>11. Free Accounts:</strong> MentalWell provide one (1) free session to new patient accounts. If a patient abuses the free session policy (e.g., creating multiple accounts), therapists can report the incident with proof through our Gmail for investigation.</p>
             @else
                 <p>Unauthorized access. Please contact the administrator.</p>
             @endif

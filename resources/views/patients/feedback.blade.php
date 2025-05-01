@@ -5,7 +5,7 @@
             
             <!-- Therapist Image and Info -->
             <div class="flex items-center mb-8">
-                <img src="https://i.pravatar.cc/150?img={{ $appointment->therapist->email }}" alt="Therapist Image" class="w-16 h-16 ring-4 ring-indigo-600 rounded-full object-cover mr-6 transform transition-transform duration-300 hover:scale-110">
+                <img src="{{ asset('storage/' . $appointment->therapist->therapistInformation->image_picture) }}"" alt="Therapist Image" class="w-16 h-16 ring-4 ring-indigo-600 rounded-full object-cover mr-6 transform transition-transform duration-300 hover:scale-110">
                 <div>
                     <h3 class="text-2xl font-semibold text-gray-800">{{ $appointment->therapist->name }}</h3>
                     <p class="text-sm text-gray-500">{{ $appointment->therapist->email }}</p>

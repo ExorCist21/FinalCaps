@@ -94,40 +94,26 @@ class AdminController extends Controller
     // Send Payment method to process the payment and upload proof
     public function sendPayment(Request $request, $appointmentID)
     {
-        // Validate the input fields
-        $validated = $request->validate([
-            'payment_proof' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate payment proof image
-            'amount' => 'required|numeric|min:1', // Validate the payment amount
-            'payment_method' => 'required|string|max:255', // Payment method (e.g., GCash)
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
-        // Fetch the appointment and therapist information
-        $appointment = Appointment::with('therapist', 'progress')->findOrFail($appointmentID);
-        $therapistInformation = $appointment->therapist->therapistInformation;
+        $appointment = Appointment::findOrFail($appointmentID);
 
-        // Check if the therapist has a GCash number
-        if (!$therapistInformation || !$therapistInformation->gcash_number) {
-            return redirect()->back()->with('error', 'Therapist does not have a GCash number.');
-        }
+        $filePath = $request->file('proof')->store('proofs', 'public');
 
-        // Store the payment proof image
-        $paymentProofPath = $request->file('payment_proof')->store('proofs', 'public');
+        // Create a new payment associated with the appointment
+        Payment::create([
+            'appointment_id' => $appointment->appointmentID,
+            'amount' => $request->amount,
+            'payment_method' => 'gcash',
+            'transaction_id' => uniqid('tx_'),
+            'status' => 'pending',
+            'proof' => $filePath,
+        ]);
 
-        // Create a new payment record
-        $payment = new Payment();
-
-        // Check if the appointment has a related subscription; if not, set to null
-        $payment->subscription_id = $appointment->subscription_id ?? null;
-
-        $payment->amount = $validated['amount'];
-        $payment->proof = $paymentProofPath;
-        $payment->payment_method = $validated['payment_method'];
-        $payment->transaction_id = $appointment->appointmentID; // Generate a unique transaction ID or set it dynamically
-        $payment->status = 'Pending'; // Initially, status can be 'Pending' until processed
-        $payment->save();
-
-        return redirect()->route('admin.appointments', ['appointmentID' => $appointmentID])
-            ->with('success', 'Payment sent and proof uploaded successfully.');
+        return back()->with('success', 'Payment proof sent. Waiting for admin approval.');
     }
 
     // Approve payment and update subscription and patient data
@@ -162,14 +148,14 @@ class AdminController extends Controller
 
         // Add sessions based on service name
         switch ($subscription->service_name) {
-            case 'Standard':
-                $patient->session_left += 1; // Standard subscription
+            case 'half_month':
+                $patient->session_left += 15; // Standard subscription
                 break;
-            case 'Pro':
-                $patient->session_left += 5; // Pro subscription
+            case 'month':
+                $patient->session_left += 30; // Pro subscription
                 break;
-            case 'Enterprise':
-                $patient->session_left += 2; // Enterprise subscription
+            case 'yearly':
+                $patient->session_left += 365; // Enterprise subscription
                 break;
             default:
                 return redirect()->back()->with('error', 'Unknown service name.');
@@ -215,5 +201,25 @@ class AdminController extends Controller
             ->get();
 
         return view('admin.view_reports_system', compact('systemFeedbacks'));
+    }
+
+    public function therapistPayments()
+    {
+        $payments = Payment::with('appointment.therapist')->latest()->get();
+        return view('admin.therapist-payments', compact('payments'));
+    }
+
+    public function confirmTherapistPayment($id)
+    {
+        $payment = Payment::findOrFail($id);
+        
+        if ($payment->status !== 'pending') {
+            return redirect()->back()->with('error', 'Payment already processed.');
+        }
+
+        $payment->status = 'confirmed';
+        $payment->save();
+
+        return redirect()->back()->with('success', 'Payment has been confirmed.');
     }
 }

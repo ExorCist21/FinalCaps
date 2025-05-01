@@ -32,10 +32,6 @@
                 class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
                     Progress
                 </a>
-                <a href="{{ route('subscriptions.index') }}" 
-                class="text-sm font-semibold text-gray-900 rounded-md px-3 py-2 transition duration-300 transform hover:bg-white/30 hover:backdrop-blur-lg hover:scale-105 border border-transparent hover:border-gray-300 focus:outline-none">
-                    Buy Sessions
-                </a>
             </div>
 
 
@@ -79,9 +75,6 @@
                     <!-- Dropdown Menu -->
                     <div x-show="open" @click.away="open = false" class="absolute right-0 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                         <form method="POST" action="{{ route('logout') }}" class="mt-4">
-                            <a href="{{ route('profile.edit') }}" class="block w-full text-center px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-                                <span class="font-semibold text-white text-sm bg-indigo-600 p-2 rounded-full">{{ Auth::user()->session_left }}</span> sessions left
-                            </a>      
                             <a href="{{ route('profile.edit') }}" class="block w-full text-center px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900 capitalize">
                                 {{ Auth::user()->name }} Account
                             </a>    

@@ -18,7 +18,7 @@
             
             <!-- Therapist Image -->
             <div class="flex items-center mb-4">
-                <img src="https://i.pravatar.cc/150?img={{ $therapist->email }}" alt="Therapist Image" class="w-12 h-12 ring-2 ring-indigo-600 rounded-full object-cover mr-4">
+                <img src="{{ asset('storage/' . $therapist->therapistInformation->image_picture) }}" class="w-12 h-12 ring-2 ring-indigo-600 rounded-full object-cover mr-4">
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 capitalize">{{ $therapist->name }}</h3>
                     <p class="text-sm text-gray-600">{{ $therapist->email }}</p>
@@ -75,6 +75,21 @@
                     </ul>
                 </li>
             </ul>
+
+            <!-- Certificates Section -->
+            @if ($therapist->therapistInformation && $therapist->therapistInformation->certificates)
+                                <div class="mb-2">
+                                    <p class="text-sm text-gray-700 font-medium mb-1">Certificates:</p>
+                                    <div class="flex flex-wrap justify-center gap-2">
+                                    @foreach (json_decode($therapist->therapistInformation->certificates, true) as $index => $certificate)
+                                        <a href="{{ asset('storage/' . $certificate) }}" target="_blank"
+                                        class="inline-block px-3 py-1.5 text-sm text-white bg-indigo-600 rounded hover:bg-indigo-700 transition">
+                                            📄 View Certificate {{ $index + 1 }}
+                                        </a>
+                                    @endforeach
+                                    </div>
+                                </div>
+                            @endif
 
             <!-- Google Maps Section Below the Button -->
             <div class="mt-6">
@@ -162,23 +177,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Modal for no sessions left -->
-        <div id="noSessionModal" class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
-            <div class="relative p-4 w-full max-w-md md:max-w-lg">
-                <div class="relative bg-white rounded-lg shadow-md">
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-gray-800">
-                            No Sessions Left
-                        </h3>
-                        <p class="text-gray-600 mt-2">You have 0 sessions left to book an appointment. Kindly navigate to the <a href="{{ route('subscriptions.index') }}" class="text-indigo-600">purchase session</a> page to buy more sessions.</p>
-                        <div class="mt-4 flex justify-end space-x-3">
-                            <button id="closeNoSessionModal" class="py-2 px-4 text-sm font-medium text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     
     </div>
 
@@ -214,20 +212,12 @@
         const openModalButton = document.getElementById('openModalButton');
         const closeModalButton = document.getElementById('closeModalButton');
         const closeModalButtonFooter = document.getElementById('closeModalButtonFooter');
-        const closeNoSessionModal = document.getElementById('closeNoSessionModal');
         const modal = document.getElementById('static-modal');
-        const noSessionModal = document.getElementById('noSessionModal');
-        const sessionLeft = parseInt("{{ $session_left }}") || 0; // Use the session count from your server-side variable
 
         if (openModalButton) {
             openModalButton.addEventListener('click', function () {
-                if (sessionLeft === 0) {
-                    noSessionModal?.classList.remove('hidden');
-                    noSessionModal?.classList.add('flex'); // Show no session modal
-                } else {
                     modal?.classList.remove('hidden');
                     modal?.classList.add('flex'); // Show booking modal
-                }
             });
         }
 
@@ -242,13 +232,6 @@
             closeModalButtonFooter.addEventListener('click', function () {
                 modal?.classList.remove('flex');
                 modal?.classList.add('hidden');
-            });
-        }
-
-        if (closeNoSessionModal) {
-            closeNoSessionModal.addEventListener('click', function () {
-                noSessionModal?.classList.remove('flex');
-                noSessionModal?.classList.add('hidden');
             });
         }
 

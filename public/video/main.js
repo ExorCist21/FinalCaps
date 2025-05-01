@@ -1,6 +1,6 @@
 const APP_ID = $('#appid').val();
 //const TOKEN = $('#token').val();
-const TOKEN = '007eJxTYJjccjLDtMqe7d2/lUev9n6wTdm2suXx3py3e1keqpQEK91WYDA3NzQ1M04zsEwyNTAxTklNNDZPMbe0NDIxSDVONDW2jGzgzWgIZGSo4/rKxMgAgSA+J0Nien5RoomhiTEDAwB+/SGP';
+const TOKEN = '007eJxTYHh3it14bryKhQRjhDzX+r2unbnlvQeFHSv9f6lMzU2x+6vAYG5uaGpmnGZgmWRqYGKckppobJ5ibmlpZGKQapxoamz51kMgoyGQkSHFO4eRkQECQXxOhsT0/KJEE0MTYwYGANCuHMc=';
 const CHANNEL = $('#channel').val();
 
 const client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8'})

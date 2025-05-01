@@ -51,10 +51,10 @@ class SubscriptionController extends Controller
     {
         
         $validated = $request->validate([
-            'service_name' => 'required|string|max:255',
-            'duration' => 'required|integer|in:2,5,10', // Validate duration
+            'service_name' => 'required|string|in:half_month,month,yearly',
+            'duration' => 'required|integer|in:15,30,365',
             'payment_method' => 'required|string|in:gcash,maya,credit_card,paypal',
-            'price' => 'required|numeric|min:1|max:10000',
+            'price' => 'required|numeric|min:1|max:20000',
         ]);
 
         // Create the subscription
@@ -95,7 +95,7 @@ class SubscriptionController extends Controller
     {
         $validated = $request->validate([
             'service_name' => 'required|string|max:255',
-            'duration' => 'required|integer|in:3,6,12', // Validate duration
+            'duration' => 'required|integer|in:1,2,5', // Validate duration
         ]);
 
         $subscription = Subscription::findOrFail($id);
@@ -110,7 +110,7 @@ class SubscriptionController extends Controller
         $subscription = Subscription::findOrFail($id);
         $subscription->delete();
 
-        return redirect('/patient/subscriptions')->with('success', 'Subscription canceled successfully.');
+        return redirect('/therapist/subscriptions')->with('success', 'Subscription canceled successfully.');
     }
 
     // Location: App\Http\Controllers\AdminController.php
@@ -139,21 +139,21 @@ class SubscriptionController extends Controller
         $payment->save();
 
         // Find the patient
-        $patient = User::find($subscription->patient_id);
-        if (!$patient) {
-            return redirect()->back()->with('error', 'Patient not found.');
+        $user = User::find($subscription->patient_id);
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found.');
         }
 
         // Add sessions based on service name
         switch ($subscription->service_name) {
-            case 'Standard':
-                $patient->session_left += 1; // Standard subscription
+            case 'half_month':
+                $user->session_left += 15;
                 break;
-            case 'Pro':
-                $patient->session_left += 5; // Pro subscription
+            case 'month':
+                $user->session_left += 30;
                 break;
-            case 'Enterprise':
-                $patient->session_left += 2; // Enterprise subscription
+            case 'yearly':
+                $user->session_left += 365;
                 break;
             default:
                 return redirect()->back()->with('error', 'Unknown service name.');
@@ -179,6 +179,11 @@ class SubscriptionController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Payment, subscription approved, and sessions added successfully.');
+    }
+
+    public function lock() {
+        $subscriptions = Subscription::where('patient_id', auth()->id())->get();
+        return view('subscriptions.index', compact('subscriptions'));
     }
 
 }

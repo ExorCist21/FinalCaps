@@ -25,7 +25,7 @@
                         onclick="window.location='{{ route('patient.show.progress', $appointment->appointmentID) }}'">
                         <!-- Therapist Information -->
                         <div class="flex items-center mb-6">
-                            <img src="https://i.pravatar.cc/150?img={{ $appointment->therapist->email ?? '1' }}" alt="Therapist Image"
+                            <img src="{{ asset('storage/' . $appointment->therapist->therapistInformation->image_picture) }}" alt="Therapist Image"
                                 class="w-14 h-14 ring-4 ring-indigo-600 rounded-full object-cover mr-6">
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $appointment->therapist->name }}</h3>

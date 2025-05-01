@@ -99,10 +99,13 @@ class AppointmentController extends Controller
             ->with('patient','progress')
             ->get();
 
-        $doneAppointments = Appointment::where('therapistID', Auth::id())
+            $doneAppointments = Appointment::where('therapistID', Auth::id())
             ->where('status', 'approved')
             ->where('isDone', true)
-            ->with('patient','progress')
+            ->whereHas('progress', function($query) {
+                $query->where('status', 'Completed');
+            })
+            ->with('patient', 'progress')
             ->get();
 
         return view('therapist.therapist-index', compact('upcomingAppointments', 'doneAppointments'));
