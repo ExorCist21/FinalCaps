@@ -21,12 +21,21 @@
                 <div class="flex flex-col sm:flex-row sm:space-x-4">
                     <!-- Name -->
                     <div class="w-full sm:w-1/2 mb-4 sm:mb-0">
-                        <label for="name" class="block text-sm font-medium text-gray-900">Full Name</label>
+                        <label for="first_name" class="block text-sm font-medium text-gray-900">First Name</label>
                         <div class="mt-2">
-                            <input type="text" id="name" name="name" autofocus
+                            <input type="text" id="first_name" name="first_name" autofocus
                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                         </div>
-                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
+                    </div>
+
+                    <div class="w-full sm:w-1/2 mb-4 sm:mb-0">
+                        <label for="last_name" class="block text-sm font-medium text-gray-900">Last Name</label>
+                        <div class="mt-2">
+                            <input type="text" id="last_name" name="last_name" autofocus
+                                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                        </div>
+                        <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
                     </div>
 
                     <!-- Email -->

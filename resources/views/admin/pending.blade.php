@@ -40,7 +40,7 @@
                     <tbody>
                         @foreach ($subscriptions as $subscription)
                             <tr class="hover:bg-gray-50 border-t">
-                                <td class="py-3 px-4">{{ $subscription->patient->name }}</td>
+                                <td class="py-3 px-4">{{ $subscription->patient->first_name }} {{ $subscription->patient->last_name }}</td>
                                 <td class="py-3 px-4">{{ $subscription->service_name }}</td>
                                 @if ($subscription->payment)
                                     <td class="py-3 px-4">₱{{ number_format($subscription->payment->amount, 2) }}</td>

@@ -77,7 +77,7 @@ class TherapistController extends Controller
             // Create the notification for the patient
             Notification::create([
                 'n_userID' => $patient->id,  
-                'data' =>  $therapist->name,  
+                'data' =>  $therapist->first_name,  
                 'type' => $type,  
             ]);
         }

@@ -28,7 +28,7 @@
 
                     <!-- Expertise Filter -->
                     <div>
-                        <label for="expertise" class="block text-sm font-medium text-gray-800 mb-1">Filter by Expertise</label>
+                        <label for="expertise" class="block text-sm font-medium text-gray-800 mb-1">Filter by Specialty</label>
                         <select name="expertise" id="expertise"
                                 class="border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-48 p-2">
                             <option value="">All Expertise</option>
@@ -70,7 +70,7 @@
                             </div>
                             <!-- Therapist Details -->
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-800 capitalize">{{ $therapist->name }}</h3>
+                                <h3 class="text-lg font-semibold text-gray-800 capitalize">{{ $therapist->first_name }} {{ $therapist->last_name }}</h3>
                                 <p class="text-sm text-gray-600">{{ $therapist->email }}</p>
                             </div>
                             <hr class="my-4 mx-8 border-pastel-gray-300"/>

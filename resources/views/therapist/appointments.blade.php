@@ -41,7 +41,7 @@
                         <div class="flex items-center mb-6">
                             <img src="https://i.pravatar.cc/150?img={{ $appointment->patient->email ?? '1' }}" alt="Patient Image" class="w-14 h-14 ring-4 ring-indigo-600 rounded-full object-cover mr-6">
                             <div>
-                                <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $appointment->patient->name ?? 'N/A' }}</h3>
+                                <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $appointment->patient->first_name ?? 'N/A' }} {{ $appointment->patient->last_name ?? 'N/A' }}</h3>
                                 <p class="text-sm text-gray-600">{{ $appointment->patient->email ?? 'Unavailable' }}</p>
                             </div>
                         </div>
@@ -70,6 +70,11 @@
                             </span>
                         </p>
 
+                        <p class="text-gray-600 mb-6">
+                            <strong>Price Range:</strong> 
+                            {{ $appointment->price_range ?? 'No price range' }}
+                        </p>
+
                         <hr class="my-4 border-gray-200"/>
 
                         <!-- Action Buttons -->
@@ -89,10 +94,24 @@
                                 </form>
                             @elseif ($appointment->status == 'approved')
                                 <span class="text-sm text-green-600">This appointment has been <span class="font-semibold text-green-700">approved</span>. Your patient will message you soon, or you may message them directly.</span>
-                                <button onclick="window.location.href='{{ route('meetingUser') }}?appointmentID={{ $appointment->appointmentID }}'" 
-                                        class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md focus:outline-none transition-all duration-300 transform hover:scale-105">
-                                    Join Meeting
-                                </button>
+                                <div class="flex flex-col gap-2 mt-4 w-full">
+                                    <!-- Join Meeting Button -->
+                                    <button onclick="window.location.href='{{ route('meetingUser') }}?appointmentID={{ $appointment->appointmentID }}'"
+                                            class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md transition-all duration-300 text-center">
+                                        Join Meeting
+                                    </button>
+
+                                    <!-- Edit Button -->
+                                    <a href="{{ route('appointments.edit', $appointment->appointmentID) }}"
+                                    class="text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 py-2 px-4 rounded-lg shadow-md transition-all duration-300 text-center">
+                                        Edit Appointment
+                                    </a>
+
+                                    <button onclick="openPriceRangeModal({{ $appointment->appointmentID }})"
+                                            class="text-sm font-medium text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded-lg shadow-md transition-all duration-300 text-center">
+                                        Add Price Range
+                                    </button>
+                                </div>
                             @elseif ($appointment->status == 'disapproved')
                                 <span class="text-sm text-red-400 font-medium">
                                     This appointment has been disapproved.
@@ -103,6 +122,8 @@
                 @endforeach
             </div>
         @endif
+
+
         </div>
             <!-- Right Side: Compact Calendar -->
             <div class="w-full md:w-1/3 bg-white p-4 rounded-lg shadow-md h-80">
@@ -137,6 +158,26 @@
                 </div>
                 <div id="modalContent" class="text-gray-700 text-sm"></div>
             </div>
+        </div>
+    </div>
+
+    <div id="priceRangeModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-lg font-semibold mb-4">Add Price Range</h2>
+            <form id="priceRangeForm" method="POST" action="{{ route('appointments.updatePriceRange') }}">
+                @csrf
+                <input type="hidden" name="appointmentID" id="modalAppointmentID">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1" for="price_range">Price Range</label>
+                    <input type="text" name="price_range" id="price_range"
+                        class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                        placeholder="e.g. ₱500 - ₱800">
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closePriceRangeModal()" class="text-gray-500 hover:text-gray-700">Cancel</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -209,6 +250,15 @@
 
                 calendarGrid.appendChild(dayCell);
             }
+        }
+
+        function openPriceRangeModal(appointmentID) {
+            document.getElementById('modalAppointmentID').value = appointmentID;
+            document.getElementById('priceRangeModal').classList.remove('hidden');
+        }
+
+        function closePriceRangeModal() {
+            document.getElementById('priceRangeModal').classList.add('hidden');
         }
 
         function changeMonth(step) {

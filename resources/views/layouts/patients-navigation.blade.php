@@ -76,7 +76,7 @@
                     <div x-show="open" @click.away="open = false" class="absolute right-0 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                         <form method="POST" action="{{ route('logout') }}" class="mt-4">
                             <a href="{{ route('profile.edit') }}" class="block w-full text-center px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900 capitalize">
-                                {{ Auth::user()->name }} Account
+                                {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Account
                             </a>    
                             @csrf
                             <button type="submit" class="block w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">

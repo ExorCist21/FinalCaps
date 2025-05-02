@@ -20,7 +20,7 @@
                             <div class="flex items-center mb-4">
                                 <img src="{{ asset('storage/' . $appointment->therapist->therapistInformation->image_picture) }}" alt="Therapist Image" class="w-14 h-14 ring-4 ring-indigo-600 rounded-full object-cover mr-6">
                                 <div>
-                                    <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $appointment->therapist->name }}</h3>
+                                    <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $appointment->therapist->first_name }} {{ $appointment->therapist->last_name }}</h3>
                                     <p class="text-sm text-gray-600">{{ $appointment->therapist->email }}</p>
                                 </div>
                             </div>
@@ -36,6 +36,12 @@
                                     {{ ucfirst($appointment->status) }}
                                 </span>
                             </p>
+
+                            <p class="text-gray-600 mb-6">
+                                <strong>Price Rates:</strong> 
+                                {{ $appointment->price_range ?? 'No price rate' }}
+                            </p>
+
                             <div class="flex justify-between mt-4 mb-2 items-center">
                                 @if ($appointment->status == 'pending')
                                     <span class="text-sm text-pink-600">Waiting for approval...</span>

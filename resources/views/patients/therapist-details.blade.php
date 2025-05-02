@@ -20,7 +20,7 @@
             <div class="flex items-center mb-4">
                 <img src="{{ asset('storage/' . $therapist->therapistInformation->image_picture) }}" class="w-12 h-12 ring-2 ring-indigo-600 rounded-full object-cover mr-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 capitalize">{{ $therapist->name }}</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 capitalize">{{ $therapist->first_name }} {{ $therapist->last_name }}</h3>
                     <p class="text-sm text-gray-600">{{ $therapist->email }}</p>
                 </div>
                 <button id="openModalButton" type="button" class="ml-auto text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md focus:outline-none">
@@ -65,7 +65,7 @@
             </p>
             <ul class="list-disc text-gray-600 italic">
                 <li class="list-none mb-2">
-                    <strong>Dr. {{ $therapist->name }}</strong>
+                    <strong>Dr. {{ $therapist->first_name }} {{ $therapist->last_name }}</strong>
                     <ul>
                         @forelse ($therapist->feedback as $feedback)
                             <li class="text-gray-700">- {{ $feedback->feedback }}</li>

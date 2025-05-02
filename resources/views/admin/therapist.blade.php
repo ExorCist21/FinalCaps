@@ -37,9 +37,9 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($therapists as $therapist)
                             <tr class="hover:bg-indigo-50 transition duration-150">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->name }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $therapist->id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $therapist->first_name }} {{ $therapist->last_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                                     @if ($therapist->therapistInformation && $therapist->therapistInformation->image_picture)
                                         <a href="{{ asset('storage/' . $therapist->therapistInformation->image_picture) }}" target="_blank">
                                             <img src="{{ asset('storage/' . $therapist->therapistInformation->image_picture) }}" alt="Therapist Picture" class="h-16 w-16 rounded-full object-cover mx-auto hover:opacity-80 transition">
@@ -48,10 +48,10 @@
                                         <span class="text-gray-500 text-xs">No Image</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->email }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->therapistInformation->expertise ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->therapistInformation->awards }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $therapist->therapistInformation->contact_number }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $therapist->email }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $therapist->therapistInformation->expertise ?? 'N/A' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $therapist->therapistInformation->awards }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $therapist->therapistInformation->contact_number }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     @if ($therapist->isActive == 1)
                                         <form action="{{ route('therapist.deactivate', $therapist->id) }}" method="POST" class="inline-block">

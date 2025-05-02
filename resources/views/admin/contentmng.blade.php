@@ -160,7 +160,7 @@
                 </div>
 
                 <!-- Content Info -->
-                <p class="text-m"><span class="font-bold text-lg">{{ $content->creator->name }}</span> added new content</p>
+                <p class="text-m"><span class="font-bold text-lg">{{ $content->creator->first_name }} {{ $content->creator->last_name }}</span> added new content</p>
                 <p class="text-sm text-gray-700">{{ $content->created_at->format('F j, Y') }}</p>
                 @if($content->image_path)
                     <img src="{{ Storage::url($content->image_path) }}" 

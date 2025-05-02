@@ -33,8 +33,8 @@ class ChatController extends Controller
             $conversations = \DB::table('appointments')
                 ->join('users', 'users.id', '=', 'appointments.therapistID')
                 ->where('appointments.patientID', $senderId)
-                ->select('users.id', 'users.name', 'users.email') // Corrected table alias
-                ->groupBy('users.id', 'users.name', 'users.email') // Added 'users.email' to groupBy
+                ->select('users.id', 'users.first_name','users.last_name', 'users.email') // Corrected table alias
+                ->groupBy('users.id', 'users.first_name','users.last_name', 'users.email') // Added 'users.email' to groupBy
                 ->orderBy(\DB::raw('MAX(appointments.updated_at)'), 'desc') // Corrected ordering
                 ->get();
         } elseif ($userRole === 'therapist') {
@@ -42,8 +42,8 @@ class ChatController extends Controller
             $conversations = \DB::table('appointments')
                 ->join('users', 'users.id', '=', 'appointments.patientID')
                 ->where('appointments.therapistID', $senderId)
-                ->select('users.id', 'users.name', 'users.email') // Corrected table alias
-                ->groupBy('users.id', 'users.name', 'users.email') // Added 'users.email' to groupBy
+                ->select('users.id', 'users.first_name','users.last_name', 'users.email') // Corrected table alias
+                ->groupBy('users.id', 'users.first_name','users.last_name', 'users.email') // Added 'users.email' to groupBy
                 ->orderBy(\DB::raw('MAX(appointments.updated_at)'), 'desc') // Corrected ordering
                 ->get();
         }

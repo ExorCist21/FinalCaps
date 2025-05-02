@@ -28,7 +28,7 @@
                             <img src="{{ asset('storage/' . $appointment->therapist->therapistInformation->image_picture) }}" alt="Therapist Image"
                                 class="w-14 h-14 ring-4 ring-indigo-600 rounded-full object-cover mr-6">
                             <div>
-                                <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $appointment->therapist->name }}</h3>
+                                <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $appointment->therapist->first_name }} {{ $appointment->therapist->last_name }}</h3>
                                 <p class="text-sm text-gray-600">{{ $appointment->therapist->email ?? 'Unavailable' }}</p>
                                 <p class="text-sm text-gray-600">{{ $appointment->therapist->therapistInformation->contact_number ?? 'Unavailable' }}</p>
                             </div>

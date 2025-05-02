@@ -25,7 +25,7 @@
                     @foreach($completedAppointments as $appointment)
                         <div class="bg-white border border-gray-200 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
                             <div class="mb-4">
-                                <h4 class="text-xl font-semibold text-gray-900 capitalize">{{ $appointment->patient->name ?? 'N/A' }}</h4>
+                                <h4 class="text-xl font-semibold text-gray-900 capitalize">{{ $appointment->patient->first_name ?? 'N/A' }} {{ $appointment->patient->last_name ?? 'N/A' }}</h4>
                                 <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}</p>
                             </div>
 
@@ -62,7 +62,7 @@
                     @foreach($therapistFeedback as $feedback)
                         <div class="bg-white border border-gray-200 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
                             <div class="flex items-center justify-between mb-3">
-                                <h4 class="text-lg font-semibold text-gray-900 capitalize">{{ $feedback->patient->name ?? 'Unknown' }}</h4>
+                                <h4 class="text-lg font-semibold text-gray-900 capitalize">{{ $feedback->patient->first_name ?? 'Unknown' }} {{ $feedback->patient->last_name ?? 'Unknown' }}</h4>
                                 <span class="text-yellow-400 font-bold">{{ $feedback->rating }}/5 ★</span>
                             </div>
 

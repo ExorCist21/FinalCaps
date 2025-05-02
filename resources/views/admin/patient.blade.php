@@ -34,10 +34,10 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($patients as $patient)
                             <tr class="hover:bg-indigo-50 transition duration-150">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $patient->id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $patient->name }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $patient->email }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $patient->session_left }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $patient->id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $patient->first_name }} {{ $patient->last_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $patient->email }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $patient->session_left }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     @if ($patient->isActive == 1)
                                         <form action="{{ route('patients.deactivate', $patient->id) }}" method="POST" class="inline-block">

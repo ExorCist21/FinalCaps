@@ -15,7 +15,7 @@
                             <div class="appointment-card flex justify-between items-center border-b border-gray-200 py-4 relative bg-gradient-to-r from-pastel-blue-100 to-pastel-indigo-100 rounded-lg shadow-sm hover:shadow-xl transition duration-300">
                                 <div class="w-full">
                                     <p class="font-semibold text-pastel-blue-100 capitalize">{{ $appointment->description }}</p>
-                                    <p class="text-gray-600 text-sm"> with <span class="capitalize font-semibold text-pastel-indigo-500">{{ $appointment->therapist->name }}</span></p>
+                                    <p class="text-gray-600 text-sm"> with <span class="capitalize font-semibold text-pastel-indigo-500">{{ $appointment->therapist->first_name }} {{ $appointment->therapist->last_name }}</span></p>
                                     <p class="text-gray-500 text-sm"> on {{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}</p>
                                 </div>
                                 <div>
@@ -45,7 +45,7 @@
                             <div class="appointment-card flex justify-between items-center border-b border-gray-200 py-4 relative bg-gradient-to-r from-pastel-lavender-100 to-pastel-pink-100 rounded-lg shadow-sm hover:shadow-xl transition duration-300">
                                 <div class="w-full">
                                     <p class="font-semibold text-pastel-blue-100 capitalize">{{ $appointment->description }}</p>
-                                    <p class="text-gray-600 text-sm"> with <span class="capitalize font-semibold text-pastel-indigo-500">{{ $appointment->therapist->name }}</span></p>
+                                    <p class="text-gray-600 text-sm"> with <span class="capitalize font-semibold text-pastel-indigo-500">{{ $appointment->therapist->first_name }} {{ $appointment->therapist->last_name }}</span></p>
                                     <p class="text-gray-500 text-sm"> on {{ \Carbon\Carbon::parse($appointment->datetime)->format('F j, Y g:i A') }}</p>
                                 </div>
                                 <div>

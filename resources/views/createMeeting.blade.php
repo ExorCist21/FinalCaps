@@ -24,9 +24,9 @@
             <div class="mb-6 p-4 border rounded-lg bg-gray-50">
                 <p class="text-gray-700 mb-2">
                     @if(Auth::user()->role == 'therapist')
-                        Create a meeting with <span class="font-semibold">{{ $appointment->patient->name }}</span>
+                        Create a meeting with <span class="font-semibold">{{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }}</span>
                     @else
-                        Meeting with <span class="font-semibold">{{ $appointment->therapist->name }}</span>
+                        Meeting with <span class="font-semibold">{{ $appointment->therapist->first_name }} {{ $appointment->therapist->last_name }}</span>
                     @endif
                 </p>
 

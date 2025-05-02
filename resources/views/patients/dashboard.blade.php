@@ -42,7 +42,7 @@
                                      alt="Creator Avatar"
                                      class="w-14 h-14 ring-4 ring-indigo-300 rounded-full object-cover mr-4">
                                 <div>
-                                    <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $content->creator->name }}</h3>
+                                    <h3 class="text-xl font-semibold text-gray-800 capitalize">{{ $content->creator->first_name }} {{ $content->creator->last_name }}</h3>
                                     <p class="text-sm text-gray-500">{{ $content->created_at->format('F j, Y') }}</p>
                                 </div>
                             </div>

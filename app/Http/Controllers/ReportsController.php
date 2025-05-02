@@ -11,6 +11,8 @@ use App\Models\User;
 use App\Models\Feedback;
 use App\Models\SystemFeedbacks;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -25,12 +27,28 @@ class ReportsController extends Controller
         $admin = User::where('role', 'admin')->first();
         
         // If the admin is not found, set totalRevenue to 0 (or handle as needed)
-        $totalRevenue = $admin ? $admin->total_revenue : 0;
+        $revenueData = Payment::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(amount) as total')
+        )
+        ->where('status', 'approved')
+        ->groupBy(DB::raw('MONTH(created_at)'))
+        ->orderBy('month')
+        ->pluck('total', 'month');
+    
+        // Prepare array with 0 for months with no revenue
+        $monthlyRevenue = collect(range(1, 12))->mapWithKeys(function ($month) use ($revenueData) {
+            $monthName = Carbon::create()->month($month)->format('F');
+            return [$monthName => $revenueData->get($month, 0)];
+        });
 
-        $pendingPayments = Payment::where('status', 'Pending')->count();
+        $pendingPayments = Payment::where('status', 'pending')->count();
+        $completedPayments  = Payment::where('status', 'approved')->count();
 
         $feedbacks = Feedback::count();
         $systemfeedbacks = SystemFeedbacks::count();
+
+        $totalRevenue = $admin ? $admin->total_revenue : 0;
 
         $activeSubscriptions = Subscription::where('status', 'Active')->count();
         $inactiveSubscriptions = Subscription::where('status', 'Inactive')->count();
@@ -45,13 +63,15 @@ class ReportsController extends Controller
             'totalAppointments',
             'completedAppointments',
             'pendingAppointments',
-            'totalRevenue',
+            'monthlyRevenue',
             'pendingPayments',
             'activeSubscriptions',
             'inactiveSubscriptions',
             'topTherapists',
             'feedbacks',
-            'systemfeedbacks'
+            'systemfeedbacks',
+            'completedPayments',
+            'totalRevenue'
         ));
     }
 

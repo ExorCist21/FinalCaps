@@ -72,7 +72,7 @@
                     <!-- Dropdown Menu -->
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                         <a href="{{ route('profile.edit') }}" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 capitalize">
-                            {{ Auth::user()->name }} Account
+                            {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Account
                         </a>    
                         <a href="{{ route('feedback.form') }}" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
                             Provide Feedback

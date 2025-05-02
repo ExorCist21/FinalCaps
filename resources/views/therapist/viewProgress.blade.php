@@ -30,7 +30,7 @@
                         <div class="flex items-center mb-4">
                             <img src="https://i.pravatar.cc/150?img={{ $appointment->patient->email ?? '1' }}" alt="Patient Image" class="w-12 h-12 ring-2 ring-indigo-600 rounded-full object-cover mr-4">
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-800 capitalize">{{ $appointment->patient->name ?? 'N/A' }}</h3>
+                                <h3 class="text-lg font-semibold text-gray-800 capitalize">{{ $appointment->patient->first_name ?? 'N/A' }} {{ $appointment->patient->last_name ?? 'N/A' }}</h3>
                                 <p class="text-sm text-gray-600 lower-case">{{ $appointment->patient->email ?? 'Unavailable' }}</p>
                             </div>
                         </div>

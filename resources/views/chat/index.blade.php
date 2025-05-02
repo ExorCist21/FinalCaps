@@ -81,7 +81,7 @@
                                 <img src="https://i.pravatar.cc/150?img=${user.email}" alt="User Avatar"
                                     class="w-12 h-12 ring-2 ring-indigo-600 rounded-full object-cover mr-4">
                                 <div>
-                                    <h3 class="text-lg font-semibold text-gray-800 capitalize">${user.name}</h3>
+                                    <h3 class="text-lg font-semibold text-gray-800 capitalize">${user.first_name} ${user.last_name}</h3>
                                     <p class="text-sm text-gray-600">${user.email}</p>
                                 </div>
                             </div>`

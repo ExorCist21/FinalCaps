@@ -63,7 +63,7 @@ class AppointmentController extends Controller
         Notification::create([
             'n_userID' => $request->therapist_id,
             'type' => 'appointment',
-            'data' => Auth::user()->name,
+            'data' => Auth::user()->first_name,
             'created_at' => now(),
         ]);
 
@@ -325,5 +325,50 @@ class AppointmentController extends Controller
             ->get();
 
         return view('therapist.history', compact('completedAppointments', 'therapistFeedback'));
+    }
+
+    public function edit($appointmentID)
+    {
+        $appointment = Appointment::findOrFail($appointmentID);
+
+        // Optional: Check if therapist owns the appointment
+        if (auth()->user()->id !== $appointment->therapistID) {
+            abort(403);
+        }
+
+        return view('appointment.edit', compact('appointment'));
+    }
+
+    public function update(Request $request, $appointmentID)
+    {
+        $appointment = Appointment::findOrFail($appointmentID);
+
+        if (auth()->user()->id !== $appointment->therapistID) {
+            abort(403);
+        }
+
+        $request->validate([
+            'datetime' => 'required|date|after_or_equal:today',
+        ]);
+
+        $appointment->update([
+            'datetime' => $request->datetime,
+        ]);
+
+        return redirect()->route('therapist.appointment')->with('success', 'Appointment updated successfully.');
+    }
+
+    public function updatePriceRange(Request $request)
+    {
+        $request->validate([
+            'appointmentID' => 'required|exists:appointments,appointmentID',
+            'price_range' => 'required|string|max:255',
+        ]);
+
+        $appointment = Appointment::find($request->appointmentID);
+        $appointment->price_range = $request->price_range;
+        $appointment->save();
+
+        return redirect()->back()->with('success', 'Price range updated successfully.');
     }
 }

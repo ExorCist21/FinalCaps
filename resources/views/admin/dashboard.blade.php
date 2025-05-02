@@ -74,7 +74,7 @@
                     <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Recent User Sign-ups</h4>
                     <ul class="list-disc pl-6 space-y-2 mt-4">
                         @foreach ($recentUsers as $user)
-                            <li class="text-gray-700 dark:text-gray-200">{{ $user->name }} - Registered at {{ $user->created_at->format('H:i A') }}</li>
+                            <li class="text-gray-700 dark:text-gray-200">{{ $user->first_name }} {{ $user->last_name }} - Registered at {{ $user->created_at->format('H:i A') }}</li>
                         @endforeach
                     </ul>
                 </div>

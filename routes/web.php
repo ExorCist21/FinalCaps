@@ -84,6 +84,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/appointment/{appointmentID}/approve', [TherapistController::class, 'approveApp'])->name('therapist.approve');
         Route::put('/appointment/{appointmentID}/confirm-payment', [TherapistController::class, 'confirmPayment'])->name('therapist.payment.confirm');
         Route::post('/appointment/{appointmentID}/disapprove', [TherapistController::class, 'disapproveApp'])->name('therapist.disapprove');
+        Route::get('/appointments/{appointmentID}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
+        Route::put('/appointments/{appointmentID}', [AppointmentController::class, 'update'])->name('appointments.update');
+        Route::post('/appointments/update-price-range', [AppointmentController::class, 'updatePriceRange'])->name('appointments.updatePriceRange');
         Route::get('/session', [AppointmentController::class, 'index'])->name('therapist.session');
         Route::get('/session/{appointmentId}/schedule', [AppointmentController::class, 'viewSession'])->name('therapist.viewSession');
         Route::post('/session/{appointmentId}/schedule', [AppointmentController::class, 'storeSession'])->name('therapist.storeSession');
@@ -122,7 +125,6 @@ Route::middleware(['auth', 'verified', 'role:therapist','check.isActive','check.
     Route::prefix('admin')->middleware('role:admin', 'verified')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
         Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
-        Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports');
         Route::get('/therapists', [AdminController::class, 'therapists'])->name('admin.therapists');
         Route::get('/patients', [AdminController::class, 'patients'])->name('admin.patients');
         Route::get('/content', [ContentController::class, 'index'])->name('admin.contentmng');
